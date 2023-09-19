@@ -1,2 +1,2 @@
 # jooice
-Jooice Script
+Jooice Script Library
