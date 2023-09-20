@@ -10,7 +10,7 @@ const JFetch = {
     /** 공통 에러를 처리하는 함수 설정: JFetch.error_fn = (error) =>  { }
 	 * @param {object} error
 	 */
-    error_fn: (error) => null,
+    error_fn: null,
 
     param: (target, data) => {},
     json: (url, obj, fn, _error_fn) => {},
@@ -23,13 +23,13 @@ const JFetch = {
  * @param {function} error_fn
  */
 JFetch.error_process = (error, error_fn) => {
-    if (error_fn != undefined) {
+    if (error_fn != undefined && error_fn instanceof Function) {
         error_fn(error);
     } else {
-        if (JFetch.error_fn != null && JFetch.alererror_fnt_fn instanceof Function) {
+        if (JFetch.error_fn != null && JFetch.error_fn instanceof Function) {
             JFetch.error_fn(error);
         } else {
-            console.error(error);
+            console.log(error);
         }
     }
 };
@@ -63,7 +63,7 @@ JFetch.json = (url, obj, fn, error_fn) => {
     .then(text => JSON.parse(text))
     .then(json => fn(json))
     .catch(error => {
-        error_process(error, error_fn);
+        JFetch.error_process(error, error_fn);
     });
 }
 
@@ -75,7 +75,10 @@ JFetch.json = (url, obj, fn, error_fn) => {
  */
 JFetch.form = (url, form_id, fn, error_fn) => {
     const form = document.getElementById(form_id);
-    if (form == null) return JFetch.error_fn();
+    if (form == null) {
+        console.log("Element (form id: " + form_id + ") is null");
+        return;
+    }
     const form_data = new FormData(form);
     const url_encoded_data = new URLSearchParams(form_data);
     fetch(url, {
@@ -89,7 +92,7 @@ JFetch.form = (url, form_id, fn, error_fn) => {
     .then(text => JSON.parse(text))
     .then(json => fn(json))
     .catch(error => {
-        error_process(error, error_fn);
+        JFetch.error_process(error, error_fn);
     });
 }
 
@@ -101,7 +104,10 @@ JFetch.form = (url, form_id, fn, error_fn) => {
  */
 JFetch.file_form = (url, form_id, fn, error_fn) => {
     let form = document.getElementById(form_id);
-    if (form == null) return JFetch.error_fn();
+    if (form == null) {
+        console.log("Element (form id: " + form_id + ") is null");
+        return;
+    }
     let form_data = new FormData(form);
     fetch(url, {
         method: 'POST',
@@ -114,6 +120,6 @@ JFetch.file_form = (url, form_id, fn, error_fn) => {
     .then(text => JSON.parse(text))
     .then(json => fn(json))
     .catch(error => {
-        error_process(error, error_fn);
+        JFetch.error_process(error, error_fn);
     });
 }
