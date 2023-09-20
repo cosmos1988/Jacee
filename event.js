@@ -38,7 +38,7 @@ JEvent.load = (fn) => {
     try {
         window.addEventListener("load", fn);
     } catch (e) {
-        // console.error("JEvent.laod (fn: ", fn, "): ", e)
+        console.log(e)
    }
 }
 
@@ -53,10 +53,14 @@ JEvent.add_event = (id, type, fn) => {
             document.addEventListener(type, fn);
         } else {
             let element = document.getElementById(id);
+            if (element == null) {
+                console.log("Element (id: " + id + ") is null");
+                return;
+            }
             element.addEventListener(type, fn);
         }
     } catch (e) {
-        // console.error("JEvent.add_event (id: ", id, ", type: ", type, ", fn: ", fn, "): ", e)
+        console.log(e)
     }
 }
 
