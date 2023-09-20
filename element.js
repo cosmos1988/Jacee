@@ -20,14 +20,22 @@ const JElement = {
  * @param {string} id
  */
 JElement.get = (id) => {
-    return document.getElementById(id);
+    let element = document.getElementById(id);
+    if (element == null) {
+        console.log("Element (id: " + id + ") is null");
+    }
+    return element;
 }
 
 /**
  * @param {string} name
  */
 JElement.elements = (name) => {
-    return document.getElementsByName(name);
+    let elements = document.getElementsByName(name);
+    if (elements == null) {
+        console.log("Element (name: " + name + ") is null");
+    }
+    return elements;
 }
 
 /**
