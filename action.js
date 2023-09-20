@@ -10,25 +10,31 @@ const JAction = {
     /** 공통 경고창을 띄우는 함수 설정: JAction.alert_fn = (msg) => { }
 	 * @param {string} msg
 	 */
-    alert_fn: (msg) => null,
+    alert_fn: null,
+    
     go: (url) => {},
     back: () => {},
     teleport: (url) => {},
+    sleep: (ms) => {},
 };
 
 /**
  * @param {string} url
  */
 JAction.element = (id) => {
-    return document.getElementById(id);
+    let element = document.getElementById(id);
+    if (element == null) {
+        console.log("Element (id: " + id + ") is null");
+    }
+    return element;
 }
 
 /**
  * @param {string} msg
  */
 JAction.alert = (msg) => {
-    if (JCheck.alert_fn != null && JCheck.alert_fn instanceof Function) {
-        JCheck.alert_fn(msg);
+    if (JAction.alert_fn != null && JAction.alert_fn instanceof Function) {
+        JAction.alert_fn(msg);
     } else {
         alert(msg);
     }
@@ -47,3 +53,11 @@ JAction.back = () => {window.history.back()};
  * @param {string} url
  */
 JAction.teleport = (url) => {window.location.replace(url)};
+
+/**
+ * @param {number} ms
+ */
+JAction.sleep =(ms) => {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + ms);
+};
