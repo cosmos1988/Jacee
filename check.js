@@ -10,7 +10,7 @@ const JCheck = {
     /** 공통 경고창을 띄우는 함수 설정: JCheck.alert_fn = (msg) => { }
 	 * @param {string} msg
 	 */
-    alert_fn: (msg) => null,
+    alert_fn: null,
 
     result: {
         empty: (id) => {},
@@ -113,17 +113,17 @@ const JCheck = {
     element: (id) => {
         let element = document.getElementById(id);
         if (element == null) {
-            // console.error("JCheck.element (id: ", id, ")");
+            console.log("Element (id: " + id + ") is null");
         }
-        return element
+        return element;
     },
 
     elements: (name) => {
         let elements = document.getElementsByName(name);
         if (elements == null) {
-            // console.error("JCheck.elements (name: ", name, ")");
+            console.log("Element (name: " + name + ") is null");
         }
-        return elements
+        return elements;
     },
 
     length: (id) => {
@@ -844,7 +844,7 @@ JCheck.input.add_event = (id, fn) => {
         if (element == null) return;
         element.addEventListener("input", fn);
     } catch(e) {
-        // console.error("JCheck.input.add_event (id: ", id, ", fn: ", fn, "): ", e)
+        console.log(e)
     }
 }
 
@@ -1102,7 +1102,7 @@ JCheck.change.add_events = (name, fn) => {
             elements[i].addEventListener("change", fn);
         }
     } catch(e) {
-        // console.error("JCheck.change.add_events (name: ", name, ", fn: ", fn, "): ", e)
+        console.log(e)
     }
 }
 
