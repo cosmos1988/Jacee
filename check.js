@@ -470,9 +470,10 @@ JCheck.result.checked = (name) => {
     if (elements == null) return 0;
     let count = 0;
     for (let i = 0; i < elements.length; i++) {
-        if (elements[i] == null) return 0;
-        if (elements[i].checked == null) return 0;
-        if (elements[i].checked) {
+        let element = elements[i];
+        if (element == null) return 0;
+        if (element.checked == null) return 0;
+        if (element.checked) {
             count++;
         }
     }
@@ -487,11 +488,12 @@ JCheck.result.checked_sum = (name) => {
     if (elements == null) return 0;
     let sum = 0;
     for (let i = 0; i < elements.length; i++) {
-        if (elements[i] == null) return 0;
-        if (elements[i].checked == null) return 0;
-        if (elements[i].checked) {
-            if (!NaN(elements[i].value)) {
-                sum += Number(elements[i].value);
+        let element = elements[i];
+        if (element == null) return 0;
+        if (element.checked == null) return 0;
+        if (element.checked) {
+            if (!NaN(element.value)) {
+                sum += Number(element.value);
             }
         }
     }
