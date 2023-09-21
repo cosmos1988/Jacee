@@ -6,6 +6,7 @@
  * @copyright Copyright © 2023 <cosmos1988>
  */
 const JElement = {
+    get: (id) => {},
     element: (id) => {},
     elements: (name) => {},
     value: (id) => {},
@@ -17,6 +18,11 @@ const JElement = {
     selected_value: (id) => {},
     select_by_value: (id, value) => {},
     select_by_index: (id, index) => {},
+    add_option: (select_id, name, value) => {},
+    del_all_option: (select_id) => {},
+    del_option_by_index: (select_id, index) => {},
+    del_option_by_text: (select_id, text) => {},
+    del_option_by_value: (select_id, value) => {},
     checked_count: (name) => {},
     checked_sum: (name) => {},
     check_by_value: (name, value, bool) => {},
@@ -32,6 +38,13 @@ JElement.get = (id) => {
         console.log("Element (id: " + id + ") is null");
     }
     return element;
+}
+
+/**
+ * @param {string} id
+ */
+JElement.element = (id) => {
+    return JElement.get(id);
 }
 
 /**
@@ -91,7 +104,7 @@ JElement.json = (form_id) => {
  * @param {string} id
  */
 JElement.disabled = (id) => {
-    let element = JAction.element(id);
+    let element = JElement.get(id);
     if (element != null && element.value != null) return element.disabled;
     else return false;
 }
@@ -101,7 +114,7 @@ JElement.disabled = (id) => {
  * @param {boolean} bool
  */
 JElement.set_disabled = (id, bool) => {
-    let element = JAction.element(id);
+    let element = JElement.get(id);
     if (element != null && element.value != null) element.disabled = bool;
 }
 
@@ -109,7 +122,7 @@ JElement.set_disabled = (id, bool) => {
  * @param {string} id
  */
 JElement.selected_value = (id) => {
-    let element = JCheck.element(id);
+    let element = JElement.get(id);
     if (element == null) return false;
     return element.options[element.selectedIndex].value;
 }
@@ -119,7 +132,7 @@ JElement.selected_value = (id) => {
  * @param {string} value
  */
 JElement.select_by_value = (id, value) => {
-    let element = JCheck.element(id);
+    let element = JElement.get(id);
     if (element == null) return false;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
@@ -135,7 +148,7 @@ JElement.select_by_value = (id, value) => {
  * @param {number} index
  */
 JElement.select_by_index = (id, index) => {
-    let element = JCheck.element(id);
+    let element = JElement.get(id);
     if (element == null) return false;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
@@ -146,10 +159,73 @@ JElement.select_by_index = (id, index) => {
 }
 
 /**
+ * @param {string} select_id
+ * @param {number} index
+ */
+JElement.add_option = (select_id, text, value) => {
+    let element = JElement.get(select_id);
+    if (element == null) return false;
+    var option = new Option(text, value);
+    element.add(option);
+}
+
+/**
+ * @param {string} select_id
+ * @param {number} index
+ */
+JElement.del_all_option = (select_id) => {
+    let element = JElement.get(select_id);
+    if (element == null) return false;
+    while (element.options.length > 0) {
+        element.remove(0);
+    }
+}
+
+/**
+ * @param {string} select_id
+ * @param {number} index
+ */
+JElement.del_option_by_index = (select_id, index) => {
+    let element = JElement.get(select_id);
+    if (element == null) return false;
+    element.remove(index);
+}
+
+/**
+ * @param {string} select_id
+ * @param {string} text
+ */
+JElement.del_option_by_text = (select_id, text) => {
+    let element = JElement.get(select_id);
+    if (element == null) return false;
+    let options = element.options;
+    for (i = 0; i < options.length; i++) {
+        if (options[i].text == text) {
+            element.remove(i);
+        }
+    }
+}
+
+/**
+ * @param {string} select_id
+ * @param {string} value
+ */
+JElement.del_option_by_value = (select_id, value) => {
+    let element = JElement.get(select_id);
+    if (element == null) return false;
+    let options = element.options;
+    for (i = 0; i < options.length; i++) {
+        if (options[i].value == value) {
+            element.remove(i);
+        }
+    }
+}
+
+/**
  * @param {string} name
  */
 JElement.checked_count = (name) => {
-    let elements = JCheck.elements(name);
+    let elements = JElement.gets(name);
     if (elements == null) return 0;
     let count = 0;
     for (let i = 0; i < elements.length; i++) {
@@ -167,7 +243,7 @@ JElement.checked_count = (name) => {
  * @param {string} name
  */
 JElement.checked_sum = (name) => {
-    let elements = JCheck.elements(name);
+    let elements = JElement.gets(name);
     if (elements == null) return 0;
     let sum = 0;
     for (let i = 0; i < elements.length; i++) {
@@ -189,7 +265,7 @@ JElement.checked_sum = (name) => {
  * @param {boolean} bool
  */
 JElement.check_by_value = (name, value, bool) => {
-    let elements = JCheck.elements(name);
+    let elements = JElement.gets(name);
     if (elements == null) return 0;
     let count = 0;
     for (let i = 0; i < elements.length; i++) {
@@ -205,7 +281,7 @@ JElement.check_by_value = (name, value, bool) => {
  * @param {boolean} bool
  */
 JElement.check_all = (name, bool) => {
-    let elements = JAction.elements(name);
+    let elements = JElement.gets(name);
     if (elements != null || elements.length > 0) {
         for (i = 0; i < elements.length; i++) {
             let element = elements[i];
