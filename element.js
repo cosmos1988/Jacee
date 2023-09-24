@@ -63,7 +63,7 @@ JElement.element = (id) => {
 JElement.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements == null) {
-        console.log("Element (name: " + name + ") is null");
+        console.log("Elements (name: " + name + ") is null");
     }
     return elements;
 }
@@ -83,7 +83,7 @@ JElement.value = (id) => {
  */
 JElement.set_value = (id, value) => {
     let element = JElement.get(id);
-    if (element != null) return element.value = value;
+    if (element != null) element.value = value;
 }
 
 /**
@@ -134,6 +134,7 @@ JElement.set_disabled = (id, bool) => {
  */
 JElement.set_disabled_by_name = (name, bool) => {
     let elements = JElement.elements(name);
+    if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
         elements[i].disabled = bool;
     }
@@ -145,7 +146,7 @@ JElement.set_disabled_by_name = (name, bool) => {
  */
 JElement.set_disabled_for_form = (form_id, bool) => {
     let form = JElement.get(form_id);
-    if (element == null) return;
+    if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
     elements.forEach(element => {
         element.disabled = bool;
@@ -176,6 +177,7 @@ JElement.set_readonly = (id, bool) => {
  */
 JElement.set_readonly_by_name = (name, bool) => {
     let elements = JElement.elements(name);
+    if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
         elements[i].readOnly = bool;
     }
@@ -187,7 +189,7 @@ JElement.set_readonly_by_name = (name, bool) => {
  */
 JElement.set_readonly_for_form = (form_id, bool) => {
     let form = JElement.get(form_id);
-    if (element == null) return;
+    if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
     elements.forEach(element => {
         element.readOnly = bool;
@@ -199,7 +201,8 @@ JElement.set_readonly_for_form = (form_id, bool) => {
  * @param {boolean} bool
  */
 JElement.add_class = (id, class_name) => {
-    let element = JElement.element(id);
+    let element = JElement.get(id);
+    if (element == null) return;
     element.classList.add(class_name);
 }
 
@@ -209,6 +212,7 @@ JElement.add_class = (id, class_name) => {
  */
 JElement.add_class_by_name = (name, class_name) => {
     let elements = JElement.elements(name);
+    if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
         elements[i].classList.add(class_name);
     }
@@ -219,7 +223,8 @@ JElement.add_class_by_name = (name, class_name) => {
  * @param {boolean} bool
  */
 JElement.remove_class = (id, class_name) => {
-    let element = JElement.element(id);
+    let element = JElement.get(id);
+    if (element == null) return;
     element.classList.remove(class_name);
 }
 
@@ -229,6 +234,7 @@ JElement.remove_class = (id, class_name) => {
  */
 JElement.remove_class_by_name = (name, class_name) => {
     let elements = JElement.elements(name);
+    if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
         elements[i].classList.remove(class_name);
     }
@@ -249,7 +255,7 @@ JElement.selected_value = (id) => {
  */
 JElement.select_by_value = (id, value) => {
     let element = JElement.get(id);
-    if (element == null) return false;
+    if (element == null) return;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
         let option = options[i];
@@ -265,7 +271,7 @@ JElement.select_by_value = (id, value) => {
  */
 JElement.select_by_index = (id, index) => {
     let element = JElement.get(id);
-    if (element == null) return false;
+    if (element == null) return;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
         if (i == index) {
@@ -280,7 +286,7 @@ JElement.select_by_index = (id, index) => {
  */
 JElement.add_option = (select_id, text, value) => {
     let element = JElement.get(select_id);
-    if (element == null) return false;
+    if (element == null) return;
     var option = new Option(text, value);
     element.add(option);
 }
@@ -291,7 +297,7 @@ JElement.add_option = (select_id, text, value) => {
  */
 JElement.del_all_option = (select_id) => {
     let element = JElement.get(select_id);
-    if (element == null) return false;
+    if (element == null) return;
     while (element.options.length > 0) {
         element.remove(0);
     }
@@ -303,7 +309,7 @@ JElement.del_all_option = (select_id) => {
  */
 JElement.del_option_by_index = (select_id, index) => {
     let element = JElement.get(select_id);
-    if (element == null) return false;
+    if (element == null) return;
     element.remove(index);
 }
 
@@ -313,7 +319,7 @@ JElement.del_option_by_index = (select_id, index) => {
  */
 JElement.del_option_by_text = (select_id, text) => {
     let element = JElement.get(select_id);
-    if (element == null) return false;
+    if (element == null) return;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
         if (options[i].text == text) {
@@ -328,7 +334,7 @@ JElement.del_option_by_text = (select_id, text) => {
  */
 JElement.del_option_by_value = (select_id, value) => {
     let element = JElement.get(select_id);
-    if (element == null) return false;
+    if (element == null) return;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
         if (options[i].value == value) {
@@ -341,7 +347,7 @@ JElement.del_option_by_value = (select_id, value) => {
  * @param {string} name
  */
 JElement.checked_count = (name) => {
-    let elements = JElement.gets(name);
+    let elements = JElement.elements(name);
     if (elements == null) return 0;
     let count = 0;
     for (let i = 0; i < elements.length; i++) {
@@ -359,7 +365,7 @@ JElement.checked_count = (name) => {
  * @param {string} name
  */
 JElement.checked_sum = (name) => {
-    let elements = JElement.gets(name);
+    let elements = JElement.elements(name);
     if (elements == null) return 0;
     let sum = 0;
     for (let i = 0; i < elements.length; i++) {
@@ -381,8 +387,8 @@ JElement.checked_sum = (name) => {
  * @param {boolean} bool
  */
 JElement.check_by_value = (name, value, bool) => {
-    let elements = JElement.gets(name);
-    if (elements == null) return 0;
+    let elements = JElement.elements(name);
+    if (elements == null) return;
     let count = 0;
     for (let i = 0; i < elements.length; i++) {
         let element = elements[i];
@@ -397,7 +403,7 @@ JElement.check_by_value = (name, value, bool) => {
  * @param {boolean} bool
  */
 JElement.check_all = (name, bool) => {
-    let elements = JElement.gets(name);
+    let elements = JElement.elements(name);
     if (elements != null || elements.length > 0) {
         for (i = 0; i < elements.length; i++) {
             let element = elements[i];
