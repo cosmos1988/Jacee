@@ -7,10 +7,34 @@
  */
 const JCheck = {
 
-    /** 공통 경고창을 띄우는 함수 설정: JCheck.alert_fn = (msg) => { }
+    /** 
+     * 공통 경고창을 띄우는 함수 설정: JCheck.alert_fn = (msg) => { }
 	 * @param {string} msg
 	 */
     alert_fn: null,
+
+    /**
+     * 패스워드 패턴 
+     * 
+     * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]): 문자열 내에 이러한 특수 문자 중 최소 하나가 포함되어 있어야 합니다.
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{8,}: 전체 문자열은 위의 소문자, 대문자, 숫자, 특수 문자들로만 구성되어 있어야 하며, 최소 길이는 8자 이상이어야 합니다.
+     */
+    password_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{8,}$/,
+
+    /**
+     * 강력한 패스워드 패턴
+     * 
+     * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]): 문자열에 최소 하나의 이 특수 문자들 중 하나가 포함되어 있어야 합니다.
+     * .*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]: 이 조건은 문자열에 위의 특수 문자들 중 적어도 하나가 포함되어 있어야 한다는 것을 추가로 확인합니다. (특수 문자 최소 두 개)
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{12,}: 문자열은 소문자 알파벳, 대문자 알파벳, 숫자, 위의 특수 문자들 중 하나 이상으로 구성되어야 하며, 최소 길이는 12자 이상이어야 합니다.
+     */
+    password_lv2_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/].*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{12,}$/,
 
     result: {
         empty: (id) => {},
@@ -109,33 +133,32 @@ const JCheck = {
         checked_count_range: (name, min, max) => {},
         checked_sum_range: (name, min, max) => {},
     },
-
-    element: (id) => {
-        let element = document.getElementById(id);
-        if (element == null) {
-            console.log("Element (id: " + id + ") is null");
-        }
-        return element;
-    },
-
-    elements: (name) => {
-        let elements = document.getElementsByName(name);
-        if (elements == null) {
-            console.log("Element (name: " + name + ") is null");
-        }
-        return elements;
-    },
-
-    length: (id) => {
-        let element = JCheck.element(id);
-        if (element != null && element.value != null) {
-            return element.value.length;
-        } else {
-            return 0;
-        }
-    },
 };
 
+JCheck.element = (id) => {
+    let element = document.getElementById(id);
+    if (element == null) {
+        console.log("Element (id: " + id + ") is null");
+    }
+    return element;
+}
+
+JCheck.elements = (name) => {
+    let elements = document.getElementsByName(name);
+    if (elements == null) {
+        console.log("Element (name: " + name + ") is null");
+    }
+    return elements;
+}
+
+JCheck.length = (id) => {
+    let element = JCheck.element(id);
+    if (element != null && element.value != null) {
+        return element.value.length;
+    } else {
+        return 0;
+    }
+}
 
 /* result */
 /**
@@ -146,7 +169,7 @@ JCheck.result.empty = (id) => {
     if (element == null) return true;
     if (element.value == null || element.value == '') return true;
     return false
-}
+};
    
 /**
  * @param {string} id
@@ -385,7 +408,7 @@ JCheck.result.password = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    let pattern = JCheck.password_pattern;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -400,7 +423,7 @@ JCheck.result.password_lv2 = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/].*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{12,}$/;
+    let pattern = JCheck.password_lv2_pattern;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -740,6 +763,14 @@ JCheck.alert.password = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
+JCheck.alert.password_lv2 = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.password_lv2(id));
+}
+
+/**
+ * @param {string} id
+ * @param {string} msg
+ */
 JCheck.alert.email = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.email(id));
 }
@@ -1062,7 +1093,7 @@ JCheck.focusout.alert_and_focus = (id, del, msg, fn) => {
  * @param {string} msg
  */
 JCheck.focusout.password = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.password);
+    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.password(id));
 }
 
 /**
@@ -1071,7 +1102,7 @@ JCheck.focusout.password = (id, del, msg) => {
  * @param {string} msg
  */
 JCheck.focusout.email = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.email);
+    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.email(id));
 }
 
 /**
@@ -1080,7 +1111,7 @@ JCheck.focusout.email = (id, del, msg) => {
  * @param {string} msg
  */
 JCheck.focusout.phone_number = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.phone_number);
+    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.phone_number(id));
 }
 
 /**
@@ -1089,7 +1120,7 @@ JCheck.focusout.phone_number = (id, del, msg) => {
  * @param {string} msg
  */
 JCheck.focusout.zip_code = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.zip_code);
+    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.zip_code(id));
 }
 
 /* change */
