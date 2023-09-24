@@ -29,10 +29,10 @@ const JElement = {
     select_by_value: (id, value) => {},
     select_by_index: (id, index) => {},
     add_option: (select_id, text, value) => {},
-    del_all_option: (select_id) => {},
-    del_option_by_index: (select_id, index) => {},
-    del_option_by_text: (select_id, text) => {},
-    del_option_by_value: (select_id, value) => {},
+    remove_option_all: (select_id) => {},
+    remove_option_by_index: (select_id, index) => {},
+    remove_option_by_text: (select_id, text) => {},
+    remove_option_by_value: (select_id, value) => {},
     checked_count: (name) => {},
     checked_sum: (name) => {},
     check_by_value: (name, value, bool) => {},
@@ -295,7 +295,7 @@ JElement.add_option = (select_id, text, value) => {
  * @param {string} select_id
  * @param {number} index
  */
-JElement.del_all_option = (select_id) => {
+JElement.remove_option_all = (select_id) => {
     let element = JElement.get(select_id);
     if (element == null) return;
     while (element.options.length > 0) {
@@ -307,7 +307,7 @@ JElement.del_all_option = (select_id) => {
  * @param {string} select_id
  * @param {number} index
  */
-JElement.del_option_by_index = (select_id, index) => {
+JElement.remove_option_by_index = (select_id, index) => {
     let element = JElement.get(select_id);
     if (element == null) return;
     element.remove(index);
@@ -317,7 +317,7 @@ JElement.del_option_by_index = (select_id, index) => {
  * @param {string} select_id
  * @param {string} text
  */
-JElement.del_option_by_text = (select_id, text) => {
+JElement.remove_option_by_text = (select_id, text) => {
     let element = JElement.get(select_id);
     if (element == null) return;
     let options = element.options;
@@ -332,7 +332,7 @@ JElement.del_option_by_text = (select_id, text) => {
  * @param {string} select_id
  * @param {string} value
  */
-JElement.del_option_by_value = (select_id, value) => {
+JElement.remove_option_by_value = (select_id, value) => {
     let element = JElement.get(select_id);
     if (element == null) return;
     let options = element.options;
