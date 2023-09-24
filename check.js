@@ -48,10 +48,10 @@ const JCheck = {
         length_range: (id, min, max) => {},
         english: (id) => {},
         english_number: (id) => {},
-        contains_spchars: (id) => {},
-        contains_number_spchars: (id) => {},
-        contains_spchars_space: (id) => {},
-        contains_number_spchars_space: (id) => {},
+        not_spchars: (id) => {},
+        not_number_spchars: (id) => {},
+        not_spchars_space: (id) => {},
+        not_number_spchars_space: (id) => {},
         id: (id) => {},
         password: (id) => {},
         password_lv2: (id) => {},
@@ -70,8 +70,7 @@ const JCheck = {
     },
 
     alert: {
-        alert_and_focus: (id, msg, result) => {},
-        empty: (id, msg) => {},
+        no_empty: (id, msg) => {},
         number: (id, msg) => {},
         min_size: (id, min, msg) => {},
         min_length: (id, min, msg) => {},
@@ -81,10 +80,10 @@ const JCheck = {
         length_range: (id, min, max, msg) => {},
         english: (id, msg) => {},
         english_number: (id, msg) => {},
-        contains_spchars: (id, msg) => {},
-        contains_number_spchars: (id, msg) => {},
-        contains_spchars_space: (id, msg) => {},
-        contains_number_spchars_space: (id, msg) => {},
+        no_spchars: (id, msg) => {},
+        no_number_spchars: (id, msg) => {},
+        no_spchars_space: (id, msg) => {},
+        no_number_spchars_space: (id, msg) => {},
         id: (id, msg) => {},
         password: (id, msg) => {},
         password_lv2: (id, msg) => {},
@@ -105,10 +104,10 @@ const JCheck = {
         number: (id, _msg) => {},
         english: (id, _msg) => {},
         english_number: (id, _msg) => {},
-        exclude_spchars: (id, _msg) => {},
-        exclude_number_spchars: (id, _msg) => {},
-        exclude_spchars_space: (id, _msg) => {},
-        exclude_number_spchars_space: (id, _msg) => {},
+        no_spchars: (id, _msg) => {},
+        no_number_spchars: (id, _msg) => {},
+        no_spchars_space: (id, _msg) => {},
+        no_number_spchars_space: (id, _msg) => {},
         max_size: (id, max, _msg) => {},
         max_length: (id, max, _msg) => {},
         id: (id, _msg) => {},
@@ -119,6 +118,7 @@ const JCheck = {
     },
 
     focusout: {
+        id: (id, del, _msg) => {},
         password: (id, del, _msg) => {},
         email: (id, del, _msg) => {},
         phone_number: (id, del, _msg) => {},
@@ -329,7 +329,7 @@ JCheck.result.english_number = (id) => {
 /**
  * @param {string} id
  */
-JCheck.result.contains_spchars = (id) => {
+JCheck.result.not_spchars = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
@@ -344,7 +344,7 @@ JCheck.result.contains_spchars = (id) => {
 /**
  * @param {string} id
  */
-JCheck.result.contains_number_spchars = (id) => {
+JCheck.result.not_number_spchars = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
@@ -359,7 +359,7 @@ JCheck.result.contains_number_spchars = (id) => {
 /**
  * @param {string} id
  */
-JCheck.result.contains_spchars_space = (id) => {
+JCheck.result.not_spchars_space = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
@@ -374,7 +374,7 @@ JCheck.result.contains_spchars_space = (id) => {
 /**
  * @param {string} id
  */
-JCheck.result.contains_number_spchars_space = (id) => {
+JCheck.result.not_number_spchars_space = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
@@ -627,7 +627,7 @@ JCheck.alert.alert_and_focus = (id, msg, result) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.empty = (id, msg) => {
+JCheck.alert.no_empty = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, JCheck.result.empty(id));
 }
 
@@ -715,32 +715,32 @@ JCheck.alert.english_number = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.contains_spchars = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.contains_spchars(id));
+JCheck.alert.no_spchars = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_spchars(id));
 }
 
 /**
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.contains_number_spchars = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.contains_number_spchars(id));
+JCheck.alert.no_number_spchars = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_number_spchars(id));
 }
 
 /**
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.contains_spchars_space = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.contains_spchars_space(id));
+JCheck.alert.no_spchars_space = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_spchars_space(id));
 }
 
 /**
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.contains_number_spchars_space = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.contains_number_spchars_space(id));
+JCheck.alert.no_number_spchars_space = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_number_spchars_space(id));
 }
 
 /**
@@ -933,7 +933,7 @@ JCheck.input.english_number = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.exclude_spchars = (id, msg) => {
+JCheck.input.no_spchars = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
@@ -942,7 +942,7 @@ JCheck.input.exclude_spchars = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.exclude_number_spchars = (id, msg) => {
+JCheck.input.no_number_spchars = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
@@ -951,7 +951,7 @@ JCheck.input.exclude_number_spchars = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.exclude_spchars_space = (id, msg) => {
+JCheck.input.no_spchars_space = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
@@ -960,7 +960,7 @@ JCheck.input.exclude_spchars_space = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.exclude_number_spchars_space = (id, msg) => {
+JCheck.input.no_number_spchars_space = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s0-9]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
@@ -1085,6 +1085,15 @@ JCheck.focusout.alert_and_focus = (id, del, msg, fn) => {
             }
         }
     );
+}
+
+/**
+ * @param {string} id
+ * @param {boolean} del
+ * @param {string} msg
+ */
+JCheck.focusout.id = (id, del, msg) => {
+    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.id(id));
 }
 
 /**
