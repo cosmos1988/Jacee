@@ -15,10 +15,16 @@ const JElement = {
     json: (form_id) => {},
     disabled: (id) => {},
     set_disabled: (id, bool) => {},
-    set_disabled_all: (form_id, bool) => {},
+    set_disabled_by_name: (name, bool) => {},
+    set_disabled_for_form: (form_id, bool) => {},
     readonly: (id) => {},
     set_readonly: (id, bool) => {},
-    set_readonly_all: (form_id, bool) => {},
+    set_readonly_by_name: (name, bool) => {},
+    set_readonly_for_form: (form_id, bool) => {},
+    add_class: (id, class_name) => {},
+    add_class_by_name: (name, class_name) => {},
+    remove_class: (id, class_name) => {},
+    remove_class_by_name: (name, class_name) => {},
     selected_value: (id) => {},
     select_by_value: (id, value) => {},
     select_by_index: (id, index) => {},
@@ -123,10 +129,21 @@ JElement.set_disabled = (id, bool) => {
 }
 
 /**
+ * @param {string} name
+ * @param {boolean} bool
+ */
+JElement.set_disabled_by_name = (name, bool) => {
+    let elements = JElement.elements(name);
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].disabled = bool;
+    }
+}
+
+/**
  * @param {string} form_id
  * @param {boolean} bool
  */
-JElement.set_disabled_all = (form_id, bool) => {
+JElement.set_disabled_for_form = (form_id, bool) => {
     let form = JElement.get(form_id);
     if (element == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
@@ -154,16 +171,67 @@ JElement.set_readonly = (id, bool) => {
 }
 
 /**
+ * @param {string} name
+ * @param {boolean} bool
+ */
+JElement.set_readonly_by_name = (name, bool) => {
+    let elements = JElement.elements(name);
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].readOnly = bool;
+    }
+}
+
+/**
  * @param {string} form_id
  * @param {boolean} bool
  */
-JElement.set_readonly_all = (form_id, bool) => {
+JElement.set_readonly_for_form = (form_id, bool) => {
     let form = JElement.get(form_id);
     if (element == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
     elements.forEach(element => {
         element.readOnly = bool;
     });
+}
+
+/**
+ * @param {string} id
+ * @param {boolean} bool
+ */
+JElement.add_class = (id, class_name) => {
+    let element = JElement.element(id);
+    element.classList.add(class_name);
+}
+
+/**
+ * @param {string} name
+ * @param {boolean} bool
+ */
+JElement.add_class_by_name = (name, class_name) => {
+    let elements = JElement.elements(name);
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.add(class_name);
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {boolean} bool
+ */
+JElement.remove_class = (id, class_name) => {
+    let element = JElement.element(id);
+    element.classList.remove(class_name);
+}
+
+/**
+ * @param {string} name
+ * @param {boolean} bool
+ */
+JElement.remove_class_by_name = (name, class_name) => {
+    let elements = JElement.elements(name);
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.remove(class_name);
+    }
 }
 
 /**
