@@ -12,7 +12,12 @@ const JAction = {
 	 * @param {string} msg
 	 */
     alert_fn: null,
-    
+
+    /** 공통 fetch 에러를 처리하는 함수 설정: JAction.fetch_error_fn = (error) =>  { }
+	 * @param {object} error
+	 */
+    fetch_error_fn: null,
+
     go: (url) => {},
     back: () => {},
     teleport: (url) => {},
@@ -33,7 +38,7 @@ const JAction = {
 JAction.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.log("Element (id: " + id + ") is null");
+        console.error("Element (id: " + id + ") is null");
     }
     return element;
 }
@@ -92,7 +97,6 @@ JAction.submit = (form, url, method, content_type) => {
  */
 JAction.submit_form = (url, form_id) => {
     const form = JAction.element(form_id);
-    const opt = JAction.submit_opt();
     JAction.submit(form, url, 'POST', null);
 }
 
@@ -102,7 +106,6 @@ JAction.submit_form = (url, form_id) => {
  */
 JAction.submit_file_form = (url, form_id) => {
     const form = JAction.element(form_id);
-    const opt = JAction.submit_opt();
     JAction.submit(form, url, 'POST', 'multipart/form-data');
 }
 
@@ -110,10 +113,10 @@ JAction.submit_file_form = (url, form_id) => {
  * @param {object} error
  */
 JAction.fetch_error = (error) => {
-    if (JAction.error_fn != null && JAction.error_fn instanceof Function) {
-        JAction.error_fn(error);
+    if (JAction.fetch_error_fn != null && JAction.fetch_error_fn instanceof Function) {
+        JAction.fetch_error_fn(error);
     } else {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -150,7 +153,7 @@ JAction.fetch = (url, opt, fn, async = true) => {
         .then(text => JSON.parse(text))
         .then(json => fn(json))
         .catch(error => {
-            JAction.error(error);
+            JAction.fetch_error(error);
         });
     } else {
         var xhr = new XMLHttpRequest();
@@ -167,7 +170,7 @@ JAction.fetch = (url, opt, fn, async = true) => {
 						throw new Error(xhr);
 	                }
 				} catch (error) {
-					JAction.error(error);
+					JAction.fetch_error(error);
 				}
             }
         };
