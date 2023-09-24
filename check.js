@@ -146,7 +146,7 @@ JCheck.element = (id) => {
 JCheck.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements == null) {
-        console.log("Element (name: " + name + ") is null");
+        console.log("Elements (name: " + name + ") is null");
     }
     return elements;
 }
