@@ -138,7 +138,7 @@ const JCheck = {
 JCheck.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.log("Element (id: " + id + ") is null");
+        console.error("Element (id: " + id + ") is null");
     }
     return element;
 }
@@ -146,7 +146,7 @@ JCheck.element = (id) => {
 JCheck.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements == null) {
-        console.log("Elements (name: " + name + ") is null");
+        console.error("Elements (name: " + name + ") is null");
     }
     return elements;
 }
@@ -877,7 +877,7 @@ JCheck.input.add_event = (id, fn) => {
         if (element == null) return;
         element.addEventListener("input", fn);
     } catch(e) {
-        console.log(e)
+        console.error(e)
     }
 }
 
@@ -1144,7 +1144,7 @@ JCheck.change.add_events = (name, fn) => {
             elements[i].addEventListener("change", fn);
         }
     } catch(e) {
-        console.log(e)
+        console.error(e)
     }
 }
 
