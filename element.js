@@ -15,10 +15,14 @@ const JElement = {
     json: (form_id) => {},
     disabled: (id) => {},
     set_disabled: (id, bool) => {},
+    set_disabled_all: (form_id, bool) => {},
+    readonly: (id) => {},
+    set_readonly: (id, bool) => {},
+    set_readonly_all: (form_id, bool) => {},
     selected_value: (id) => {},
     select_by_value: (id, value) => {},
     select_by_index: (id, index) => {},
-    add_option: (select_id, name, value) => {},
+    add_option: (select_id, text, value) => {},
     del_all_option: (select_id) => {},
     del_option_by_index: (select_id, index) => {},
     del_option_by_text: (select_id, text) => {},
@@ -116,6 +120,50 @@ JElement.disabled = (id) => {
 JElement.set_disabled = (id, bool) => {
     let element = JElement.get(id);
     if (element != null && element.value != null) element.disabled = bool;
+}
+
+/**
+ * @param {string} form_id
+ * @param {boolean} bool
+ */
+JElement.set_disabled_all = (form_id, bool) => {
+    let form = JElement.get(form_id);
+    if (element == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
+    elements.forEach(element => {
+        element.disabled = bool;
+    });
+}
+
+/**
+ * @param {string} id
+ */
+JElement.readonly = (id) => {
+    let element = JElement.get(id);
+    if (element != null && element.value != null) return element.readOnly;
+    else return false;
+}
+
+/**
+ * @param {string} id
+ * @param {boolean} bool
+ */
+JElement.set_readonly = (id, bool) => {
+    let element = JElement.get(id);
+    if (element != null && element.value != null) element.readOnly = bool;
+}
+
+/**
+ * @param {string} form_id
+ * @param {boolean} bool
+ */
+JElement.set_readonly_all = (form_id, bool) => {
+    let form = JElement.get(form_id);
+    if (element == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
+    elements.forEach(element => {
+        element.readOnly = bool;
+    });
 }
 
 /**
