@@ -38,7 +38,7 @@ JEvent.load = (fn) => {
     try {
         window.addEventListener("load", fn);
     } catch (e) {
-        console.log(e)
+        console.error(e)
    }
 }
 
@@ -54,13 +54,13 @@ JEvent.add_event = (id, type, fn) => {
         } else {
             let element = document.getElementById(id);
             if (element == null) {
-                console.log("Element (id: " + id + ") is null");
+                console.error("Element (id: " + id + ") is null");
                 return;
             }
             element.addEventListener(type, fn);
         }
     } catch (e) {
-        console.log(e)
+        console.error(e)
     }
 }
 
