@@ -29,7 +29,7 @@ const JElement = {
     select_by_value: (id, value) => {},
     select_by_index: (id, index) => {},
     add_option: (select_id, text, value) => {},
-    remove_option_all: (select_id) => {},
+    remove_all_options: (select_id) => {},
     remove_option_by_index: (select_id, index) => {},
     remove_option_by_text: (select_id, text) => {},
     remove_option_by_value: (select_id, value) => {},
@@ -45,7 +45,7 @@ const JElement = {
 JElement.get = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.log("Element (id: " + id + ") is null");
+        console.error("Element (id: " + id + ") is null");
     }
     return element;
 }
@@ -63,7 +63,7 @@ JElement.element = (id) => {
 JElement.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements == null) {
-        console.log("Elements (name: " + name + ") is null");
+        console.error("Elements (name: " + name + ") is null");
     }
     return elements;
 }
@@ -295,7 +295,7 @@ JElement.add_option = (select_id, text, value) => {
  * @param {string} select_id
  * @param {number} index
  */
-JElement.remove_option_all = (select_id) => {
+JElement.remove_all_options = (select_id) => {
     let element = JElement.get(select_id);
     if (element == null) return;
     while (element.options.length > 0) {
