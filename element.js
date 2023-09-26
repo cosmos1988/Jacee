@@ -6,13 +6,13 @@
  * @copyright Copyright © 2023 <cosmos1988>
  */
 const JElement = {
+    not_null: (id) => {},
     get: (id) => {},
     element: (id) => {},
     elements: (name) => {},
     value: (id) => {},
     set_value: (id, value) => {},
     length: (id) => {},
-    json: (form_id) => {},
     disabled: (id) => {},
     set_disabled: (id, bool) => {},
     set_disabled_by_name: (name, bool) => {},
@@ -38,6 +38,17 @@ const JElement = {
     check_by_value: (name, value, bool) => {},
     check_all: (name, bool) => {},
 };
+
+/**
+ * @param {string} id
+ */
+JElement.not_null = (id) => {
+    let element = document.getElementById(id);
+    if (element != null) {
+        return true;
+    }
+    return false;
+}
 
 /**
  * @param {string} id
@@ -93,21 +104,6 @@ JElement.length = (id) => {
     let element = JElement.get(id);
     if (element != null && element.value != null) return element.value.length;
     else return 0;
-}
-
-/**
- * @param {string} form_id
- */
-JElement.json = (form_id) => {
-    let element = JElement.get(id);
-    if (element == null) return JSON.stringify({});
-
-    const formData = new FormData(element);
-    let json = {};
-    for (const [key, value] of formData.entries()) {
-        json[key] = value;
-    }
-    return JSON.stringify(json);
 }
 
 /**
