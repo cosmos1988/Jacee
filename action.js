@@ -18,18 +18,22 @@ const JAction = {
 	 */
     fetch_error_fn: null,
 
+    alert: (msg) => {},
     go: (url) => {},
     back: () => {},
     teleport: (url) => {},
     sleep: (ms) => {},
-    submit: (form, url, method, content_type) => {},
-    submit_form: (url, form_id) => {},
-    submit_file_form: (url, form_id) => {},
-    fetch_opt: (method, content_type, body) => {},
+    create_form: (_id) => {},
+    get_form: (form) => {},
+    form_append: (form, name, value, _type) => {},
+    form_to_object: (form_id) => {},
+    submit: (url, form, _method, _content_type) => {},
+    submit_by_file_form: (url, form_id) => {},
+    fetch_option: (method, content_type, body) => {},
     fetch: (url, opt, fn, _async) => {},
-    fetch_json: (url, obj, fn, _async) => {},
-    fetch_form: (url, form_id, fn, _async) => {},
-    fetch_file_form: (url, form_id, fn, _async) => {},
+    fetch_by_json: (url, obj, fn, _async) => {},
+    fetch_by_form: (url, form, fn, _async) => {},
+    fetch_by_file_form: (url, form_id, fn, _async) => {},
 };
 
 /**
@@ -77,14 +81,78 @@ JAction.sleep =(ms) => {
 };
 
 /**
- * @param {object} form
+ * @param {string} id
+ */
+JAction.create_form = (id) => {
+    let form = document.createElement("form");
+    if (id != null) {
+        form.setAttribute("id", id);
+    }
+    document.body.appendChild(form);
+    return form;
+}
+
+/**
+ * @param {object|string} form
+ */
+JAction.get_form = (form) => {
+    if (form instanceof HTMLFormElement) {
+        return form;
+    } else if (typeof form === 'string') {
+        return JAction.element(form);
+    } else {
+        console.error('It is not a form');
+    }
+}
+
+/**
+ * @param {object|string} form
+ * @param {string} name
+ * @param {string} value
+ * @param {string} type
+ */
+JAction.form_append = (form, name, value, type) => {
+    form = JAction.get_form(form);
+    let element = document.createElement("input");
+    if (type != null) {
+        element.setAttribute("type", type);
+    } else {
+        element.setAttribute("type", "hidden");
+    }
+    element.setAttribute("name", name);
+    element.setAttribute("value", value);
+    form.appendChild(element);
+}
+
+/**
+ * @param {string} form_id
+ */
+JAction.form_to_object = (form_id) => {
+    let element = JAction.element(form_id);
+    if (element == null) return JSON.stringify({});
+
+    const formData = new FormData(element);
+    let obj = {};
+    for (const [key, value] of formData.entries()) {
+        obj[key] = value;
+    }
+    return obj;
+}
+
+/**
  * @param {string} url
+ * @param {object|string} form
  * @param {string} method
  * @param {string} content_type
  */
-JAction.submit = (form, url, method, content_type) => {
+JAction.submit = (url, form, method, content_type) => {
+    form = JAction.get_form(form);
     form.action = url;
-    form.method = method;
+    if (method != null) {
+        form.method = method;
+    } else {
+        form.method = 'POST';
+    }
     if (content_type != null) {
         form.enctype = content_type;
     }
@@ -95,18 +163,9 @@ JAction.submit = (form, url, method, content_type) => {
  * @param {string} url
  * @param {string} form_id
  */
-JAction.submit_form = (url, form_id) => {
+JAction.submit_by_file_form = (url, form_id) => {
     const form = JAction.element(form_id);
-    JAction.submit(form, url, 'POST', null);
-}
-
-/**
- * @param {string} url
- * @param {string} form_id
- */
-JAction.submit_file_form = (url, form_id) => {
-    const form = JAction.element(form_id);
-    JAction.submit(form, url, 'POST', 'multipart/form-data');
+    JAction.submit(url, form, 'POST', 'multipart/form-data');
 }
 
 /**
@@ -125,7 +184,7 @@ JAction.fetch_error = (error) => {
  * @param {string} content_type
  * @param {object} body
  */
-JAction.fetch_opt = (method, content_type, body) => {
+JAction.fetch_option = (method, content_type, body) => {
     return {
         method,
         headers: {
@@ -184,22 +243,22 @@ JAction.fetch = (url, opt, fn, async = true) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch_json = (url, obj, fn, async) => {
-    const opt = JAction.fetch_opt('POST', 'application/json', JSON.stringify(obj));
+JAction.fetch_by_json = (url, obj, fn, async) => {
+    const opt = JAction.fetch_option('POST', 'application/json', JSON.stringify(obj));
     JAction.fetch(url, opt, fn, async);
 }
 
 /**
  * @param {string} url
- * @param {string} form_id
+ * @param {object|string} form
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch_form = (url, form_id, fn, async) => {
-    const form = JAction.element(form_id);
+JAction.fetch_by_form = (url, form, fn, async) => {
+    form = JAction.get_form(form);
     const form_data = new FormData(form);
     const url_encoded_data = new URLSearchParams(form_data);
-    const opt = JAction.fetch_opt('POST', 'application/x-www-form-urlencoded', url_encoded_data);
+    const opt = JAction.fetch_option('POST', 'application/x-www-form-urlencoded', url_encoded_data);
     JAction.fetch(url, opt, fn, async);
 }
 
@@ -209,9 +268,9 @@ JAction.fetch_form = (url, form_id, fn, async) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch_file_form = (url, form_id, fn, async) => {
+JAction.fetch_by_file_form = (url, form_id, fn, async) => {
     const form = JAction.element(form_id);
     const form_data = new FormData(form);
-    const opt = JAction.fetch_opt('POST', 'multipart/form-data', form_data);
+    const opt = JAction.fetch_option('POST', 'multipart/form-data', form_data);
     JAction.fetch(url, opt, fn, async);
 }
