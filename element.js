@@ -11,9 +11,10 @@ const JElement = {
     element: (id) => {},
     elements: (name) => {},
     value: (id) => {},
-    length: (id) => {},
+    value_length: (id) => {},
     set_value: (id, value) => {},
     text: (id) => {},
+    text_length: (id) => {},
     set_text: (id, text) => {},
     inner_html: (id) => {},
     outer_html: (id) => {},
@@ -41,6 +42,7 @@ const JElement = {
     remove_class_by_name: (name, class_name) => {},
     selected_value: (id) => {}, // select
     select_by_value: (id, value) => {}, // select
+    select_by_text: (id, value) => {}, // select
     select_by_index: (id, index) => {}, // select
     add_option: (select_id, text, value) => {}, // select
     remove_all_options: (select_id) => {}, // select
@@ -124,7 +126,7 @@ JElement.value = (id) => {
 /**
  * @param {string} id
  */
-JElement.length = (id) => {
+JElement.value_length = (id) => {
     let element = JElement.get(id);
     if (element != null && element.value != null) return element.value.length;
     else return 0;
@@ -149,6 +151,15 @@ JElement.text = (id) => {
     let element = JElement.get(id);
     if (element != null) return element.textContent;
     else return "";
+}
+
+/**
+ * @param {string} id
+ */
+JElement.text_length = (id) => {
+    let element = JElement.get(id);
+    if (element != null && element.textContent != null) return element.textContent.length;
+    else return 0;
 }
 
 /**
@@ -439,6 +450,23 @@ JElement.select_by_value = (id, value) => {
     for (i = 0; i < options.length; i++) {
         let option = options[i];
         if (option.value == value) {
+            option.selected = true;
+            JElement.dispatch_event(element);
+        }
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} text
+ */
+JElement.select_by_text = (id, text) => {
+    let element = JElement.get(id);
+    if (element == null) return;
+    let options = element.options;
+    for (i = 0; i < options.length; i++) {
+        let option = options[i];
+        if (option.text == text) {
             option.selected = true;
             JElement.dispatch_event(element);
         }
