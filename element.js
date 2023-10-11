@@ -12,32 +12,64 @@ const JElement = {
     elements: (name) => {},
     value: (id) => {},
     set_value: (id, value) => {},
+    text: (id) => {},
+    set_text: (id, text) => {},
+    html: (id) => {},
+    inner_html: (id, html) => {}, /* <div><p>변경</p></div> */
+    outer_html: (id, html) => {}, /* <p>변경</p> */
+    beforebegin_html: (id, html) => {}, /* <p>추가</p><div>대상</div> */
+    afterbegin_html: (id, html) => {}, /* <div><p>추가</p>대상</div> */
+    beforeend_html: (id, html) => {}, /* <div>대상<p>추가</p></div> */
+    afterend_html: (id, html) => {}, /* <div>대상</div><p>추가</p> */
+    remove: (id) => {},
+    remove_by_name: (name) => {},
     length: (id) => {},
     disabled: (id) => {},
-    set_disabled: (id, bool) => {},
-    set_disabled_by_name: (name, bool) => {},
-    set_disabled_for_form: (form_id, bool) => {},
+    set_disabled: (id, _bool) => {},
+    set_disabled_by_name: (name, _bool) => {},
+    set_disabled_for_form: (form_id, _bool) => {},
     readonly: (id) => {},
-    set_readonly: (id, bool) => {},
-    set_readonly_by_name: (name, bool) => {},
-    set_readonly_for_form: (form_id, bool) => {},
+    set_readonly: (id, _bool) => {},
+    set_readonly_by_name: (name, _bool) => {},
+    set_readonly_for_form: (form_id, _bool) => {},
+    add_display_none: (id) => {},
+    remove_display_none: (id) => {},
     add_class: (id, class_name) => {},
     add_class_by_name: (name, class_name) => {},
     remove_class: (id, class_name) => {},
     remove_class_by_name: (name, class_name) => {},
-    selected_value: (id) => {},
-    select_by_value: (id, value) => {},
-    select_by_index: (id, index) => {},
-    add_option: (select_id, text, value) => {},
-    remove_all_options: (select_id) => {},
-    remove_option_by_index: (select_id, index) => {},
-    remove_option_by_text: (select_id, text) => {},
-    remove_option_by_value: (select_id, value) => {},
-    checked_count: (name) => {},
-    checked_sum: (name) => {},
-    check_by_value: (name, value, bool) => {},
-    check_all: (name, bool) => {},
+    selected_value: (id) => {}, // select
+    select_by_value: (id, value) => {}, // select
+    select_by_index: (id, index) => {}, // select
+    add_option: (select_id, text, value) => {}, // select
+    remove_all_options: (select_id) => {}, // select
+    remove_option_by_index: (select_id, index) => {}, // select
+    remove_option_by_text: (select_id, text) => {}, // select
+    remove_option_by_value: (select_id, value) => {}, // select
+    checked_count: (name) => {}, // checkbox
+    checked_sum: (name) => {}, // checkbox
+    check: (id, _bool) => {}, // checkbox, radio
+    check_by_value: (name, value, _bool) => {}, // checkbox, radio
+    check_all: (name, _bool) => {}, // checkbox
 };
+
+/**
+ * @param {object} element
+ */
+JElement.dispatch_event = (element) => {
+
+    let inputEvent = new Event('input', {
+        'bubbles': true,
+        'cancelable': true
+    });
+    element.dispatchEvent(inputEvent);
+
+    let changeEvent = new Event('change', {
+        'bubbles': true,
+        'cancelable': true
+    });
+    element.dispatchEvent(changeEvent);
+}
 
 /**
  * @param {string} id
@@ -94,7 +126,127 @@ JElement.value = (id) => {
  */
 JElement.set_value = (id, value) => {
     let element = JElement.get(id);
-    if (element != null) element.value = value;
+    if (element != null) {
+        element.value = value;
+        JElement.dispatch_event(element);
+    }
+}
+
+/**
+ * @param {string} id
+ */
+JElement.text = (id) => {
+    let element = JElement.get(id);
+    if (element != null) return element.textContent;
+    else return "";
+}
+
+/**
+ * @param {string} id
+ * @param {string} text
+ */
+JElement.set_text = (id, text) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.textContent = text;
+    }
+}
+
+/**
+ * @param {string} id
+ */
+JElement.html = (id) => {
+    let element = JElement.get(id);
+    if (element != null) return element.innerHTML;
+    else return "";
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.inner_html = (id, html) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.innerHTML = html;
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.outer_html = (id, html) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.outerHTML = html;
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.beforebegin_html = (id, html) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.insertAdjacentHTML("beforebegin", html);
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.afterbegin_html = (id, html) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.insertAdjacentHTML("afterbegin", html);
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.beforeend_html = (id, html) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.insertAdjacentHTML("beforeend", html);
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.afterend_html = (id, html) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.insertAdjacentHTML("afterend", html);
+    }
+}
+
+/**
+ * @param {string} id
+ */
+JElement.remove = (id) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.remove();
+    }
+}
+
+/**
+ * @param {string} name
+ */
+JElement.remove_by_name = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        element.remove();
+    }
 }
 
 /**
@@ -111,7 +263,7 @@ JElement.length = (id) => {
  */
 JElement.disabled = (id) => {
     let element = JElement.get(id);
-    if (element != null && element.value != null) return element.disabled;
+    if (element != null) return element.disabled;
     else return false;
 }
 
@@ -119,16 +271,16 @@ JElement.disabled = (id) => {
  * @param {string} id
  * @param {boolean} bool
  */
-JElement.set_disabled = (id, bool) => {
+JElement.set_disabled = (id, bool = true) => {
     let element = JElement.get(id);
-    if (element != null && element.value != null) element.disabled = bool;
+    if (element != null) element.disabled = bool;
 }
 
 /**
  * @param {string} name
  * @param {boolean} bool
  */
-JElement.set_disabled_by_name = (name, bool) => {
+JElement.set_disabled_by_name = (name, bool = true) => {
     let elements = JElement.elements(name);
     if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
@@ -140,7 +292,7 @@ JElement.set_disabled_by_name = (name, bool) => {
  * @param {string} form_id
  * @param {boolean} bool
  */
-JElement.set_disabled_for_form = (form_id, bool) => {
+JElement.set_disabled_for_form = (form_id, bool = true) => {
     let form = JElement.get(form_id);
     if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
@@ -154,7 +306,7 @@ JElement.set_disabled_for_form = (form_id, bool) => {
  */
 JElement.readonly = (id) => {
     let element = JElement.get(id);
-    if (element != null && element.value != null) return element.readOnly;
+    if (element != null) return element.readOnly;
     else return false;
 }
 
@@ -162,16 +314,16 @@ JElement.readonly = (id) => {
  * @param {string} id
  * @param {boolean} bool
  */
-JElement.set_readonly = (id, bool) => {
+JElement.set_readonly = (id, bool = true) => {
     let element = JElement.get(id);
-    if (element != null && element.value != null) element.readOnly = bool;
+    if (element != null) element.readOnly = bool;
 }
 
 /**
  * @param {string} name
  * @param {boolean} bool
  */
-JElement.set_readonly_by_name = (name, bool) => {
+JElement.set_readonly_by_name = (name, bool = true) => {
     let elements = JElement.elements(name);
     if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
@@ -183,7 +335,7 @@ JElement.set_readonly_by_name = (name, bool) => {
  * @param {string} form_id
  * @param {boolean} bool
  */
-JElement.set_readonly_for_form = (form_id, bool) => {
+JElement.set_readonly_for_form = (form_id, bool = true) => {
     let form = JElement.get(form_id);
     if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
@@ -196,6 +348,27 @@ JElement.set_readonly_for_form = (form_id, bool) => {
  * @param {string} id
  * @param {boolean} bool
  */
+JElement.add_display_none = (id) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.style.display = "none";
+    }
+}
+
+/**
+ * @param {string} id
+ */
+JElement.remove_display_none = (id) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.style.display = "";
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} class_name
+ */
 JElement.add_class = (id, class_name) => {
     let element = JElement.get(id);
     if (element == null) return;
@@ -204,7 +377,7 @@ JElement.add_class = (id, class_name) => {
 
 /**
  * @param {string} name
- * @param {boolean} bool
+ * @param {string} class_name
  */
 JElement.add_class_by_name = (name, class_name) => {
     let elements = JElement.elements(name);
@@ -216,7 +389,7 @@ JElement.add_class_by_name = (name, class_name) => {
 
 /**
  * @param {string} id
- * @param {boolean} bool
+ * @param {string} class_name
  */
 JElement.remove_class = (id, class_name) => {
     let element = JElement.get(id);
@@ -226,7 +399,7 @@ JElement.remove_class = (id, class_name) => {
 
 /**
  * @param {string} name
- * @param {boolean} bool
+ * @param {string} class_name
  */
 JElement.remove_class_by_name = (name, class_name) => {
     let elements = JElement.elements(name);
@@ -257,6 +430,7 @@ JElement.select_by_value = (id, value) => {
         let option = options[i];
         if (option.value == value) {
             option.selected = true;
+            JElement.dispatch_event(element);
         }
     }
 }
@@ -272,6 +446,7 @@ JElement.select_by_index = (id, index) => {
     for (i = 0; i < options.length; i++) {
         if (i == index) {
             options[i].selected = true;
+            JElement.dispatch_event(element);
         }
     }
 }
@@ -378,18 +553,29 @@ JElement.checked_sum = (name) => {
 }
 
 /**
+ * @param {string} id
+ * @param {boolean} bool
+ */
+JElement.check = (id, bool = true) => {
+    let element = JElement.element(id);
+    if (element == null) return;
+    element.checked = bool;
+    JElement.dispatch_event(element);
+}
+
+/**
  * @param {string} name
  * @param {string} value
  * @param {boolean} bool
  */
-JElement.check_by_value = (name, value, bool) => {
+JElement.check_by_value = (name, value, bool = true) => {
     let elements = JElement.elements(name);
     if (elements == null) return;
-    let count = 0;
     for (let i = 0; i < elements.length; i++) {
         let element = elements[i];
         if (element.value == value) {
             element.checked = bool;
+            JElement.dispatch_event(element);
         }
     }
 }
@@ -398,14 +584,14 @@ JElement.check_by_value = (name, value, bool) => {
  * @param {string} name
  * @param {boolean} bool
  */
-JElement.check_all = (name, bool) => {
+JElement.check_all = (name, bool = true) => {
     let elements = JElement.elements(name);
-    if (elements != null || elements.length > 0) {
-        for (i = 0; i < elements.length; i++) {
-            let element = elements[i];
-            if (element.checked != undefined) {
-                element.checked = bool;
-            }
+    if (elements == null) return;
+    for (i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element.checked != undefined) {
+            element.checked = bool;
+            JElement.dispatch_event(element);
         }
     }
 }
