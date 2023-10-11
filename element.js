@@ -14,9 +14,10 @@ const JElement = {
     set_value: (id, value) => {},
     text: (id) => {},
     set_text: (id, text) => {},
-    html: (id) => {},
-    inner_html: (id, html) => {}, /* <div><p>변경</p></div> */
-    outer_html: (id, html) => {}, /* <p>변경</p> */
+    inner_html: (id) => {},
+    outer_html: (id) => {},
+    set_inner_html: (id, html) => {}, /* <div><p>변경</p></div> */
+    set_outer_html: (id, html) => {}, /* <p>변경</p> */
     beforebegin_html: (id, html) => {}, /* <p>추가</p><div>대상</div> */
     afterbegin_html: (id, html) => {}, /* <div><p>추가</p>대상</div> */
     beforeend_html: (id, html) => {}, /* <div>대상<p>추가</p></div> */
@@ -155,7 +156,7 @@ JElement.set_text = (id, text) => {
 /**
  * @param {string} id
  */
-JElement.html = (id) => {
+JElement.inner_html = (id) => {
     let element = JElement.get(id);
     if (element != null) return element.innerHTML;
     else return "";
@@ -163,9 +164,18 @@ JElement.html = (id) => {
 
 /**
  * @param {string} id
+ */
+JElement.outer_html = (id) => {
+    let element = JElement.get(id);
+    if (element != null) return element.outerHTML;
+    else return "";
+}
+
+/**
+ * @param {string} id
  * @param {string} html
  */
-JElement.inner_html = (id, html) => {
+JElement.set_inner_html = (id, html) => {
     let element = JElement.get(id);
     if (element != null) {
         element.innerHTML = html;
@@ -176,7 +186,7 @@ JElement.inner_html = (id, html) => {
  * @param {string} id
  * @param {string} html
  */
-JElement.outer_html = (id, html) => {
+JElement.set_outer_html = (id, html) => {
     let element = JElement.get(id);
     if (element != null) {
         element.outerHTML = html;
