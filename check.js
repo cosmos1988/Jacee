@@ -38,7 +38,7 @@ const JCheck = {
 
     result: {
         empty: (id) => {},
-        not_empty: (id, msg) => {},
+        not_empty: (id) => {},
         number: (id) => {},
         min_size: (id, min) => {},
         min_length: (id, min) => {},
@@ -47,6 +47,9 @@ const JCheck = {
         size_range: (id, min, max) => {},
         length_range: (id, min, max) => {},
         english: (id) => {},
+        lowercase: (id) => {},
+        uppercase: (id) => {},
+        language: (id, lang) => {},
         english_number: (id) => {},
         not_spchars: (id) => {},
         not_number_spchars: (id) => {},
@@ -79,6 +82,9 @@ const JCheck = {
         size_range: (id, min, max, msg) => {},
         length_range: (id, min, max, msg) => {},
         english: (id, msg) => {},
+        lowercase: (id, msg) => {},
+        uppercase: (id, msg) => {},
+        language: (id, lang, msg) => {},
         english_number: (id, msg) => {},
         no_spchars: (id, msg) => {},
         no_number_spchars: (id, msg) => {},
@@ -103,6 +109,9 @@ const JCheck = {
     input: {
         number: (id, _msg) => {},
         english: (id, _msg) => {},
+        lowercase: (id, _msg) => {},
+        uppercase: (id, _msg) => {},
+        language: (id, lang, _msg) => {},
         english_number: (id, _msg) => {},
         no_spchars: (id, _msg) => {},
         no_number_spchars: (id, _msg) => {},
@@ -175,7 +184,7 @@ JCheck.result.empty = (id) => {
  * @param {string} id
  */
 JCheck.result.not_empty = (id) => {
-    return !JCheck.result.empty()
+    return !JCheck.result.empty(id)
 }
 
 /**
@@ -304,6 +313,64 @@ JCheck.result.english = (id) => {
     if (element == null) return false;
     if (element.value == null) return false;
     let pattern = /[a-zA-Z]$/;
+    if (pattern.test(element.value)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @param {string} id
+ */
+JCheck.result.lowercase = (id) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    let pattern = /[a-z]/;
+    if (pattern.test(element.value)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @param {string} id
+ */
+JCheck.result.uppercase = (id) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    let pattern = /[A-Z]/;
+    if (pattern.test(element.value)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} lang
+ */
+JCheck.result.language = (id, pattern) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+
+    switch (pattern.toLowerCase()) {
+        case "korean":
+        pattern = /^[ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
+        break;
+        case "japanese":
+        pattern = /^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+$/;
+        break;
+        case "chinese":
+        pattern = /^[\u4E00-\u9FFF]+$/;
+        break;
+    }
+
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -707,6 +774,31 @@ JCheck.alert.english = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
+JCheck.alert.lowercase = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.lowercase(id));
+}
+
+/**
+ * @param {string} id
+ * @param {string} msg
+ */
+JCheck.alert.uppercase = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.uppercase(id));
+}
+
+/**
+ * @param {string} id
+ * @param {string} lang
+ * @param {string} msg
+ */
+JCheck.alert.language = (id, lang, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.language(id, lang));
+}
+
+/**
+ * @param {string} id
+ * @param {string} msg
+ */
 JCheck.alert.english_number = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.english_number(id));
 }
@@ -917,6 +1009,46 @@ JCheck.input.number = (id, msg) => {
  */
 JCheck.input.english = (id, msg) => {
     let pattern = /[^a-zA-Z]/g
+    JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * @param {string} id
+ * @param {string} msg
+ */
+JCheck.input.lowercase = (id, msg) => {
+    let pattern = /[^a-z]/g;
+    JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * @param {string} id
+ * @param {string} msg
+ */
+JCheck.input.uppercase = (id, msg) => {
+    let pattern = /[^A-Z]/g;
+    JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * @param {string} id
+ * @param {string} lang
+ * @param {string} msg
+ */
+JCheck.input.language = (id, lang, msg) => {
+
+    let pattern = /[^a-zA-Z]/g;
+    switch (lang.toLowerCase()) {
+        case "korean":
+        pattern = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+        break;
+        case "japanese":
+        pattern = /[^\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g;
+        break;
+        case "chinese":
+        pattern = /[^\u4E00-\u9FFF]/g;
+        break;
+    }
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
