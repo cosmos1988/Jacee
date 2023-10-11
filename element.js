@@ -11,6 +11,7 @@ const JElement = {
     element: (id) => {},
     elements: (name) => {},
     value: (id) => {},
+    length: (id) => {},
     set_value: (id, value) => {},
     text: (id) => {},
     set_text: (id, text) => {},
@@ -24,7 +25,6 @@ const JElement = {
     afterend_html: (id, html) => {}, /* <div>대상</div><p>추가</p> */
     remove: (id) => {},
     remove_by_name: (name) => {},
-    length: (id) => {},
     disabled: (id) => {},
     set_disabled: (id, _bool) => {},
     set_disabled_by_name: (name, _bool) => {},
@@ -119,6 +119,15 @@ JElement.value = (id) => {
     let element = JElement.get(id);
     if (element != null) return element.value;
     else return "";
+}
+
+/**
+ * @param {string} id
+ */
+JElement.length = (id) => {
+    let element = JElement.get(id);
+    if (element != null && element.value != null) return element.value.length;
+    else return 0;
 }
 
 /**
@@ -257,15 +266,6 @@ JElement.remove_by_name = (name) => {
         let element = elements[i];
         element.remove();
     }
-}
-
-/**
- * @param {string} id
- */
-JElement.length = (id) => {
-    let element = JElement.get(id);
-    if (element != null && element.value != null) return element.value.length;
-    else return 0;
 }
 
 /**
