@@ -23,6 +23,9 @@ const JAction = {
     back: () => {},
     teleport: (url) => {},
     sleep: (ms) => {},
+    click: (btn_id) => {},
+    focus: (id) => {},
+    blur: (id) => {},
     create_form: (_id) => {},
     get_form: (form) => {},
     form_append: (form, name, value, _type) => {},
@@ -81,6 +84,30 @@ JAction.sleep =(ms) => {
 };
 
 /**
+ * @param {string} btn_id
+ */
+JAction.click =(btn_id) => {
+    let element = JAction.element(btn_id);
+    if (element != null) element.click();
+};
+
+/**
+ * @param {string} id
+ */
+JAction.focus = (id) => {
+    let element = JAction.element(id);
+    if (element != null) element.focus();
+}
+
+/**
+ * @param {string} id
+ */
+JAction.blur = (id) => {
+    let element = JAction.element(id);
+    if (element != null) element.blur();
+}
+
+/**
  * @param {string} id
  */
 JAction.create_form = (id) => {
@@ -134,7 +161,14 @@ JAction.form_to_object = (form_id) => {
     const formData = new FormData(element);
     let obj = {};
     for (const [key, value] of formData.entries()) {
-        obj[key] = value;
+        if (obj[key] !== undefined) {
+            if (!Array.isArray(obj[key])) {
+                obj[key] = [obj[key]];
+            }
+            obj[key].push(value);
+        } else {
+            obj[key] = value;
+        }
     }
     return obj;
 }
