@@ -1,7 +1,7 @@
 /**
- * @name Jooice Script Library
+ * @name Jooscript
  * @version 0.0.1
- * @author cosmos1988 <https://github.com/cosmos1988/jooice/>
+ * @author cosmos1988 <https://github.com/cosmos1988/jooscript>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
  */
@@ -13,12 +13,19 @@ const JAction = {
 	 */
     alert_fn: null,
 
+    /** 
+     * 공통 확인창을 띄우는 함수 설정: JAction.confirm_fn = (msg) => { }
+	 * @param {string} msg
+	 */
+    confirm_fn: null,
+
     /** 공통 fetch 에러를 처리하는 함수 설정: JAction.fetch_error_fn = (error) =>  { }
 	 * @param {object} error
 	 */
     fetch_error_fn: null,
 
     alert: (msg) => {},
+    confirm: (msg) => {},
     go: (url) => {},
     back: () => {},
     teleport: (url) => {},
@@ -58,6 +65,17 @@ JAction.alert = (msg) => {
         JAction.alert_fn(msg);
     } else {
         alert(msg);
+    }
+};
+
+/**
+ * @param {string} msg
+ */
+JAction.confirm = (msg) => {
+    if (JAction.alert_fn != null && JAction.alert_fn instanceof Function) {
+        return JAction.confirm_fn(msg);
+    } else {
+        return confirm(msg);
     }
 };
 
@@ -138,14 +156,10 @@ JAction.get_form = (form) => {
  * @param {string} value
  * @param {string} type
  */
-JAction.form_append = (form, name, value, type) => {
+JAction.form_append = (form, name, value, type = "hidden") => {
     form = JAction.get_form(form);
     let element = document.createElement("input");
-    if (type != null) {
-        element.setAttribute("type", type);
-    } else {
-        element.setAttribute("type", "hidden");
-    }
+    element.setAttribute("type", type);
     element.setAttribute("name", name);
     element.setAttribute("value", value);
     form.appendChild(element);
@@ -179,14 +193,10 @@ JAction.form_to_object = (form_id) => {
  * @param {string} method
  * @param {string} content_type
  */
-JAction.submit = (url, form, method, content_type) => {
+JAction.submit = (url, form, method = 'POST', content_type) => {
     form = JAction.get_form(form);
     form.action = url;
-    if (method != null) {
-        form.method = method;
-    } else {
-        form.method = 'POST';
-    }
+    form.method = method;
     if (content_type != null) {
         form.enctype = content_type;
     }
