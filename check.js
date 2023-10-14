@@ -73,7 +73,7 @@ const JCheck = {
     },
 
     alert: {
-        no_empty: (id, msg) => {},
+        not_empty: (id, msg) => {},
         number: (id, msg) => {},
         min_size: (id, min, msg) => {},
         min_length: (id, min, msg) => {},
@@ -86,10 +86,10 @@ const JCheck = {
         uppercase: (id, msg) => {},
         language: (id, lang, msg) => {},
         english_number: (id, msg) => {},
-        no_spchars: (id, msg) => {},
-        no_number_spchars: (id, msg) => {},
-        no_spchars_space: (id, msg) => {},
-        no_number_spchars_space: (id, msg) => {},
+        not_spchars: (id, msg) => {},
+        not_number_spchars: (id, msg) => {},
+        not_spchars_space: (id, msg) => {},
+        not_number_spchars_space: (id, msg) => {},
         id: (id, msg) => {},
         password: (id, msg) => {},
         password_lv2: (id, msg) => {},
@@ -113,10 +113,10 @@ const JCheck = {
         uppercase: (id, _msg) => {},
         language: (id, lang, _msg) => {},
         english_number: (id, _msg) => {},
-        no_spchars: (id, _msg) => {},
-        no_number_spchars: (id, _msg) => {},
-        no_spchars_space: (id, _msg) => {},
-        no_number_spchars_space: (id, _msg) => {},
+        not_spchars: (id, _msg) => {},
+        not_number_spchars: (id, _msg) => {},
+        not_spchars_space: (id, _msg) => {},
+        not_number_spchars_space: (id, _msg) => {},
         max_size: (id, max, _msg) => {},
         max_length: (id, max, _msg) => {},
         id: (id, _msg) => {},
@@ -176,7 +176,7 @@ JCheck.length = (id) => {
 JCheck.result.empty = (id) => {
     let element = JCheck.element(id);
     if (element == null) return true;
-    if (element.value == null || element.value == '') return true;
+    if (element.value == null || element.value.trim() == '') return true;
     return false
 };
    
@@ -402,9 +402,9 @@ JCheck.result.not_spchars = (id) => {
     if (element.value == null) return false;
     let pattern = /(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).*/;
     if (pattern.test(element.value)){
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
@@ -417,9 +417,9 @@ JCheck.result.not_number_spchars = (id) => {
     if (element.value == null) return false;
     let pattern = /(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).*/;
     if (pattern.test(element.value)){
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
@@ -432,9 +432,9 @@ JCheck.result.not_spchars_space = (id) => {
     if (element.value == null) return false;
     let pattern = /(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? \s]+).*/;
     if (pattern.test(element.value)){
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
@@ -447,9 +447,9 @@ JCheck.result.not_number_spchars_space = (id) => {
     if (element.value == null) return false;
     let pattern = /(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? \s]+).*/;
     if (pattern.test(element.value)){
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
@@ -694,7 +694,7 @@ JCheck.alert.alert_and_focus = (id, msg, result) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.no_empty = (id, msg) => {
+JCheck.alert.not_empty = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, JCheck.result.empty(id));
 }
 
@@ -807,32 +807,32 @@ JCheck.alert.english_number = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.no_spchars = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_spchars(id));
+JCheck.alert.not_spchars = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_spchars(id));
 }
 
 /**
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.no_number_spchars = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_number_spchars(id));
+JCheck.alert.not_number_spchars = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_number_spchars(id));
 }
 
 /**
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.no_spchars_space = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_spchars_space(id));
+JCheck.alert.not_spchars_space = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_spchars_space(id));
 }
 
 /**
  * @param {string} id
  * @param {string} msg
  */
-JCheck.alert.no_number_spchars_space = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.not_number_spchars_space(id));
+JCheck.alert.not_number_spchars_space = (id, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_number_spchars_space(id));
 }
 
 /**
@@ -1065,7 +1065,7 @@ JCheck.input.english_number = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.no_spchars = (id, msg) => {
+JCheck.input.not_spchars = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
@@ -1074,7 +1074,7 @@ JCheck.input.no_spchars = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.no_number_spchars = (id, msg) => {
+JCheck.input.not_number_spchars = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
@@ -1083,7 +1083,7 @@ JCheck.input.no_number_spchars = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.no_spchars_space = (id, msg) => {
+JCheck.input.not_spchars_space = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
@@ -1092,7 +1092,7 @@ JCheck.input.no_spchars_space = (id, msg) => {
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.no_number_spchars_space = (id, msg) => {
+JCheck.input.not_number_spchars_space = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s0-9]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
