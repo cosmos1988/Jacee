@@ -1,7 +1,7 @@
 /**
- * @name Jooice Script Library
+ * @name Jooscript
  * @version 0.0.1
- * @author cosmos1988 <https://github.com/cosmos1988/jooice/>
+ * @author cosmos1988 <https://github.com/cosmos1988/jooscript>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
  */
@@ -20,6 +20,8 @@ const JElement = {
     outer_html: (id) => {},
     set_inner_html: (id, html) => {}, /* <div><p>변경</p></div> */
     set_outer_html: (id, html) => {}, /* <p>변경</p> */
+    remove_inner_html: (id, html) => {}, /* <div></div> */
+    remove_outer_html: (id, html) => {}, /*  */
     beforebegin_html: (id, html) => {}, /* <p>추가</p><div>대상</div> */
     afterbegin_html: (id, html) => {}, /* <div><p>추가</p>대상</div> */
     beforeend_html: (id, html) => {}, /* <div>대상<p>추가</p></div> */
@@ -49,6 +51,7 @@ const JElement = {
     remove_option_by_index: (select_id, index) => {}, // select
     remove_option_by_text: (select_id, text) => {}, // select
     remove_option_by_value: (select_id, value) => {}, // select
+    checked: (id) => {}, // checkbox
     checked_count: (name) => {}, // checkbox
     checked_sum: (name) => {}, // checkbox
     check: (id, _bool) => {}, // checkbox, radio
@@ -89,18 +92,18 @@ JElement.not_null = (id) => {
  * @param {string} id
  */
 JElement.get = (id) => {
-    let element = document.getElementById(id);
-    if (element == null) {
-        console.error("Element (id: " + id + ") is null");
-    }
-    return element;
+    return JElement.element(id);
 }
 
 /**
  * @param {string} id
  */
 JElement.element = (id) => {
-    return JElement.get(id);
+    let element = document.getElementById(id);
+    if (element == null) {
+        console.error("Element (id: " + id + ") is null");
+    }
+    return element;
 }
 
 /**
@@ -139,8 +142,10 @@ JElement.value_length = (id) => {
 JElement.set_value = (id, value) => {
     let element = JElement.get(id);
     if (element != null) {
-        element.value = value;
-        JElement.dispatch_event(element);
+        if (element.value != value) {
+            element.value = value;
+            JElement.dispatch_event(element);
+        }
     }
 }
 
@@ -210,6 +215,28 @@ JElement.set_outer_html = (id, html) => {
     let element = JElement.get(id);
     if (element != null) {
         element.outerHTML = html;
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.remove_inner_html = (id) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.innerHTML = '';
+    }
+}
+
+/**
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.remove_outer_html = (id, html) => {
+    let element = JElement.get(id);
+    if (element != null) {
+        element.outerHTML = '';
     }
 }
 
@@ -447,12 +474,16 @@ JElement.select_by_value = (id, value) => {
     let element = JElement.get(id);
     if (element == null) return;
     let options = element.options;
+    let count = 0;
     for (i = 0; i < options.length; i++) {
         let option = options[i];
         if (option.value == value) {
             option.selected = true;
-            JElement.dispatch_event(element);
+            count++
         }
+    }
+    if (count > 0) {
+        JElement.dispatch_event(element);
     }
 }
 
@@ -464,12 +495,16 @@ JElement.select_by_text = (id, text) => {
     let element = JElement.get(id);
     if (element == null) return;
     let options = element.options;
+    let count = 0;
     for (i = 0; i < options.length; i++) {
         let option = options[i];
         if (option.text == text) {
             option.selected = true;
-            JElement.dispatch_event(element);
+            count++
         }
+    }
+    if (count > 0) {
+        JElement.dispatch_event(element);
     }
 }
 
@@ -481,11 +516,15 @@ JElement.select_by_index = (id, index) => {
     let element = JElement.get(id);
     if (element == null) return;
     let options = element.options;
+    let count = 0;
     for (i = 0; i < options.length; i++) {
         if (i == index) {
             options[i].selected = true;
-            JElement.dispatch_event(element);
+            count++
         }
+    }
+    if (count > 0) {
+        JElement.dispatch_event(element);
     }
 }
 
@@ -553,6 +592,16 @@ JElement.remove_option_by_value = (select_id, value) => {
 }
 
 /**
+ * @param {string} id
+ */
+JElement.checked = (id) => {
+    let element = JElement.element(id);
+    if (element == null) return 0;
+    if (element.checked == null) return 0;
+    return element.checked;
+}
+
+/**
  * @param {string} name
  */
 JElement.checked_count = (name) => {
@@ -597,8 +646,10 @@ JElement.checked_sum = (name) => {
 JElement.check = (id, bool = true) => {
     let element = JElement.element(id);
     if (element == null) return;
-    element.checked = bool;
-    JElement.dispatch_event(element);
+    if (element.checked != bool) {
+        element.checked = bool;
+        JElement.dispatch_event(element);
+    }
 }
 
 /**
@@ -613,7 +664,6 @@ JElement.check_by_value = (name, value, bool = true) => {
         let element = elements[i];
         if (element.value == value) {
             element.checked = bool;
-            JElement.dispatch_event(element);
         }
     }
 }
@@ -629,7 +679,6 @@ JElement.check_all = (name, bool = true) => {
         let element = elements[i];
         if (element.checked != undefined) {
             element.checked = bool;
-            JElement.dispatch_event(element);
         }
     }
 }
