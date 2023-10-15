@@ -1,7 +1,7 @@
 /**
- * @name Jooscript
+ * @name Jacee
  * @version 0.0.1
- * @author cosmos1988 <https://github.com/cosmos1988/jooscript>
+ * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
  */
@@ -49,7 +49,9 @@ JEvent.load = (fn) => {
  */
 JEvent.add_event = (id, type, fn) => {
     try {
-        if (id == "document") {
+        if (id == "window") {
+            window.addEventListener(type, fn);
+        } else if (id == "document") {
             document.addEventListener(type, fn);
         } else {
             let element = document.getElementById(id);
