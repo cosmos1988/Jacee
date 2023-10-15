@@ -20,8 +20,8 @@ const JElement = {
     outer_html: (id) => {},
     set_inner_html: (id, html) => {}, /* <div><p>변경</p></div> */
     set_outer_html: (id, html) => {}, /* <p>변경</p> */
-    remove_inner_html: (id, html) => {}, /* <div></div> */
-    remove_outer_html: (id, html) => {}, /*  */
+    remove_inner_html: (id) => {}, /* <div></div> */
+    remove_outer_html: (id) => {}, /*  */
     beforebegin_html: (id, html) => {}, /* <p>추가</p><div>대상</div> */
     afterbegin_html: (id, html) => {}, /* <div><p>추가</p>대상</div> */
     beforeend_html: (id, html) => {}, /* <div>대상<p>추가</p></div> */
@@ -233,7 +233,7 @@ JElement.remove_inner_html = (id) => {
  * @param {string} id
  * @param {string} html
  */
-JElement.remove_outer_html = (id, html) => {
+JElement.remove_outer_html = (id) => {
     let element = JElement.get(id);
     if (element != null) {
         element.outerHTML = '';
