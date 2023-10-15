@@ -1,7 +1,7 @@
 # Jacee
 Jacee (제이시)
 
-[English]
+
 Jacee is a fast and low-level abstracted library that can fully replace jQuery. The name is derived from the first letters of J, action, check, element, and event.
 
 ■ action.js: The JAction object is a collection of functions related to various actions. It includes functionality such as Ajax requests, page transitions, clicks, and focus.
@@ -11,6 +11,7 @@ Jacee is a fast and low-level abstracted library that can fully replace jQuery. 
 ■ element.js: The JElement object is a collection of functions for manipulating various elements. It includes functions for commonly used elements such as input, select, checkbox, radio buttons, and more.
 
 ■ event.js: The JEvent object is a collection of functions that make it easier to add event listeners. It includes functions that abstract the addEventListener function by using function names, making it easier to add events more clearly.
+
 
 [한국어]
 JQuery를 완전히 대체하여 사용할 수 있는 빠르고 낮은 수준의 추상화 라이브러리 입니다.
