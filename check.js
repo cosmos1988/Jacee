@@ -19,10 +19,10 @@ const JCheck = {
      * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
      * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
      * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
-     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]): 문자열 내에 이러한 특수 문자 중 최소 하나가 포함되어 있어야 합니다.
-     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{8,}: 전체 문자열은 위의 소문자, 대문자, 숫자, 특수 문자들로만 구성되어 있어야 하며, 최소 길이는 8자 이상이어야 합니다.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): 문자열 내에 이러한 특수 문자 중 최소 하나가 포함되어 있어야 합니다.
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}: 전체 문자열은 위의 소문자, 대문자, 숫자, 특수 문자들로만 구성되어 있어야 하며, 최소 길이는 8자 이상이어야 합니다.
      */
-    password_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{8,}$/,
+    password_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}$/,
 
     /**
      * 강력한 패스워드 패턴
@@ -30,11 +30,11 @@ const JCheck = {
      * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
      * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
      * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
-     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]): 문자열에 최소 하나의 이 특수 문자들 중 하나가 포함되어 있어야 합니다.
-     * .*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]: 이 조건은 문자열에 위의 특수 문자들 중 적어도 하나가 포함되어 있어야 한다는 것을 추가로 확인합니다. (특수 문자 최소 두 개)
-     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{12,}: 문자열은 소문자 알파벳, 대문자 알파벳, 숫자, 위의 특수 문자들 중 하나 이상으로 구성되어야 하며, 최소 길이는 12자 이상이어야 합니다.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): 문자열에 최소 하나의 이 특수 문자들 중 하나가 포함되어 있어야 합니다.
+     * .*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]: 이 조건은 문자열에 위의 특수 문자들 중 적어도 하나가 포함되어 있어야 한다는 것을 추가로 확인합니다. (특수 문자 최소 두 개)
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}: 문자열은 소문자 알파벳, 대문자 알파벳, 숫자, 위의 특수 문자들 중 하나 이상으로 구성되어야 하며, 최소 길이는 12자 이상이어야 합니다.
      */
-    password_lv2_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/].*[!@#$%^&*()-_=+\[\]{}|;:'",.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'",.<>?/]{12,}$/,
+    password_lv2_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/].*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}$/,
 
     result: {
         empty: (id) => {},
@@ -144,22 +144,41 @@ const JCheck = {
     },
 };
 
+/**
+ * 
+ * 
+ * @param {string} id 
+ * @returns {Element}
+ */
 JCheck.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.error("Element (id: " + id + ") is null");
+        console.error(`Element (id: ${id}) is null`);
     }
     return element;
 }
 
+/**
+ * 
+ * 
+ * @param {string} name 
+ * @returns {Element}
+ */
 JCheck.elements = (name) => {
     let elements = document.getElementsByName(name);
-    if (elements == null) {
-        console.error("Elements (name: " + name + ") is null");
+    if (elements.length === 0) {
+        console.error(`Elements (name: ${name}) is a length of 0`);
+        return;
     }
     return elements;
 }
 
+/**
+ * 
+ * 
+ * @param {string} id 
+ * @returns {number}
+ */
 JCheck.length = (id) => {
     let element = JCheck.element(id);
     if (element != null && element.value != null) {
@@ -169,9 +188,11 @@ JCheck.length = (id) => {
     }
 }
 
-/* result */
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.empty = (id) => {
     let element = JCheck.element(id);
@@ -181,14 +202,20 @@ JCheck.result.empty = (id) => {
 };
    
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.not_empty = (id) => {
     return !JCheck.result.empty(id)
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.number = (id) => {
     let element = JCheck.element(id);
@@ -202,8 +229,11 @@ JCheck.result.number = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
+ * @returns {boolean}
  */
 JCheck.result.min_size = (id, min) => {
     let element = JCheck.element(id);
@@ -221,8 +251,11 @@ JCheck.result.min_size = (id, min) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
+ * @returns {boolean}
  */
 JCheck.result.min_length = (id, min) => {
     let element = JCheck.element(id);
@@ -236,8 +269,11 @@ JCheck.result.min_length = (id, min) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.max_size = (id, max) => {
     let element = JCheck.element(id);
@@ -255,8 +291,11 @@ JCheck.result.max_size = (id, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.max_length = (id, max) => {
     let element = JCheck.element(id);
@@ -270,9 +309,12 @@ JCheck.result.max_length = (id, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.size_range = (id, min, max) => {
     let element = JCheck.element(id);
@@ -290,9 +332,12 @@ JCheck.result.size_range = (id, min, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.length_range = (id, min, max) => {
     let element = JCheck.element(id);
@@ -306,7 +351,10 @@ JCheck.result.length_range = (id, min, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.english = (id) => {
     let element = JCheck.element(id);
@@ -321,7 +369,10 @@ JCheck.result.english = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.lowercase = (id) => {
     let element = JCheck.element(id);
@@ -336,7 +387,10 @@ JCheck.result.lowercase = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.uppercase = (id) => {
     let element = JCheck.element(id);
@@ -351,8 +405,11 @@ JCheck.result.uppercase = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} lang
+ * @returns {boolean}
  */
 JCheck.result.language = (id, pattern) => {
     let element = JCheck.element(id);
@@ -360,13 +417,15 @@ JCheck.result.language = (id, pattern) => {
     if (element.value == null) return false;
 
     switch (pattern.toLowerCase()) {
-        case "korean":
+        case 'english':
+        return JCheck.result.english(id);
+        case 'korean':
         pattern = /^[ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
         break;
-        case "japanese":
+        case 'japanese':
         pattern = /^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+$/;
         break;
-        case "chinese":
+        case 'chinese':
         pattern = /^[\u4E00-\u9FFF]+$/;
         break;
     }
@@ -379,7 +438,10 @@ JCheck.result.language = (id, pattern) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.english_number = (id) => {
     let element = JCheck.element(id);
@@ -394,13 +456,16 @@ JCheck.result.english_number = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.not_spchars = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).*/;
+    let pattern = /(?=.*[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?]+).*/;
     if (pattern.test(element.value)){
         return false;
     } else {
@@ -409,13 +474,16 @@ JCheck.result.not_spchars = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.not_number_spchars = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).*/;
+    let pattern = /(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?]+).*/;
     if (pattern.test(element.value)){
         return false;
     } else {
@@ -424,13 +492,16 @@ JCheck.result.not_number_spchars = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.not_spchars_space = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? \s]+).*/;
+    let pattern = /(?=.*[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/? \s]+).*/;
     if (pattern.test(element.value)){
         return false;
     } else {
@@ -439,13 +510,16 @@ JCheck.result.not_spchars_space = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.not_number_spchars_space = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? \s]+).*/;
+    let pattern = /(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/? \s]+).*/;
     if (pattern.test(element.value)){
         return false;
     } else {
@@ -454,7 +528,10 @@ JCheck.result.not_number_spchars_space = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.id = (id) => {
     let element = JCheck.element(id);
@@ -469,7 +546,10 @@ JCheck.result.id = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.password = (id) => {
     let element = JCheck.element(id);
@@ -484,7 +564,10 @@ JCheck.result.password = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.password_lv2 = (id) => {
     let element = JCheck.element(id);
@@ -499,7 +582,10 @@ JCheck.result.password_lv2 = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.email = (id) => {
     let element = JCheck.element(id);
@@ -514,7 +600,10 @@ JCheck.result.email = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.phone_number = (id) => {
     let element = JCheck.element(id);
@@ -529,7 +618,10 @@ JCheck.result.phone_number = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JCheck.result.zip_code = (id) => {
     let element = JCheck.element(id);
@@ -544,6 +636,8 @@ JCheck.result.zip_code = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  */
 JCheck.result.selected = (id) => {
@@ -553,7 +647,10 @@ JCheck.result.selected = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {number}
  */
 JCheck.result.checked = (name) => {
     let elements = JCheck.elements(name);
@@ -571,7 +668,10 @@ JCheck.result.checked = (name) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
+ * @returns {number}
  */
 JCheck.result.checked_sum = (name) => {
     let elements = JCheck.elements(name);
@@ -591,8 +691,11 @@ JCheck.result.checked_sum = (name) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
+ * @returns {boolean}
  */
 JCheck.result.min_checked_count = (name, min) => {
     let count = JCheck.result.checked(name);
@@ -604,8 +707,11 @@ JCheck.result.min_checked_count = (name, min) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
+ * @returns {boolean}
  */
 JCheck.result.min_checked_sum = (name, min) => {
     let sum = JCheck.result.checked_sum(name);
@@ -617,8 +723,11 @@ JCheck.result.min_checked_sum = (name, min) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.max_checked_count = (name, max) => {
     let count = JCheck.result.checked(name);
@@ -630,8 +739,11 @@ JCheck.result.max_checked_count = (name, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.max_checked_sum = (name, max) => {
     let sum = JCheck.result.checked_sum(name);
@@ -643,9 +755,12 @@ JCheck.result.max_checked_sum = (name, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.checked_count_range = (name, min, max) => {
     let count = JCheck.result.checked(name);
@@ -657,9 +772,12 @@ JCheck.result.checked_count_range = (name, min, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {number} max
+ * @returns {boolean}
  */
 JCheck.result.checked_sum_range = (name, min, max) => {
     let sum = JCheck.result.checked_sum(name);
@@ -670,12 +788,13 @@ JCheck.result.checked_sum_range = (name, min, max) => {
     }
 }
 
-
-/* alert */
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  * @param {boolean} result
+ * @returns {boolean}
  */
 JCheck.alert.alert_and_focus = (id, msg, result) => {
     if (result == undefined || result) {
@@ -691,209 +810,284 @@ JCheck.alert.alert_and_focus = (id, msg, result) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.not_empty = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, JCheck.result.empty(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.number = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.number(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.min_size = (id, min, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.min_size(id, min));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.min_length = (id, min, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.min_length(id, min));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} max
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.max_size = (id, max, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.max_size(id, max));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} max
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.max_length = (id, max, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.max_length(id, max));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
  * @param {number} max
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.size_range = (id, min, max, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.size_range(id, min, max));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} min
  * @param {number} max
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.length_range = (id, min, max, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.length_range(id, min, max));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.english = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.english(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.lowercase = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.lowercase(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.uppercase = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.uppercase(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} lang
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.language = (id, lang, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.language(id, lang));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.english_number = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.english_number(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.not_spchars = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_spchars(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.not_number_spchars = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_number_spchars(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.not_spchars_space = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_spchars_space(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.not_number_spchars_space = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_number_spchars_space(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.id = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.id(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.password = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.password(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.password_lv2 = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.password_lv2(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.email = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.email(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.phone_number = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.phone_number(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.zip_code = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.zip_code(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.selected = (id, msg) => {
     return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.selected(id));
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.checked = (name, msg) => {
     let elements = JCheck.elements(name);
@@ -902,9 +1096,12 @@ JCheck.alert.checked = (name, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.min_checked_count = (name, min, msg) => {
     let elements = JCheck.elements(name);
@@ -913,9 +1110,12 @@ JCheck.alert.min_checked_count = (name, min, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.min_checked_sum = (name, min, msg) => {
     let elements = JCheck.elements(name);
@@ -924,9 +1124,12 @@ JCheck.alert.min_checked_sum = (name, min, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} max
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.max_checked_count = (name, max, msg) => {
     let elements = JCheck.elements(name);
@@ -935,9 +1138,12 @@ JCheck.alert.max_checked_count = (name, max, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} max
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.checked_count_range = (name, max, msg) => {
     let elements = JCheck.elements(name);
@@ -946,10 +1152,13 @@ JCheck.alert.checked_count_range = (name, max, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {number} max
  * @param {string} msg
+ * @returns {boolean}
  */
 JCheck.alert.checked_sum_range = (name, min, max, msg) => {
     let elements = JCheck.elements(name);
@@ -957,23 +1166,21 @@ JCheck.alert.checked_sum_range = (name, min, max, msg) => {
     return JCheck.alert.alert_and_focus(elements[0].id, msg, !JCheck.result.checked_sum_range(name, min, max));
 }
 
-
-/* JCheck.input */
 /**
+ * 
+ * 
  * @param {string} id
  * @param {function} fn
  */
 JCheck.input.add_event = (id, fn) => {
-    try {
-        let element = JCheck.element(id);
-        if (element == null) return;
-        element.addEventListener("input", fn);
-    } catch(e) {
-        console.error(e)
-    }
+    let element = JCheck.element(id);
+    if (element == null) return;
+    element.addEventListener('input', fn);
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {RegExp} pattern
  * @param {string} replacement
@@ -995,6 +1202,8 @@ JCheck.input.add_replace_event = (id, pattern, replacement, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1004,6 +1213,8 @@ JCheck.input.number = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1013,6 +1224,8 @@ JCheck.input.english = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1022,6 +1235,8 @@ JCheck.input.lowercase = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1031,6 +1246,8 @@ JCheck.input.uppercase = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} lang
  * @param {string} msg
@@ -1039,13 +1256,15 @@ JCheck.input.language = (id, lang, msg) => {
 
     let pattern = /[^a-zA-Z]/g;
     switch (lang.toLowerCase()) {
-        case "korean":
+        case 'english':
+        return JCheck.input.english(id, msg);
+        case 'korean':
         pattern = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/g;
         break;
-        case "japanese":
+        case 'japanese':
         pattern = /[^\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g;
         break;
-        case "chinese":
+        case 'chinese':
         pattern = /[^\u4E00-\u9FFF]/g;
         break;
     }
@@ -1053,6 +1272,8 @@ JCheck.input.language = (id, lang, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1062,42 +1283,52 @@ JCheck.input.english_number = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
 JCheck.input.not_spchars = (id, msg) => {
-    let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g;
+    let pattern = /[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
 JCheck.input.not_number_spchars = (id, msg) => {
-    let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/g;
+    let pattern = /[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?0-9]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
 JCheck.input.not_spchars_space = (id, msg) => {
-    let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]+/g;
+    let pattern = /[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?\s]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
 JCheck.input.not_number_spchars_space = (id, msg) => {
-    let pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s0-9]+/g;
+    let pattern = /[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?\s0-9]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} max
  * @param {string} msg
@@ -1117,13 +1348,15 @@ JCheck.input.max_size = (id, max, msg) => {
                 JCheck.alert.alert_and_focus(id, msg, !test);
             }
         } else {
-            element.value = element.value.replace(/\b0+(\d+)\b/g, "$1");
+            element.value = element.value.replace(/\b0+(\d+)\b/g, '$1');
         }
     };
     JCheck.input.add_event(id, fn);
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} max
  * @param {string} msg
@@ -1148,6 +1381,8 @@ JCheck.input.id = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {function} fn
  */
@@ -1167,6 +1402,8 @@ JCheck.input.password = (id, fn) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1175,6 +1412,8 @@ JCheck.input.email = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1184,6 +1423,8 @@ JCheck.input.phone_number = (id, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  */
@@ -1192,9 +1433,9 @@ JCheck.input.zip_code = (id, msg) => {
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
-
-/* focusout */
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
@@ -1203,7 +1444,7 @@ JCheck.input.zip_code = (id, msg) => {
 JCheck.focusout.alert_and_focus = (id, del, msg, fn) => {
     let element = JCheck.element(id);
     if (element == null) return;
-    element.addEventListener("focusout", () => {
+    element.addEventListener('focusout', () => {
             if (JCheck.result.empty(id)) return;
             let test = fn(id);
             if (!test) {
@@ -1220,6 +1461,8 @@ JCheck.focusout.alert_and_focus = (id, del, msg, fn) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
@@ -1229,6 +1472,8 @@ JCheck.focusout.id = (id, del, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
@@ -1238,6 +1483,8 @@ JCheck.focusout.password = (id, del, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
@@ -1247,6 +1494,8 @@ JCheck.focusout.email = (id, del, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
@@ -1256,6 +1505,8 @@ JCheck.focusout.phone_number = (id, del, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
@@ -1264,23 +1515,23 @@ JCheck.focusout.zip_code = (id, del, msg) => {
     JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.zip_code(id));
 }
 
-/* change */
 /**
+ * 
+ * 
  * @param {string} name
  * @param {string} msg
  */
 JCheck.change.add_events = (name, fn) => {
-    try {
-        let elements = JCheck.elements(name);
-        for (let i = 0; i < elements.length; i++) {
-            elements[i].addEventListener("change", fn);
-        }
-    } catch(e) {
-        console.error(e)
+    let elements = JCheck.elements(name);
+    if (elements.length === 0) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener('change', fn);
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {string} msg
@@ -1299,6 +1550,8 @@ JCheck.change.min_checked_count = (name, min, msg) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  */
@@ -1316,6 +1569,8 @@ JCheck.change.min_checked_sum = (name, min) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  */
@@ -1333,6 +1588,8 @@ JCheck.change.max_checked_count = (name, min) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  */
@@ -1350,6 +1607,8 @@ JCheck.change.max_checked_sum = (name, min) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {number} max
@@ -1368,6 +1627,8 @@ JCheck.change.checked_count_range = (name, min, max) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {number} min
  * @param {number} max
