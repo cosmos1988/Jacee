@@ -6,28 +6,33 @@
  * @copyright Copyright © 2023 <cosmos1988>
  */
 const JElement = {
+    
     not_null: (id) => {},
     get: (id) => {},
     element: (id) => {},
     elements: (name) => {},
+    remove: (id) => {},
+    remove_by_name: (name) => {},
+
     value: (id) => {},
     value_length: (id) => {},
     set_value: (id, value) => {},
+
     text: (id) => {},
     text_length: (id) => {},
     set_text: (id, text) => {},
+
     inner_html: (id) => {},
     outer_html: (id) => {},
-    set_inner_html: (id, html) => {}, /* <div><p>변경</p></div> */
-    set_outer_html: (id, html) => {}, /* <p>변경</p> */
-    remove_inner_html: (id) => {}, /* <div></div> */
-    remove_outer_html: (id) => {}, /*  */
-    beforebegin_html: (id, html) => {}, /* <p>추가</p><div>대상</div> */
-    afterbegin_html: (id, html) => {}, /* <div><p>추가</p>대상</div> */
-    beforeend_html: (id, html) => {}, /* <div>대상<p>추가</p></div> */
-    afterend_html: (id, html) => {}, /* <div>대상</div><p>추가</p> */
-    remove: (id) => {},
-    remove_by_name: (name) => {},
+    set_inner_html: (id, html) => {}, // <div><p>변경</p></div>
+    set_outer_html: (id, html) => {}, // <p>변경</p>
+    remove_inner_html: (id) => {}, // <div>(삭제)</div>
+    remove_outer_html: (id) => {}, // (삭제)
+    beforebegin_html: (id, html) => {}, // <p>추가</p><div>대상</div>
+    afterbegin_html: (id, html) => {}, // <div><p>추가</p>대상</div>
+    beforeend_html: (id, html) => {}, // <div>대상<p>추가</p></div>
+    afterend_html: (id, html) => {}, // <div>대상</div><p>추가</p>
+
     disabled: (id) => {},
     set_disabled: (id, _bool) => {},
     set_disabled_by_name: (name, _bool) => {},
@@ -42,6 +47,7 @@ const JElement = {
     add_class_by_name: (name, class_name) => {},
     remove_class: (id, class_name) => {},
     remove_class_by_name: (name, class_name) => {},
+
     selected_value: (id) => {}, // select
     select_by_value: (id, value) => {}, // select
     select_by_text: (id, value) => {}, // select
@@ -60,7 +66,9 @@ const JElement = {
 };
 
 /**
- * @param {object} element
+ * 
+ * 
+ * @param {Element} element
  */
 JElement.dispatch_event = (element) => {
 
@@ -78,7 +86,10 @@ JElement.dispatch_event = (element) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JElement.not_null = (id) => {
     let element = document.getElementById(id);
@@ -89,58 +100,76 @@ JElement.not_null = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {Element}
  */
 JElement.get = (id) => {
     return JElement.element(id);
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {Element}
  */
 JElement.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.error("Element (id: " + id + ") is null");
+        console.error(`Element (id: ${id}) is null`);
     }
     return element;
 }
 
 /**
+ * 
+ * 
  * @param {string} name
+ * @returns {NodeList}
  */
 JElement.elements = (name) => {
     let elements = document.getElementsByName(name);
-    if (elements == null) {
-        console.error("Elements (name: " + name + ") is null");
+    if (elements.length === 0) {
+        console.error(`Elements (name: ${name}) is a length of 0`);
+        return;
     }
     return elements;
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {string}
  */
 JElement.value = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) return element.value;
-    else return "";
+    else return '';
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {number}
  */
 JElement.value_length = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null && element.value != null) return element.value.length;
     else return 0;
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} value
  */
 JElement.set_value = (id, value) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
         if (element.value != value) {
             element.value = value;
@@ -150,151 +179,185 @@ JElement.set_value = (id, value) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {string}
  */
 JElement.text = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) return element.textContent;
-    else return "";
+    else return '';
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {number}
  */
 JElement.text_length = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null && element.textContent != null) return element.textContent.length;
     else return 0;
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} text
  */
 JElement.set_text = (id, text) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
         element.textContent = text;
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {string}
  */
 JElement.inner_html = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) return element.innerHTML;
-    else return "";
+    else return '';
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {string}
  */
 JElement.outer_html = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) return element.outerHTML;
-    else return "";
+    else return '';
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.set_inner_html = (id, html) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
         element.innerHTML = html;
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.set_outer_html = (id, html) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
         element.outerHTML = html;
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.remove_inner_html = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
         element.innerHTML = '';
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.remove_outer_html = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
         element.outerHTML = '';
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.beforebegin_html = (id, html) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
-        element.insertAdjacentHTML("beforebegin", html);
+        element.insertAdjacentHTML('beforebegin', html);
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.afterbegin_html = (id, html) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
-        element.insertAdjacentHTML("afterbegin", html);
+        element.insertAdjacentHTML('afterbegin', html);
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.beforeend_html = (id, html) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
-        element.insertAdjacentHTML("beforeend", html);
+        element.insertAdjacentHTML('beforeend', html);
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} html
  */
 JElement.afterend_html = (id, html) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
-        element.insertAdjacentHTML("afterend", html);
+        element.insertAdjacentHTML('afterend', html);
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  */
 JElement.remove = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
         element.remove();
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  */
 JElement.remove_by_name = (name) => {
@@ -307,24 +370,31 @@ JElement.remove_by_name = (name) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JElement.disabled = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) return element.disabled;
     else return false;
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} bool
  */
 JElement.set_disabled = (id, bool = true) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) element.disabled = bool;
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {boolean} bool
  */
@@ -337,11 +407,13 @@ JElement.set_disabled_by_name = (name, bool = true) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} form_id
  * @param {boolean} bool
  */
 JElement.set_disabled_for_form = (form_id, bool = true) => {
-    let form = JElement.get(form_id);
+    let form = JElement.element(form_id);
     if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
     elements.forEach(element => {
@@ -350,24 +422,31 @@ JElement.set_disabled_for_form = (form_id, bool = true) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {boolean}
  */
 JElement.readonly = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) return element.readOnly;
     else return false;
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} bool
  */
 JElement.set_readonly = (id, bool = true) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) element.readOnly = bool;
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {boolean} bool
  */
@@ -380,11 +459,13 @@ JElement.set_readonly_by_name = (name, bool = true) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} form_id
  * @param {boolean} bool
  */
 JElement.set_readonly_for_form = (form_id, bool = true) => {
-    let form = JElement.get(form_id);
+    let form = JElement.element(form_id);
     if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
     elements.forEach(element => {
@@ -393,37 +474,45 @@ JElement.set_readonly_for_form = (form_id, bool = true) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} bool
  */
 JElement.add_display_none = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
-        element.style.display = "none";
+        element.style.display = 'none';
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  */
 JElement.remove_display_none = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element != null) {
-        element.style.display = "";
+        element.style.display = '';
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} class_name
  */
 JElement.add_class = (id, class_name) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element == null) return;
     element.classList.add(class_name);
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {string} class_name
  */
@@ -436,16 +525,20 @@ JElement.add_class_by_name = (name, class_name) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} class_name
  */
 JElement.remove_class = (id, class_name) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element == null) return;
     element.classList.remove(class_name);
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {string} class_name
  */
@@ -458,20 +551,25 @@ JElement.remove_class_by_name = (name, class_name) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {string}
  */
 JElement.selected_value = (id) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element == null) return false;
     return element.options[element.selectedIndex].value;
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} value
  */
 JElement.select_by_value = (id, value) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element == null) return;
     let options = element.options;
     let count = 0;
@@ -488,11 +586,13 @@ JElement.select_by_value = (id, value) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {string} text
  */
 JElement.select_by_text = (id, text) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element == null) return;
     let options = element.options;
     let count = 0;
@@ -509,11 +609,13 @@ JElement.select_by_text = (id, text) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {number} index
  */
 JElement.select_by_index = (id, index) => {
-    let element = JElement.get(id);
+    let element = JElement.element(id);
     if (element == null) return;
     let options = element.options;
     let count = 0;
@@ -529,22 +631,26 @@ JElement.select_by_index = (id, index) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} select_id
  * @param {number} index
  */
 JElement.add_option = (select_id, text, value) => {
-    let element = JElement.get(select_id);
+    let element = JElement.element(select_id);
     if (element == null) return;
     var option = new Option(text, value);
     element.add(option);
 }
 
 /**
+ * 
+ * 
  * @param {string} select_id
  * @param {number} index
  */
 JElement.remove_all_options = (select_id) => {
-    let element = JElement.get(select_id);
+    let element = JElement.element(select_id);
     if (element == null) return;
     while (element.options.length > 0) {
         element.remove(0);
@@ -552,21 +658,25 @@ JElement.remove_all_options = (select_id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} select_id
  * @param {number} index
  */
 JElement.remove_option_by_index = (select_id, index) => {
-    let element = JElement.get(select_id);
+    let element = JElement.element(select_id);
     if (element == null) return;
     element.remove(index);
 }
 
 /**
+ * 
+ * 
  * @param {string} select_id
  * @param {string} text
  */
 JElement.remove_option_by_text = (select_id, text) => {
-    let element = JElement.get(select_id);
+    let element = JElement.element(select_id);
     if (element == null) return;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
@@ -577,11 +687,13 @@ JElement.remove_option_by_text = (select_id, text) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} select_id
  * @param {string} value
  */
 JElement.remove_option_by_value = (select_id, value) => {
-    let element = JElement.get(select_id);
+    let element = JElement.element(select_id);
     if (element == null) return;
     let options = element.options;
     for (i = 0; i < options.length; i++) {
@@ -592,7 +704,10 @@ JElement.remove_option_by_value = (select_id, value) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {number}
  */
 JElement.checked = (id) => {
     let element = JElement.element(id);
@@ -602,7 +717,10 @@ JElement.checked = (id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
+ * @returns {number}
  */
 JElement.checked_count = (name) => {
     let elements = JElement.elements(name);
@@ -620,7 +738,10 @@ JElement.checked_count = (name) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
+ * @returns {number}
  */
 JElement.checked_sum = (name) => {
     let elements = JElement.elements(name);
@@ -640,6 +761,8 @@ JElement.checked_sum = (name) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  * @param {boolean} bool
  */
@@ -653,6 +776,8 @@ JElement.check = (id, bool = true) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {string} value
  * @param {boolean} bool
@@ -669,6 +794,8 @@ JElement.check_by_value = (name, value, bool = true) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} name
  * @param {boolean} bool
  */
