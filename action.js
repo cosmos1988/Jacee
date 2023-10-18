@@ -19,7 +19,7 @@ const JAction = {
 	 */
     confirm_fn: null,
 
-    /** 공통 fetch 에러를 처리하는 함수 설정: JAction.fetch_error_fn = (error) =>  { }
+    /** 공통 fetch 에러를 처리하는 함수 설정: JAction.fetch_error_fn = (url, error) =>  { }
 	 * @param {object} error
 	 */
     fetch_error_fn: null,
@@ -36,28 +36,35 @@ const JAction = {
     create_form: (_id) => {},
     get_form: (form) => {},
     form_append: (form, name, value, _type) => {},
-    form_to_object: (form_id) => {},
+    form_set: (form, name, value, _type) => {},
+    form_remove: (form, name) => {},
+    form_to_object: (form) => {},
     submit: (url, form, _method, _content_type) => {},
-    submit_by_file_form: (url, form_id) => {},
+    submit_by_file_form: (url, form) => {},
     fetch_option: (method, content_type, body) => {},
     fetch: (url, opt, fn, _async) => {},
     fetch_by_json: (url, obj, fn, _async) => {},
     fetch_by_form: (url, form, fn, _async) => {},
-    fetch_by_file_form: (url, form_id, fn, _async) => {},
+    fetch_by_file_form: (url, form, fn, _async) => {},
 };
 
 /**
- * @param {string} url
+ * 
+ * 
+ * @param {string} id
+ * @returns {HTMLElement}
  */
 JAction.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.error("Element (id: " + id + ") is null");
+        console.error(`Element (id: ${id}) is null`);
     }
     return element;
 }
 
 /**
+ * 
+ * 
  * @param {string} msg
  */
 JAction.alert = (msg) => {
@@ -69,7 +76,10 @@ JAction.alert = (msg) => {
 };
 
 /**
+ * 
+ * 
  * @param {string} msg
+ * @returns {boolean}
  */
 JAction.confirm = (msg) => {
     if (JAction.alert_fn != null && JAction.alert_fn instanceof Function) {
@@ -80,20 +90,27 @@ JAction.confirm = (msg) => {
 };
 
 /**
+ * 
+ * 
  * @param {string} url
  */
 JAction.go = (url) => {window.location.assign(url)};
 
 /**
+ * 
  */
 JAction.back = () => {window.history.back()};
 
 /**
+ * 
+ * 
  * @param {string} url
  */
 JAction.teleport = (url) => {window.location.replace(url)};
 
 /**
+ * 
+ * 
  * @param {number} ms
  */
 JAction.sleep =(ms) => {
@@ -102,43 +119,61 @@ JAction.sleep =(ms) => {
 };
 
 /**
+ * 
+ * 
  * @param {string} btn_id
  */
 JAction.click =(btn_id) => {
     let element = JAction.element(btn_id);
-    if (element != null) element.click();
+    if (element == null) return;
+    if (element.click == null) return;
+    element.click();
 };
 
 /**
+ * 
+ * 
  * @param {string} id
  */
 JAction.focus = (id) => {
     let element = JAction.element(id);
-    if (element != null) element.focus();
+    if (element == null) return;
+    if (element.focus == null) return;
+    element.focus();
 }
 
 /**
+ * 
+ * 
  * @param {string} id
  */
 JAction.blur = (id) => {
     let element = JAction.element(id);
-    if (element != null) element.blur();
+    if (element == null) return;
+    if (element.blur == null) return;
+    element.blur();
 }
 
 /**
+ * 
+ * 
  * @param {string} id
+ * @returns {HTMLFormElement}
  */
 JAction.create_form = (id) => {
-    let form = document.createElement("form");
+    let form = document.createElement('form');
     if (id != null) {
-        form.setAttribute("id", id);
+        form.setAttribute('id', id);
     }
     document.body.appendChild(form);
     return form;
 }
 
 /**
- * @param {object|string} form
+ * 
+ * 
+ * @param {HTMLFormElement|string} form
+ * @returns {HTMLFormElement}
  */
 JAction.get_form = (form) => {
     if (form instanceof HTMLFormElement) {
@@ -146,33 +181,87 @@ JAction.get_form = (form) => {
     } else if (typeof form === 'string') {
         return JAction.element(form);
     } else {
-        console.error('It is not a form');
+        console.error(`Parameter (id: ${form}) is not a form`);
     }
 }
 
 /**
- * @param {object|string} form
+ * 
+ * 
+ * @param {HTMLFormElement|string} form
+ * @param {string} name
+ * @param {string} value
+ * @param {string} type
+ * @returns {HTMLInputElement}
+ */
+JAction.form_append = (form, name, value, type = 'hidden') => {
+    form = JAction.get_form(form);
+    if (form == null) return;
+    let element = document.createElement('input');
+    element.setAttribute('type', type);
+    element.setAttribute('name', name);
+    element.setAttribute('value', value);
+    form.appendChild(element);
+    return element;
+}
+
+/**
+ * 
+ * 
+ * @param {HTMLFormElement|string} form
  * @param {string} name
  * @param {string} value
  * @param {string} type
  */
-JAction.form_append = (form, name, value, type = "hidden") => {
+JAction.form_set = (form, name, value, type = 'hidden') => {
     form = JAction.get_form(form);
-    let element = document.createElement("input");
-    element.setAttribute("type", type);
-    element.setAttribute("name", name);
-    element.setAttribute("value", value);
-    form.appendChild(element);
+    if (form == null) return;
+    let element = form.elements[name];
+    if (element != null) {
+        if (element.length != null) {
+            for (let i = 0; i < element.length; i++) {
+                element[i].value = value;
+            }
+        } else {
+            element.value = value;
+        }
+    } else {
+        JAction.form_append(form, name, value, type);
+    }
 }
 
 /**
- * @param {string} form_id
+ * 
+ * 
+ * @param {HTMLFormElement|string} form
+ * @param {string} name
  */
-JAction.form_to_object = (form_id) => {
-    let element = JAction.element(form_id);
-    if (element == null) return JSON.stringify({});
+JAction.form_remove = (form, name) => {
+    form = JAction.get_form(form);
+    if (form == null) return;
+    let element = form.elements[name];
+    if (element != null) {
+        if (element.length != null) {
+            for (let i = 0; i < element.length; i++) {
+                element[i].remove();
+            }
+        } else {
+            element.remove();
+        }
+    }
+}
 
-    const formData = new FormData(element);
+/**
+ * 
+ * 
+ * @param {HTMLFormElement|string} form
+ * @returns {Object}
+ */
+JAction.form_to_object = (form) => {
+    form = JAction.get_form(form);
+    if (form == null) return JSON.stringify({});
+
+    const formData = new FormData(form);
     let obj = {};
     for (const [key, value] of formData.entries()) {
         if (obj[key] !== undefined) {
@@ -188,13 +277,16 @@ JAction.form_to_object = (form_id) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} url
- * @param {object|string} form
+ * @param {HTMLFormElement|string} form
  * @param {string} method
  * @param {string} content_type
  */
 JAction.submit = (url, form, method = 'POST', content_type) => {
     form = JAction.get_form(form);
+    if (form == null) return;
     form.action = url;
     form.method = method;
     if (content_type != null) {
@@ -204,41 +296,58 @@ JAction.submit = (url, form, method = 'POST', content_type) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} url
- * @param {string} form_id
+ * @param {HTMLFormElement|string} form
  */
-JAction.submit_by_file_form = (url, form_id) => {
-    const form = JAction.element(form_id);
+JAction.submit_by_file_form = (url, form) => {
+    form = JAction.get_form(form);
+    if (form == null) return;
     JAction.submit(url, form, 'POST', 'multipart/form-data');
 }
 
 /**
+ * 
+ * 
  * @param {object} error
  */
-JAction.fetch_error = (error) => {
+JAction.fetch_error = (url, error) => {
     if (JAction.fetch_error_fn != null && JAction.fetch_error_fn instanceof Function) {
-        JAction.fetch_error_fn(error);
+        JAction.fetch_error_fn(url, error);
     } else {
-        console.error(error);
+        console.error(`Fetch (url: ${url}) error`);
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} method
  * @param {string} content_type
  * @param {object} body
+ * @returns {Object}
  */
 JAction.fetch_option = (method, content_type, body) => {
-    return {
-        method,
-        headers: {
-            'Content-Type': content_type,
-        },
-        body,
+    if (content_type == null) {
+        return {
+            method,
+            body,
+        }
+    } else {
+        return {
+            method,
+            headers: {
+                'Content-Type': content_type,
+            },
+            body,
+        }
     }
 }
 
 /**
+ * 
+ * 
  * @param {string} url
  * @param {object} opt
  * @param {function} fn
@@ -256,12 +365,14 @@ JAction.fetch = (url, opt, fn, async = true) => {
         .then(text => JSON.parse(text))
         .then(json => fn(json))
         .catch(error => {
-            JAction.fetch_error(error);
+            JAction.fetch_error(url, error);
         });
     } else {
         var xhr = new XMLHttpRequest();
         xhr.open(opt.method, url, async);
-        xhr.setRequestHeader('Content-Type', opt.headers['Content-Type']);
+        if (opt.headers != null) {
+            xhr.setRequestHeader('Content-Type', opt.headers['Content-Type']);
+        }
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
 				try{
@@ -273,7 +384,7 @@ JAction.fetch = (url, opt, fn, async = true) => {
 						throw new Error(xhr);
 	                }
 				} catch (error) {
-					JAction.fetch_error(error);
+					JAction.fetch_error(url, error);
 				}
             }
         };
@@ -282,6 +393,8 @@ JAction.fetch = (url, opt, fn, async = true) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} url
  * @param {object} obj
  * @param {function} fn
@@ -293,13 +406,16 @@ JAction.fetch_by_json = (url, obj, fn, async) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} url
- * @param {object|string} form
+ * @param {HTMLFormElement|string} form
  * @param {function} fn
  * @param {boolean} async
  */
 JAction.fetch_by_form = (url, form, fn, async) => {
     form = JAction.get_form(form);
+    if (form == null) return;
     const form_data = new FormData(form);
     const url_encoded_data = new URLSearchParams(form_data);
     const opt = JAction.fetch_option('POST', 'application/x-www-form-urlencoded', url_encoded_data);
@@ -307,14 +423,19 @@ JAction.fetch_by_form = (url, form, fn, async) => {
 }
 
 /**
+ * 
+ * 
  * @param {string} url
- * @param {string} form_id
+ * @param {HTMLFormElement|string} form
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch_by_file_form = (url, form_id, fn, async) => {
-    const form = JAction.element(form_id);
+JAction.fetch_by_file_form = (url, form, fn, async) => {
+    form = JAction.get_form(form);
+    if (form == null) return;
+    form.enctype = 'multipart/form-data';
     const form_data = new FormData(form);
-    const opt = JAction.fetch_option('POST', 'multipart/form-data', form_data);
+    // 크롬에서는 boundary가 포함된 Content-Type를 자동 생성해준다.
+    const opt = JAction.fetch_option('POST', null, form_data);
     JAction.fetch(url, opt, fn, async);
 }
