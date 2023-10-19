@@ -7,35 +7,6 @@
  */
 const JCheck = {
 
-    /** 
-     * 공통 경고창을 띄우는 함수 설정: JCheck.alert_fn = (msg) => { }
-	 * @param {string} msg
-	 */
-    alert_fn: null,
-
-    /**
-     * 패스워드 패턴 
-     * 
-     * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
-     * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
-     * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
-     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): 문자열 내에 이러한 특수 문자 중 최소 하나가 포함되어 있어야 합니다.
-     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}: 전체 문자열은 위의 소문자, 대문자, 숫자, 특수 문자들로만 구성되어 있어야 하며, 최소 길이는 8자 이상이어야 합니다.
-     */
-    password_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}$/,
-
-    /**
-     * 강력한 패스워드 패턴
-     * 
-     * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
-     * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
-     * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
-     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): 문자열에 최소 하나의 이 특수 문자들 중 하나가 포함되어 있어야 합니다.
-     * .*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]: 이 조건은 문자열에 위의 특수 문자들 중 적어도 하나가 포함되어 있어야 한다는 것을 추가로 확인합니다. (특수 문자 최소 두 개)
-     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}: 문자열은 소문자 알파벳, 대문자 알파벳, 숫자, 위의 특수 문자들 중 하나 이상으로 구성되어야 하며, 최소 길이는 12자 이상이어야 합니다.
-     */
-    password_lv2_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/].*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}$/,
-
     result: {
         empty: (id) => {},
         not_empty: (id) => {},
@@ -142,6 +113,65 @@ const JCheck = {
         checked_count_range: (name, min, max) => {},
         checked_sum_range: (name, min, max) => {},
     },
+
+    /** 
+     * 경고창 출력 설정
+     * Example: JAction.alert_fn = (msg) => { }
+     * 
+	 * @param {string} msg
+	 */
+    alert_fn: null,
+
+    /**
+     * 아이디 패턴 설정
+     */
+    id_pattern: /^[a-zA-Z0-9-_.]+$/,
+    id_input_pattern: /[^a-zA-Z0-9-_.]/g,
+
+    /**
+     * 패스워드 패턴 설정
+     * 
+     * 기본값:
+     * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): 문자열 내에 이러한 특수 문자 중 최소 하나가 포함되어 있어야 합니다.
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}: 전체 문자열은 위의 소문자, 대문자, 숫자, 특수 문자들로만 구성되어 있어야 하며, 최소 길이는 8자 이상이어야 합니다.
+     */
+    password_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}$/,
+
+    /**
+     * 강력한 패스워드 패턴 설정
+     * 
+     * 기본값:
+     * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*[A-Z]): 문자열에 최소 하나의 대문자 알파벳이 포함되어 있어야 합니다.
+     * (?=.*\d): 문자열에 최소 하나의 숫자가 포함되어 있어야 합니다.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): 문자열에 최소 하나의 이 특수 문자들 중 하나가 포함되어 있어야 합니다.
+     * .*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]: 이 조건은 문자열에 위의 특수 문자들 중 적어도 하나가 포함되어 있어야 한다는 것을 추가로 확인합니다. (특수 문자 최소 두 개)
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}: 문자열은 소문자 알파벳, 대문자 알파벳, 숫자, 위의 특수 문자들 중 하나 이상으로 구성되어야 하며, 최소 길이는 12자 이상이어야 합니다.
+     */
+    password_lv2_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/].*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}$/,
+
+    /**
+     * 이메일 패턴 설정
+     */
+    email_pattern: /^[a-zA-Z0-9]+[a-zA-Z0-9.+]*[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+[a-zA-Z0-9.]*[a-zA-Z0-9]+$/,
+    email_input_pattern: /[^a-zA-Z0-9-.@+]/g,
+
+    /**
+     * 전화번호 패턴 설정
+     */
+    phone_number_pattern: /^(?:\+?\d{1,3}-?)?(?:0\d{1,2}|\d{1,3})(?:-\d{1,4}){0,2}$/,
+    phone_number_input_pattern: /[^\d+-]/g,
+
+    /**
+     * 우편번호 패턴 설정
+     */
+    zip_code_pattern: /^[a-zA-Z0-9\s-]+$/,
+    zip_code_input_pattern:  /[^a-zA-Z0-9\s\-]/g,
+   
+
 };
 
 /**
@@ -537,7 +567,7 @@ JCheck.result.id = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /^[a-zA-Z0-9-_.]+$/;
+    let pattern = JCheck.id_pattern;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -591,7 +621,7 @@ JCheck.result.email = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /^[a-zA-Z0-9]+[a-zA-Z0-9.+]*[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+[a-zA-Z0-9.]*[a-zA-Z0-9]+$/;
+    let pattern = JCheck.email_pattern;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -609,7 +639,7 @@ JCheck.result.phone_number = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /^\+?[1-9]\d{1,14}$/;
+    let pattern = JCheck.phone_number_pattern;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -627,7 +657,7 @@ JCheck.result.zip_code = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /^[a-zA-Z0-9\s-]+$/;
+    let pattern = JCheck.zip_code_pattern;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -1376,7 +1406,7 @@ JCheck.input.max_length = (id, max, msg) => {
     JCheck.input.add_event(id, fn);
 }
 JCheck.input.id = (id, msg) => {
-    let pattern = /[^a-zA-Z0-9-_.]/g;
+    let pattern = JCheck.id_input_pattern;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
@@ -1408,7 +1438,8 @@ JCheck.input.password = (id, fn) => {
  * @param {string} msg
  */
 JCheck.input.email = (id, msg) => {
-    let pattern = /[^a-zA-Z0-9-.@+]/g;
+    let pattern = JCheck.email_input_pattern;
+    JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
 /**
@@ -1418,7 +1449,7 @@ JCheck.input.email = (id, msg) => {
  * @param {string} msg
  */
 JCheck.input.phone_number = (id, msg) => {
-    let pattern = /[^\d+()-]/g;
+    let pattern = JCheck.phone_number_input_pattern;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
@@ -1429,7 +1460,7 @@ JCheck.input.phone_number = (id, msg) => {
  * @param {string} msg
  */
 JCheck.input.zip_code = (id, msg) => {
-    let pattern = /[^a-zA-Z0-9\s\-]/g;
+    let pattern = JCheck.zip_code_input_pattern;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
