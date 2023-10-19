@@ -5,76 +5,99 @@
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
  */
-const JEvent = {
+const JElement = {
     
-    load: (fn) => {},
-    click_to_back: (id) => {},
-    click_to_go: (id, url) => {},
-    click_to_teleport: (id, url) => {},
-    
-    keyup: (id, fn) => {},
-    keypress: (id, fn) => {},
-    keydown: (id, fn) => {},
-    click: (id, fn) => {},
-    dblclick: (id, fn) => {},
-    drag: (id, fn) => {},
-    dragstart: (id, fn) => {},
-    dragenter: (id, fn) => {},
-    dragleave: (id, fn) => {},
-    dragover: (id, fn) => {},
-    touchstart: (id, fn) => {},
-    touchmove: (id, fn) => {},
-    touchend: (id, fn) => {},
-    touchcancel: (id, fn) => {},
-    input: (id, fn) => {},
-    change: (id, fn) => {},
-    focus: (id, fn) => {},
-    blur: (id, fn) => {},
-    focusin: (id, fn) => {},
-    focusout: (id, fn) => {},
-    
-    keyup_by_name: (name, fn) => {},
-    keypress_by_name: (name, fn) => {},
-    keydown_by_name: (name, fn) => {},
-    click_by_name: (name, fn) => {},
-    dblclick_by_name: (name, fn) => {},
-    drag_by_name: (name, fn) => {},
-    dragstart_by_name: (name, fn) => {},
-    dragenter_by_name: (name, fn) => {},
-    dragleave_by_name: (name, fn) => {},
-    dragover_by_name: (name, fn) => {},
-    touchstart_by_name: (name, fn) => {},
-    touchmove_by_name: (name, fn) => {},
-    touchend_by_name: (name, fn) => {},
-    touchcancel_by_name: (name, fn) => {},
-    input_by_name: (name, fn) => {},
-    change_by_name: (name, fn) => {},
-    focus_by_name: (name, fn) => {},
-    blur_by_name: (name, fn) => {},
-    focusin_by_name: (name, fn) => {},
-    focusout_by_name: (name, fn) => {},
-    
-    keyup_by_class: (class_name, fn) => {},
-    keypress_by_class: (class_name, fn) => {},
-    keydown_by_class: (class_name, fn) => {},
-    click_by_class: (class_name, fn) => {},
-    dblclick_by_class: (class_name, fn) => {},
-    drag_by_class: (class_name, fn) => {},
-    dragstart_by_class: (class_name, fn) => {},
-    dragenter_by_class: (class_name, fn) => {},
-    dragleave_by_class: (class_name, fn) => {},
-    dragover_by_class: (class_name, fn) => {},
-    touchstart_by_class: (class_name, fn) => {},
-    touchmove_by_class: (class_name, fn) => {},
-    touchend_by_class: (class_name, fn) => {},
-    touchcancel_by_class: (class_name, fn) => {},
-    input_by_class: (class_name, fn) => {},
-    change_by_class: (class_name, fn) => {},
-    focus_by_class: (class_name, fn) => {},
-    blur_by_class: (class_name, fn) => {},
-    focusin_by_class: (class_name, fn) => {},
-    focusout_by_class: (class_name, fn) => {},
+    not_null: (id) => {},
+    get: (id) => {},
+    element: (id) => {},
+    elements: (name) => {},
+    remove: (id) => {},
+    remove_by_name: (name) => {},
+
+    value: (id) => {},
+    value_length: (id) => {},
+    set_value: (id, value) => {},
+
+    text: (id) => {},
+    text_length: (id) => {},
+    set_text: (id, text) => {},
+
+    inner_html: (id) => {},
+    outer_html: (id) => {},
+    set_inner_html: (id, html) => {}, // <div><p>변경</p></div>
+    set_outer_html: (id, html) => {}, // <p>변경</p>
+    remove_inner_html: (id) => {}, // <div>(삭제)</div>
+    remove_outer_html: (id) => {}, // (삭제)
+    beforebegin_html: (id, html) => {}, // <p>추가</p><div>대상</div>
+    afterbegin_html: (id, html) => {}, // <div><p>추가</p>대상</div>
+    beforeend_html: (id, html) => {}, // <div>대상<p>추가</p></div>
+    afterend_html: (id, html) => {}, // <div>대상</div><p>추가</p>
+
+    disabled: (id) => {},
+    set_disabled: (id, _bool) => {},
+    set_disabled_by_name: (name, _bool) => {},
+    set_disabled_for_form: (form_id, _bool) => {},
+    readonly: (id) => {},
+    set_readonly: (id, _bool) => {},
+    set_readonly_by_name: (name, _bool) => {},
+    set_readonly_for_form: (form_id, _bool) => {},
+    add_display_none: (id) => {},
+    remove_display_none: (id) => {},
+    add_class: (id, class_name) => {},
+    add_class_by_name: (name, class_name) => {},
+    remove_class: (id, class_name) => {},
+    remove_class_by_name: (name, class_name) => {},
+
+    selected_value: (id) => {}, // select
+    select_by_value: (id, value) => {}, // select
+    select_by_text: (id, value) => {}, // select
+    select_by_index: (id, index) => {}, // select
+    add_option: (select_id, text, value) => {}, // select
+    remove_all_options: (select_id) => {}, // select
+    remove_option_by_index: (select_id, index) => {}, // select
+    remove_option_by_text: (select_id, text) => {}, // select
+    remove_option_by_value: (select_id, value) => {}, // select
+    checked: (id) => {}, // checkbox
+    checked_count: (name) => {}, // checkbox
+    checked_sum: (name) => {}, // checkbox
+    check: (id, _bool) => {}, // checkbox, radio
+    check_by_value: (name, value, _bool) => {}, // checkbox, radio
+    check_all: (name, _bool) => {}, // checkbox
 };
+
+/**
+ * 
+ * 
+ * @param {Element} element
+ */
+JElement.dispatch_event = (element) => {
+
+    let inputEvent = new Event('input', {
+        'bubbles': true,
+        'cancelable': true
+    });
+    element.dispatchEvent(inputEvent);
+
+    let changeEvent = new Event('change', {
+        'bubbles': true,
+        'cancelable': true
+    });
+    element.dispatchEvent(changeEvent);
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {boolean}
+ */
+JElement.not_null = (id) => {
+    let element = document.getElementById(id);
+    if (element != null) {
+        return true;
+    }
+    return false;
+}
 
 /**
  * 
@@ -82,7 +105,17 @@ const JEvent = {
  * @param {string} id
  * @returns {Element}
  */
-JEvent.element = (id) => {
+JElement.get = (id) => {
+    return JElement.element(id);
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {Element}
+ */
+JElement.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
         console.error(`Element (id: ${id}) is null`);
@@ -96,7 +129,7 @@ JEvent.element = (id) => {
  * @param {string} name
  * @returns {NodeList}
  */
-JEvent.elements = (name) => {
+JElement.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements.length === 0) {
         console.error(`Elements (name: ${name}) is a length of 0`);
@@ -109,711 +142,670 @@ JEvent.elements = (name) => {
  * 
  * 
  * @param {string} id
- * @param {string} type
- * @param {function} fn
+ * @returns {string}
  */
-JEvent.add_event = (id, type, fn) => {
-    let element = JEvent.element(id);
+JElement.value = (id) => {
+    let element = JElement.element(id);
+    if (element != null) return element.value;
+    else return '';
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {number}
+ */
+JElement.value_length = (id) => {
+    let element = JElement.element(id);
+    if (element != null && element.value != null) return element.value.length;
+    else return 0;
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} value
+ */
+JElement.set_value = (id, value) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        if (element.value != value) {
+            element.value = value;
+            JElement.dispatch_event(element);
+        }
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {string}
+ */
+JElement.text = (id) => {
+    let element = JElement.element(id);
+    if (element != null) return element.textContent;
+    else return '';
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {number}
+ */
+JElement.text_length = (id) => {
+    let element = JElement.element(id);
+    if (element != null && element.textContent != null) return element.textContent.length;
+    else return 0;
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} text
+ */
+JElement.set_text = (id, text) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.textContent = text;
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {string}
+ */
+JElement.inner_html = (id) => {
+    let element = JElement.element(id);
+    if (element != null) return element.innerHTML;
+    else return '';
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {string}
+ */
+JElement.outer_html = (id) => {
+    let element = JElement.element(id);
+    if (element != null) return element.outerHTML;
+    else return '';
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.set_inner_html = (id, html) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.innerHTML = html;
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.set_outer_html = (id, html) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.outerHTML = html;
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.remove_inner_html = (id) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.innerHTML = '';
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.remove_outer_html = (id) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.outerHTML = '';
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.beforebegin_html = (id, html) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.insertAdjacentHTML('beforebegin', html);
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.afterbegin_html = (id, html) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.insertAdjacentHTML('afterbegin', html);
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.beforeend_html = (id, html) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.insertAdjacentHTML('beforeend', html);
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} html
+ */
+JElement.afterend_html = (id, html) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.insertAdjacentHTML('afterend', html);
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ */
+JElement.remove = (id) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.remove();
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} name
+ */
+JElement.remove_by_name = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        element.remove();
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {boolean}
+ */
+JElement.disabled = (id) => {
+    let element = JElement.element(id);
+    if (element != null) return element.disabled;
+    else return false;
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {boolean} bool
+ */
+JElement.set_disabled = (id, bool = true) => {
+    let element = JElement.element(id);
+    if (element != null) element.disabled = bool;
+}
+
+/**
+ * 
+ * 
+ * @param {string} name
+ * @param {boolean} bool
+ */
+JElement.set_disabled_by_name = (name, bool = true) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].disabled = bool;
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} form_id
+ * @param {boolean} bool
+ */
+JElement.set_disabled_for_form = (form_id, bool = true) => {
+    let form = JElement.element(form_id);
+    if (form == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
+    elements.forEach(element => {
+        element.disabled = bool;
+    });
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {boolean}
+ */
+JElement.readonly = (id) => {
+    let element = JElement.element(id);
+    if (element != null) return element.readOnly;
+    else return false;
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {boolean} bool
+ */
+JElement.set_readonly = (id, bool = true) => {
+    let element = JElement.element(id);
+    if (element != null) element.readOnly = bool;
+}
+
+/**
+ * 
+ * 
+ * @param {string} name
+ * @param {boolean} bool
+ */
+JElement.set_readonly_by_name = (name, bool = true) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].readOnly = bool;
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} form_id
+ * @param {boolean} bool
+ */
+JElement.set_readonly_for_form = (form_id, bool = true) => {
+    let form = JElement.element(form_id);
+    if (form == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
+    elements.forEach(element => {
+        element.readOnly = bool;
+    });
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {boolean} bool
+ */
+JElement.add_display_none = (id) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.style.display = 'none';
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ */
+JElement.remove_display_none = (id) => {
+    let element = JElement.element(id);
+    if (element != null) {
+        element.style.display = '';
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} class_name
+ */
+JElement.add_class = (id, class_name) => {
+    let element = JElement.element(id);
     if (element == null) return;
-    element.addEventListener(type, fn);
+    element.classList.add(class_name);
 }
 
 /**
  * 
  * 
  * @param {string} name
- * @param {string} msg
- */
-JEvent.add_events = (name, type, fn) => {
-    let elements = JEvent.elements(name);
-    if (elements.length == null) return;
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener(type, fn);
-    }
-}
-
-/**
- * 
- * 
  * @param {string} class_name
- * @param {string} msg
  */
-JEvent.add_events_for_class = (class_name, type, fn) => {
-    let elements = document.querySelectorAll('.' + class_name);
-    if (elements.length == null) return;
+JElement.add_class_by_name = (name, class_name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener(type, fn);
+        elements[i].classList.add(class_name);
     }
 }
 
 /**
  * 
  * 
- * @param {function} fn
- */
-JEvent.load = (fn) => {
-    try {
-        window.addEventListener('load', fn);
-    } catch (e) {
-        console.error(e)
-   }
-}
-
-/**
- * 
- * 
  * @param {string} id
+ * @param {string} class_name
  */
-JEvent.click_to_back = (id) => {
-    JEvent.click(id, () => {window.history.back()});
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {string} url
- */
-JEvent.click_to_go = (id, url) => {
-    JEvent.click(id, () => {window.location.assign(url)});
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {string} url
- */
-JEvent.click_to_teleport = (id, url) => {
-    JEvent.click(id, () => {window.location.replace(url)});
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.keyup = (id, fn) => {
-    JEvent.add_event(id, 'keyup', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.keypress = (id, fn) => {
-    JEvent.add_event(id, 'keypress', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.keydown = (id, fn) => {
-    JEvent.add_event(id, 'keydown', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.click = (id, fn) => {
-    JEvent.add_event(id, 'click', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.dblclick = (id, fn) => {
-    JEvent.add_event(id, 'dblclick', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.drag = (id, fn) => {
-    JEvent.add_event(id, 'drag', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.dragstart = (id, fn) => {
-    JEvent.add_event(id, 'dragstart', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.dragenter = (id, fn) => {
-    JEvent.add_event(id, 'dragenter', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.dragleave = (id, fn) => {
-    JEvent.add_event(id, 'dragleave', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.dragover = (id, fn) => {
-    JEvent.add_event(id, 'dragover', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.drop = (id, fn) => {
-    JEvent.add_event(id, 'drop', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.touchstart = (id, fn) => {
-    JEvent.add_event(id, 'touchstart', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.touchmove = (id, fn) => {
-    JEvent.add_event(id, 'touchmove', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.touchend = (id, fn) => {
-    JEvent.add_event(id, 'touchend', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.touchcancel = (id, fn) => {
-    JEvent.add_event(id, 'touchcancel', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.change = (id, fn) => {
-    JEvent.add_event(id, 'change', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.input = (id, fn) => {
-    JEvent.add_event(id, 'input', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.focus = (id, fn) => {
-    JEvent.add_event(id, 'focus', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.blur = (id, fn) => {
-    JEvent.add_event(id, 'dblclick', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.focusin = (id, fn) => {
-    JEvent.add_event(id, 'focusin', fn);
-}
-
-/**
- * 
- * 
- * @param {string} id
- * @param {function} fn
- */
-JEvent.focusout = (id, fn) => {
-    JEvent.add_event(id, 'focusout', fn);
+JElement.remove_class = (id, class_name) => {
+    let element = JElement.element(id);
+    if (element == null) return;
+    element.classList.remove(class_name);
 }
 
 /**
  * 
  * 
  * @param {string} name
- * @param {function} fn
- */
-JEvent.keyup_by_name = (name, fn) => {
-    JEvent.add_events(name , 'keyup', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.keypress_by_name = (name , fn) => {
-    JEvent.add_events(name , 'keypress', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.keydown_by_name = (name , fn) => {
-    JEvent.add_events(name , 'keydown', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.click_by_name = (name , fn) => {
-    JEvent.add_events(name , 'click', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.dblclick_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dblclick', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.drag_by_name = (name , fn) => {
-    JEvent.add_events(name , 'drag', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.dragstart_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragstart', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.dragenter_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragenter', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.dragleave_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragleave', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.dragover_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragover', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.drop_by_name = (name , fn) => {
-    JEvent.add_events(name , 'drop', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.touchstart_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchstart', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.touchmove_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchmove', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.touchend_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchend', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.touchcancel_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchcancel', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.change_by_name = (name , fn) => {
-    JEvent.add_events(name , 'change', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.input_by_name = (name , fn) => {
-    JEvent.add_events(name , 'input', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.focus_by_name = (name , fn) => {
-    JEvent.add_events(name , 'focus', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.blur_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dblclick', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.focusin_by_name = (name , fn) => {
-    JEvent.add_events(name , 'focusin', fn);
-}
-
-/**
- * 
- * 
- * @param {string} name 
- * @param {function} fn
- */
-JEvent.focusout_by_name = (name , fn) => {
-    JEvent.add_events(name , 'focusout', fn);
-}
-
-/**
- * 
- * 
  * @param {string} class_name
- * @param {function} fn
  */
-JEvent.keyup_by_class  = (class_name, fn) => {
-    JEvent.add_events_for_class(class_name , 'keyup', fn);
+JElement.remove_class_by_name = (name, class_name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.remove(class_name);
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} id
+ * @returns {string}
  */
-JEvent.keypress_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'keypress', fn);
+JElement.selected_value = (id) => {
+    let element = JElement.element(id);
+    if (element == null) return false;
+    return element.options[element.selectedIndex].value;
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} id
+ * @param {string} value
  */
-JEvent.keydown_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'keydown', fn);
+JElement.select_by_value = (id, value) => {
+    let element = JElement.element(id);
+    if (element == null) return;
+    let options = element.options;
+    let count = 0;
+    for (i = 0; i < options.length; i++) {
+        let option = options[i];
+        if (option.value == value) {
+            option.selected = true;
+            count++
+        }
+    }
+    if (count > 0) {
+        JElement.dispatch_event(element);
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} id
+ * @param {string} text
  */
-JEvent.click_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'click', fn);
+JElement.select_by_text = (id, text) => {
+    let element = JElement.element(id);
+    if (element == null) return;
+    let options = element.options;
+    let count = 0;
+    for (i = 0; i < options.length; i++) {
+        let option = options[i];
+        if (option.text == text) {
+            option.selected = true;
+            count++
+        }
+    }
+    if (count > 0) {
+        JElement.dispatch_event(element);
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} id
+ * @param {number} index
  */
-JEvent.dblclick_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dblclick', fn);
+JElement.select_by_index = (id, index) => {
+    let element = JElement.element(id);
+    if (element == null) return;
+    let options = element.options;
+    let count = 0;
+    for (i = 0; i < options.length; i++) {
+        if (i == index) {
+            options[i].selected = true;
+            count++
+        }
+    }
+    if (count > 0) {
+        JElement.dispatch_event(element);
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} select_id
+ * @param {number} index
  */
-JEvent.drag_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'drag', fn);
+JElement.add_option = (select_id, text, value) => {
+    let element = JElement.element(select_id);
+    if (element == null) return;
+    var option = new Option(text, value);
+    element.add(option);
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} select_id
+ * @param {number} index
  */
-JEvent.dragstart_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragstart', fn);
+JElement.remove_all_options = (select_id) => {
+    let element = JElement.element(select_id);
+    if (element == null) return;
+    while (element.options.length > 0) {
+        element.remove(0);
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} select_id
+ * @param {number} index
  */
-JEvent.dragenter_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragenter', fn);
+JElement.remove_option_by_index = (select_id, index) => {
+    let element = JElement.element(select_id);
+    if (element == null) return;
+    element.remove(index);
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} select_id
+ * @param {string} text
  */
-JEvent.dragleave_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragleave', fn);
+JElement.remove_option_by_text = (select_id, text) => {
+    let element = JElement.element(select_id);
+    if (element == null) return;
+    let options = element.options;
+    for (i = 0; i < options.length; i++) {
+        if (options[i].text == text) {
+            element.remove(i);
+        }
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} select_id
+ * @param {string} value
  */
-JEvent.dragover_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragover', fn);
+JElement.remove_option_by_value = (select_id, value) => {
+    let element = JElement.element(select_id);
+    if (element == null) return;
+    let options = element.options;
+    for (i = 0; i < options.length; i++) {
+        if (options[i].value == value) {
+            element.remove(i);
+        }
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} id
+ * @returns {number}
  */
-JEvent.drop_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'drop', fn);
+JElement.checked = (id) => {
+    let element = JElement.element(id);
+    if (element == null) return 0;
+    if (element.checked == null) return 0;
+    return element.checked;
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} name
+ * @returns {number}
  */
-JEvent.touchstart_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchstart', fn);
+JElement.checked_count = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return 0;
+    let count = 0;
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element == null) return 0;
+        if (element.checked == null) return 0;
+        if (element.checked) {
+            count++;
+        }
+    }
+    return count;
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} name
+ * @returns {number}
  */
-JEvent.touchmove_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchmove', fn);
+JElement.checked_sum = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return 0;
+    let sum = 0;
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element == null) return 0;
+        if (element.checked == null) return 0;
+        if (element.checked) {
+            if (!NaN(element.value)) {
+                sum += Number(element.value);
+            }
+        }
+    }
+    return sum;
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} id
+ * @param {boolean} bool
  */
-JEvent.touchend_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchend', fn);
+JElement.check = (id, bool = true) => {
+    let element = JElement.element(id);
+    if (element == null) return;
+    if (element.checked != bool) {
+        element.checked = bool;
+        JElement.dispatch_event(element);
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} name
+ * @param {string} value
+ * @param {boolean} bool
  */
-JEvent.touchcancel_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchcancel', fn);
+JElement.check_by_value = (name, value, bool = true) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element.value == value) {
+            element.checked = bool;
+        }
+    }
 }
 
 /**
  * 
  * 
- * @param {string} class_name 
- * @param {function} fn
+ * @param {string} name
+ * @param {boolean} bool
  */
-JEvent.change_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'change', fn);
-}
-
-/**
- * 
- * 
- * @param {string} class_name 
- * @param {function} fn
- */
-JEvent.input_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'input', fn);
-}
-
-/**
- * 
- * 
- * @param {string} class_name 
- * @param {function} fn
- */
-JEvent.focus_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'focus', fn);
-}
-
-/**
- * 
- * 
- * @param {string} class_name 
- * @param {function} fn
- */
-JEvent.blur_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dblclick', fn);
-}
-
-/**
- * 
- * 
- * @param {string} class_name 
- * @param {function} fn
- */
-JEvent.focusin_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'focusin', fn);
-}
-
-/**
- * 
- * 
- * @param {string} class_name 
- * @param {function} fn
- */
-JEvent.focusout_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'focusout', fn);
+JElement.check_all = (name, bool = true) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element.checked != undefined) {
+            element.checked = bool;
+        }
+    }
 }
