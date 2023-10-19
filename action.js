@@ -7,38 +7,26 @@
  */
 const JAction = {
 
-    /** 
-     * 공통 경고창을 띄우는 함수 설정: JAction.alert_fn = (msg) => { }
-	 * @param {string} msg
-	 */
-    alert_fn: null,
-
-    /** 
-     * 공통 확인창을 띄우는 함수 설정: JAction.confirm_fn = (msg) => { }
-	 * @param {string} msg
-	 */
-    confirm_fn: null,
-
-    /** 공통 fetch 에러를 처리하는 함수 설정: JAction.fetch_error_fn = (url, error) =>  { }
-	 * @param {object} error
-	 */
-    fetch_error_fn: null,
-
     alert: (msg) => {},
     confirm: (msg) => {},
     go: (url) => {},
     back: () => {},
     teleport: (url) => {},
+
     sleep: (ms) => {},
+    timer_start: () => {},
+    timer_stop: (timer_start) => {},
     click: (btn_id) => {},
     focus: (id) => {},
     blur: (id) => {},
+
     create_form: (_id) => {},
     get_form: (form) => {},
     form_append: (form, name, value, _type) => {},
     form_set: (form, name, value, _type) => {},
     form_remove: (form, name) => {},
     form_to_object: (form) => {},
+
     submit: (url, form, _method, _content_type) => {},
     submit_by_file_form: (url, form) => {},
     fetch_option: (method, content_type, body) => {},
@@ -46,6 +34,48 @@ const JAction = {
     fetch_by_json: (url, obj, fn, _async) => {},
     fetch_by_form: (url, form, fn, _async) => {},
     fetch_by_file_form: (url, form, fn, _async) => {},
+
+    /** 
+     * 경고창 출력 설정
+     * Example: JAction.alert_fn = (msg) => { }
+     * 
+	 * @param {string} msg
+	 */
+    alert_fn: null,
+
+    /** 
+     * 확인창 출력 설정
+     * Example: JAction.confirm_fn = (msg) => { }
+     * 
+	 * @param {string} msg
+	 */
+    confirm_fn: null,
+
+    /** 
+     * 타이머 시작 출력 설정
+     * Example: JAction.timer_fn = (start_time => { }
+     * 
+	 * @param {number} start_time
+	 */
+    timer_start_fn: null,
+
+    /** 
+     * 타이머 종료 출력 설정
+     * Example: JAction.timer_fn = (start_time, end_time, elapsed_time) => { }
+     * 
+	 * @param {number} start_time
+	 * @param {number} end_time
+	 * @param {number} elapsed_time
+	 */
+    timer_stop_fn: null,
+
+    /** 
+     * fetch 에러 처리 설정
+     * Example: JAction.fetch_error_fn = (url, error) =>  { }
+     * 
+	 * @param {object} error
+	 */
+    fetch_error_fn: null,
 };
 
 /**
@@ -113,9 +143,51 @@ JAction.teleport = (url) => {window.location.replace(url)};
  * 
  * @param {number} ms
  */
-JAction.sleep =(ms) => {
+JAction.sleep = (ms) => {
     var start = new Date().getTime();
     while (new Date().getTime() < start + ms);
+};
+
+/**
+ * 
+ * 
+ * @returns {number}
+ */
+JAction.timer_start = () => {
+    let current_date = new Date();
+    let start_time =  current_date.getTime();
+    if (JAction.timer_start_fn != null && JAction.timer_start_fn instanceof Function) {
+        JAction.timer_start_fn(start_time);
+    } else {
+        console.log(`Timer start: ${current_date}`);
+    }
+    return start_time;
+};
+
+/**
+ * 
+ * 
+ * @param {number} ms
+ */
+JAction.timer_stop =(start_time) => {
+    let current_date = new Date();
+    let end_time =  current_date.getTime();
+    let elapsed_time = end_time - start_time;
+    if (JAction.timer_stop_fn != null && JAction.timer_stop_fn instanceof Function) {
+        JAction.timer_stop_fn(start_time, end_time, elapsed_time);
+    } else {
+        console.log(`Timer stop: ${current_date}`);
+        const millisecondsInASecond = 1000;
+        const secondsInAMinute = 60;
+        const minutesInAnHour = 60;
+        const milliseconds = elapsed_time % millisecondsInASecond;
+        const totalSeconds = Math.floor(elapsed_time / millisecondsInASecond);
+        const seconds = totalSeconds % secondsInAMinute;
+        const totalMinutes = Math.floor(totalSeconds / secondsInAMinute);
+        const minutes = totalMinutes % minutesInAnHour;
+        const hours = Math.floor(totalMinutes / minutesInAnHour);
+        console.log(`Hours: ${hours}, Minutes: ${minutes}, Seconds: ${seconds}, Milliseconds: ${milliseconds}`);
+    }
 };
 
 /**
@@ -357,11 +429,11 @@ JAction.fetch = (url, opt, fn, async = true) => {
     if (async) {
         fetch(url, opt)
         .then(response => {
-	        if (!response.ok) {
-	            throw new Error(response);
-	        }
-	        return response.text();
-	    })
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.text();
+       })
         .then(text => JSON.parse(text))
         .then(json => fn(json))
         .catch(error => {
@@ -375,17 +447,17 @@ JAction.fetch = (url, opt, fn, async = true) => {
         }
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
-				try{
-	                if (xhr.status === 200) {
-	                    let text = xhr.responseText;
-	                    let json = JSON.parse(text);
-	                    fn(json);
-	                } else {
-						throw new Error(xhr);
-	                }
-				} catch (error) {
-					JAction.fetch_error(url, error);
-				}
+                try{
+                    if (xhr.status === 200) {
+                        let text = xhr.responseText;
+                        let json = JSON.parse(text);
+                        fn(json);
+                    } else {
+                        throw new Error(xhr);
+                    }
+                } catch (error) {
+                    JAction.fetch_error(url, error);
+                }
             }
         };
         xhr.send(opt.body);
