@@ -14,8 +14,8 @@ const JAction = {
     teleport: (url) => {},
 
     sleep: (ms) => {},
-    timer_start: () => {},
-    timer_stop: (timer_start) => {},
+    stopwatch_start: () => {},
+    stopwatch_stop: (start_time) => {},
     click: (btn_id) => {},
     focus: (id) => {},
     blur: (id) => {},
@@ -53,21 +53,21 @@ const JAction = {
 
     /** 
      * 타이머 시작 출력 설정
-     * Example: JAction.timer_fn = (start_time => { }
+     * Example: JAction.stopwatch_fn = (start_time => { }
      * 
 	 * @param {number} start_time
 	 */
-    timer_start_fn: null,
+    stopwatch_start_fn: null,
 
     /** 
      * 타이머 종료 출력 설정
-     * Example: JAction.timer_fn = (start_time, end_time, elapsed_time) => { }
+     * Example: JAction.stopwatch_fn = (start_time, end_time, elapsed_time) => { }
      * 
 	 * @param {number} start_time
 	 * @param {number} end_time
 	 * @param {number} elapsed_time
 	 */
-    timer_stop_fn: null,
+    stopwatch_stop_fn: null,
 
     /** 
      * fetch 에러 처리 설정
@@ -153,11 +153,11 @@ JAction.sleep = (ms) => {
  * 
  * @returns {number}
  */
-JAction.timer_start = () => {
+JAction.stopwatch_start = () => {
     let current_date = new Date();
     let start_time =  current_date.getTime();
-    if (JAction.timer_start_fn != null && JAction.timer_start_fn instanceof Function) {
-        JAction.timer_start_fn(start_time);
+    if (JAction.stopwatch_start_fn != null && JAction.stopwatch_start_fn instanceof Function) {
+        JAction.stopwatch_start_fn(start_time);
     } else {
         console.log(`Timer start: ${current_date}`);
     }
@@ -167,14 +167,14 @@ JAction.timer_start = () => {
 /**
  * 
  * 
- * @param {number} ms
+ * @param {number} start_time
  */
-JAction.timer_stop =(start_time) => {
+JAction.stopwatch_stop =(start_time) => {
     let current_date = new Date();
     let end_time =  current_date.getTime();
     let elapsed_time = end_time - start_time;
-    if (JAction.timer_stop_fn != null && JAction.timer_stop_fn instanceof Function) {
-        JAction.timer_stop_fn(start_time, end_time, elapsed_time);
+    if (JAction.stopwatch_stop_fn != null && JAction.stopwatch_stop_fn instanceof Function) {
+        JAction.stopwatch_stop_fn(start_time, end_time, elapsed_time);
     } else {
         console.log(`Timer stop: ${current_date}`);
         const millisecondsInASecond = 1000;
