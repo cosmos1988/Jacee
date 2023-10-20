@@ -21,19 +21,19 @@ const JAction = {
     blur: (id) => {},
 
     create_form: (_id) => {},
-    get_form: (form) => {},
-    form_append: (form, name, value, _type) => {},
-    form_set: (form, name, value, _type) => {},
-    form_remove: (form, name) => {},
-    form_to_object: (form) => {},
+    get_form: (form_info) => {},
+    form_append: (form_info, name, value, _type) => {},
+    form_set: (form_info, name, value, _type) => {},
+    form_remove: (form_info, name) => {},
+    form_to_object: (form_info) => {},
 
-    submit: (url, form, _method, _content_type) => {},
-    submit_by_file_form: (url, form) => {},
+    submit: (url, form_info, _method, _content_type) => {},
+    submit_by_file_form: (url, form_info) => {},
     fetch_option: (method, content_type, body) => {},
     fetch: (url, opt, fn, _async) => {},
     fetch_by_json: (url, obj, fn, _async) => {},
-    fetch_by_form: (url, form, fn, _async) => {},
-    fetch_by_file_form: (url, form, fn, _async) => {},
+    fetch_by_form: (url, form_info, fn, _async) => {},
+    fetch_by_file_form: (url, form_info, fn, _async) => {},
 
     /** 
      * 경고창 출력 설정
@@ -244,30 +244,30 @@ JAction.create_form = (id) => {
 /**
  * 
  * 
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @returns {HTMLFormElement}
  */
-JAction.get_form = (form) => {
-    if (form instanceof HTMLFormElement) {
-        return form;
-    } else if (typeof form === 'string') {
-        return JAction.element(form);
+JAction.get_form = (form_info) => {
+    if (form_info instanceof HTMLFormElement) {
+        return form_info;
+    } else if (typeof form_info === 'string') {
+        return JAction.element(form_info);
     } else {
-        console.error(`Parameter (id: ${form}) is not a form`);
+        console.error(`Parameter (id: ${form_info}) is not a form`);
     }
 }
 
 /**
  * 
  * 
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @param {string} name
  * @param {string} value
  * @param {string} type
  * @returns {HTMLInputElement}
  */
-JAction.form_append = (form, name, value, type = 'hidden') => {
-    form = JAction.get_form(form);
+JAction.form_append = (form_info, name, value, type = 'hidden') => {
+    let form = JAction.get_form(form_info);
     if (form == null) return;
     let element = document.createElement('input');
     element.setAttribute('type', type);
@@ -280,13 +280,13 @@ JAction.form_append = (form, name, value, type = 'hidden') => {
 /**
  * 
  * 
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @param {string} name
  * @param {string} value
  * @param {string} type
  */
-JAction.form_set = (form, name, value, type = 'hidden') => {
-    form = JAction.get_form(form);
+JAction.form_set = (form_info, name, value, type = 'hidden') => {
+    let form = JAction.get_form(form_info);
     if (form == null) return;
     let element = form.elements[name];
     if (element != null) {
@@ -305,11 +305,11 @@ JAction.form_set = (form, name, value, type = 'hidden') => {
 /**
  * 
  * 
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @param {string} name
  */
-JAction.form_remove = (form, name) => {
-    form = JAction.get_form(form);
+JAction.form_remove = (form_info, name) => {
+    let form = JAction.get_form(form_info);
     if (form == null) return;
     let element = form.elements[name];
     if (element != null) {
@@ -326,11 +326,11 @@ JAction.form_remove = (form, name) => {
 /**
  * 
  * 
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @returns {Object}
  */
-JAction.form_to_object = (form) => {
-    form = JAction.get_form(form);
+JAction.form_to_object = (form_info) => {
+    let form = JAction.get_form(form_info);
     if (form == null) return JSON.stringify({});
 
     const formData = new FormData(form);
@@ -352,12 +352,12 @@ JAction.form_to_object = (form) => {
  * 
  * 
  * @param {string} url
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @param {string} method
  * @param {string} content_type
  */
-JAction.submit = (url, form, method = 'POST', content_type) => {
-    form = JAction.get_form(form);
+JAction.submit = (url, form_info, method = 'POST', content_type) => {
+    let form = JAction.get_form(form_info);
     if (form == null) return;
     form.action = url;
     form.method = method;
@@ -373,8 +373,8 @@ JAction.submit = (url, form, method = 'POST', content_type) => {
  * @param {string} url
  * @param {HTMLFormElement|string} form
  */
-JAction.submit_by_file_form = (url, form) => {
-    form = JAction.get_form(form);
+JAction.submit_by_file_form = (url, form_info) => {
+    let form = JAction.get_form(form_info);
     if (form == null) return;
     JAction.submit(url, form, 'POST', 'multipart/form-data');
 }
@@ -481,12 +481,12 @@ JAction.fetch_by_json = (url, obj, fn, async) => {
  * 
  * 
  * @param {string} url
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch_by_form = (url, form, fn, async) => {
-    form = JAction.get_form(form);
+JAction.fetch_by_form = (url, form_info, fn, async) => {
+    let form = JAction.get_form(form_info);
     if (form == null) return;
     const form_data = new FormData(form);
     const url_encoded_data = new URLSearchParams(form_data);
@@ -498,12 +498,12 @@ JAction.fetch_by_form = (url, form, fn, async) => {
  * 
  * 
  * @param {string} url
- * @param {HTMLFormElement|string} form
+ * @param {HTMLFormElement|string} form_info
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch_by_file_form = (url, form, fn, async) => {
-    form = JAction.get_form(form);
+JAction.fetch_by_file_form = (url, form_info, fn, async) => {
+    let form = JAction.get_form(form_info);
     if (form == null) return;
     form.enctype = 'multipart/form-data';
     const form_data = new FormData(form);
