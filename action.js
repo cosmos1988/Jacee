@@ -425,8 +425,16 @@ JAction.fetch_option = (method, content_type, body) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch = (url, opt, fn, async = true) => {
+JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
     if (async) {
+        if (url == null) {
+            console.error(`Fetch URL is null`);
+            return;
+        }
+        if (fn == null) {
+            console.error(`Fetch Callback Function is null`);
+            return;
+        }
         fetch(url, opt)
         .then(response => {
             if (!response.ok) {
@@ -473,8 +481,23 @@ JAction.fetch = (url, opt, fn, async = true) => {
  * @param {boolean} async
  */
 JAction.fetch_by_json = (url, obj, fn, async) => {
+    if (obj == null) obj = {};
     const opt = JAction.fetch_option('POST', 'application/json', JSON.stringify(obj));
-    JAction.fetch(url, opt, fn, async);
+    JAction.fetch(url, fn, opt, async);
+}
+
+/**
+ * 
+ * 
+ * @param {string} url
+ * @param {object} obj
+ * @param {function} fn
+ * @param {boolean} async
+ */
+JAction.fetch_by_json = (url, obj, fn, async) => {
+    if (obj == null) obj = {};
+    const opt = JAction.fetch_option('POST', 'application/json', JSON.stringify(obj));
+    JAction.fetch(url, fn, opt, async);
 }
 
 /**
@@ -491,7 +514,7 @@ JAction.fetch_by_form = (url, form_info, fn, async) => {
     const form_data = new FormData(form);
     const url_encoded_data = new URLSearchParams(form_data);
     const opt = JAction.fetch_option('POST', 'application/x-www-form-urlencoded', url_encoded_data);
-    JAction.fetch(url, opt, fn, async);
+    JAction.fetch(url, fn, opt, async);
 }
 
 /**
@@ -509,5 +532,5 @@ JAction.fetch_by_file_form = (url, form_info, fn, async) => {
     const form_data = new FormData(form);
     // 크롬에서는 boundary가 포함된 Content-Type를 자동 생성해준다.
     const opt = JAction.fetch_option('POST', null, form_data);
-    JAction.fetch(url, opt, fn, async);
+    JAction.fetch(url, fn, opt, async);
 }
