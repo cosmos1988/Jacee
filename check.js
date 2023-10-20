@@ -115,7 +115,8 @@ const JCheck = {
     },
 
     /** 
-     * 경고창 출력 설정
+     * Alert output function
+     * 경고창 출력 함수 
      * Example: JAction.alert_fn = (msg) => { }
      * 
 	 * @param {string} msg
@@ -123,13 +124,28 @@ const JCheck = {
     alert_fn: null,
 
     /**
-     * 아이디 패턴 설정
+     * ID pattern
+     * 아이디 패턴
      */
     id_pattern: /^[a-zA-Z0-9-_.]+$/,
+    
+    /**
+     * ID input pattern
+     * 아이디 입력 패턴
+     */
     id_input_pattern: /[^a-zA-Z0-9-_.]/g,
 
     /**
-     * 패스워드 패턴 설정
+     * Password pattern
+     * 패스워드 패턴
+     * 
+     * Default:
+     * (?=.*[a-z]): The string must contain at least one lowercase alphabetical character.
+     * (?=.*[A-Z]): The string must contain at least one uppercase alphabetical character.
+     * (?=.*\d): The string must contain at least one digit.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): The string must contain at least one of these special characters.
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}: The overall string should only be made up of the aforementioned lowercase letters,
+     * uppercase letters, numbers, and special characters, and its minimum length should be at least 8 characters.
      * 
      * 기본값:
      * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
@@ -141,7 +157,18 @@ const JCheck = {
     password_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{8,}$/,
 
     /**
-     * 강력한 패스워드 패턴 설정
+     * Strong Password pattern
+     * 강력한 패스워드 패턴
+     * 
+     * Default:
+     * (?=.*[a-z]): The string must contain at least one lowercase alphabetical character.
+     * (?=.*[A-Z]): The string must contain at least one uppercase alphabetical character.
+     * (?=.*\d): The string must contain at least one digit.
+     * (?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]): The string must contain at least one of these special characters.
+     * .*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]: This condition further confirms that the string must contain at least one of the aforementioned special characters.
+     * (Minimum two special characters in total when combined with the previous condition)
+     * [A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}: The overall string should be composed of at least one of the mentioned lowercase letters, uppercase letters,
+     * numbers, and special characters, and its minimum length should be at least 12 characters.
      * 
      * 기본값:
      * (?=.*[a-z]): 문자열에 최소 하나의 소문자 알파벳이 포함되어 있어야 합니다.
@@ -154,24 +181,40 @@ const JCheck = {
     password_lv2_pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/].*[!@#$%^&*()-_=+\[\]{}|;:'',.<>?/])[A-Za-z\d!@#$%^&*()-_=+\[\]{}|;:'',.<>?/]{12,}$/,
 
     /**
-     * 이메일 패턴 설정
+     * Email pattern
+     * 이메일 패턴
      */
     email_pattern: /^[a-zA-Z0-9]+[a-zA-Z0-9.+]*[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+[a-zA-Z0-9.]*[a-zA-Z0-9]+$/,
+
+    /**
+     * Email input pattern
+     * 이메일 입력 패턴
+     */
     email_input_pattern: /[^a-zA-Z0-9-.@+]/g,
 
     /**
-     * 전화번호 패턴 설정
+     * Phone number pattern
+     * 전화번호 패턴
      */
     phone_number_pattern: /^(?:\+?\d{1,3}-?)?(?:0\d{1,2}|\d{1,3})(?:-\d{1,4}){0,2}$/,
+    
+    /**
+     * Phone number input pattern
+     * 전화번호 입력 패턴
+     */
     phone_number_input_pattern: /[^\d+-]/g,
 
     /**
-     * 우편번호 패턴 설정
+     * Zip code pattern
+     * 우편번호 패턴
      */
     zip_code_pattern: /^[a-zA-Z0-9\s-]+$/,
+    
+    /**
+     * Zip code input pattern
+     * 우편번호 입력 패턴
+     */
     zip_code_input_pattern:  /[^a-zA-Z0-9\s\-]/g,
-   
-
 };
 
 /**
