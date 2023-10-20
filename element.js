@@ -24,14 +24,14 @@ const JElement = {
 
     inner_html: (id) => {},
     outer_html: (id) => {},
-    set_inner_html: (id, html) => {}, // <div><p>변경</p></div>
-    set_outer_html: (id, html) => {}, // <p>변경</p>
-    remove_inner_html: (id) => {}, // <div>(삭제)</div>
-    remove_outer_html: (id) => {}, // (삭제)
-    beforebegin_html: (id, html) => {}, // <p>추가</p><div>대상</div>
-    afterbegin_html: (id, html) => {}, // <div><p>추가</p>대상</div>
-    beforeend_html: (id, html) => {}, // <div>대상<p>추가</p></div>
-    afterend_html: (id, html) => {}, // <div>대상</div><p>추가</p>
+    set_inner_html: (id, html) => {}, // <div><p>change</p></div>
+    set_outer_html: (id, html) => {}, // <p>change</p>
+    remove_inner_html: (id) => {}, // <div>(remove)</div>
+    remove_outer_html: (id) => {}, // (remove)
+    beforebegin_html: (id, html) => {}, // <p>add</p><div>target</div>
+    afterbegin_html: (id, html) => {}, // <div><p>add</p>target</div>
+    beforeend_html: (id, html) => {}, // <div>target<p>add</p></div>
+    afterend_html: (id, html) => {}, // <div>target</div><p>add</p>
 
     disabled: (id) => {},
     set_disabled: (id, _bool) => {},
