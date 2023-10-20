@@ -36,7 +36,8 @@ const JAction = {
     fetch_by_file_form: (url, form_info, fn, _async) => {},
 
     /** 
-     * 경고창 출력 설정
+     * Alert output function
+     * 경고창 출력 함수
      * Example: JAction.alert_fn = (msg) => { }
      * 
 	 * @param {string} msg
@@ -44,7 +45,8 @@ const JAction = {
     alert_fn: null,
 
     /** 
-     * 확인창 출력 설정
+     * Confirm output function
+     * 확인창 출력 함수
      * Example: JAction.confirm_fn = (msg) => { }
      * 
 	 * @param {string} msg
@@ -52,15 +54,17 @@ const JAction = {
     confirm_fn: null,
 
     /** 
-     * 타이머 시작 출력 설정
-     * Example: JAction.stopwatch_fn = (start_time => { }
+     * Stopwatch start output function
+     * 스톱워치 시작 출력 함수
+     * Example: JAction.stopwatch_fn = (start_time) => { }
      * 
 	 * @param {number} start_time
 	 */
     stopwatch_start_fn: null,
 
     /** 
-     * 타이머 종료 출력 설정
+     * Stopwatch end output function
+     * 스톱워치 종료 출력 함수
      * Example: JAction.stopwatch_fn = (start_time, end_time, elapsed_time) => { }
      * 
 	 * @param {number} start_time
@@ -70,7 +74,8 @@ const JAction = {
     stopwatch_stop_fn: null,
 
     /** 
-     * fetch 에러 처리 설정
+     * Fetch error handling function
+     * Fetch 에러 처리 함수
      * Example: JAction.fetch_error_fn = (url, error) =>  { }
      * 
 	 * @param {object} error
