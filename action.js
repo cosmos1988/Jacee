@@ -427,14 +427,6 @@ JAction.fetch_option = (method, content_type, body) => {
  */
 JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
     if (async) {
-        if (url == null) {
-            console.error(`Fetch URL is null`);
-            return;
-        }
-        if (fn == null) {
-            console.error(`Fetch Callback Function is null`);
-            return;
-        }
         fetch(url, opt)
         .then(response => {
             if (!response.ok) {
