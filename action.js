@@ -173,7 +173,7 @@ JAction.blur = (id) => {
 /**
  * 
  * 
- * @param {function} fn - fn(start_time) => {}
+ * @param {function} fn - (start_time) => {} or bool
  * @returns {number}
  */
 JAction.stopwatch_start = (fn) => {
@@ -191,7 +191,7 @@ JAction.stopwatch_start = (fn) => {
  * 
  * 
  * @param {number} start_time
- * @param {function} fn - fn(elapsed_time) => {}
+ * @param {function} fn - (elapsed_time) => {} or bool
  * @returns {number}
  */
 JAction.stopwatch_stop = (start_time, fn) => {
@@ -243,7 +243,7 @@ JAction.get_form = (form_info) => {
     } else if (typeof form_info === 'string') {
         return JAction.element(form_info);
     } else {
-        console.error(`Parameter (id: ${form_info}) is not a form`);
+        console.error(`Argument(${form_info}) is not a form info`);
     }
 }
 
@@ -378,7 +378,7 @@ JAction.fetch_error = (url, error) => {
     if (JAction.fetch_error_fn != null && JAction.fetch_error_fn instanceof Function) {
         JAction.fetch_error_fn(url, error);
     } else {
-        console.error(`Fetch (url: ${url}) error`);
+        console.error(`Fetch error (url: ${url})`);
     }
 }
 
