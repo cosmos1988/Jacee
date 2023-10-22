@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version 0.0.1
+ * @version 2023.v1
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -65,7 +65,8 @@ const JAction = {
 };
 
 /**
- * 
+ * Gets an element.
+ * 엘리먼트를 가져온다.
  * 
  * @param {string} id
  * @returns {HTMLElement}
@@ -79,7 +80,8 @@ JAction.element = (id) => {
 }
 
 /**
- * 
+ * Displays an alert.
+ * 경고창을 띄운다.
  * 
  * @param {string} msg
  */
@@ -92,7 +94,8 @@ JAction.alert = (msg) => {
 };
 
 /**
- * 
+ * Displays an confirm.
+ * 확인창을 띄운다.
  * 
  * @param {string} msg
  * @returns {boolean}
@@ -106,26 +109,30 @@ JAction.confirm = (msg) => {
 };
 
 /**
- * 
+ * Move to another page.
+ * 다른 페이지로 이동한다.
  * 
  * @param {string} url
  */
 JAction.go = (url) => {window.location.assign(url)};
 
 /**
- * 
+ * Return to the previous page.
+ * 이전 페이지로 돌아간다.
  */
 JAction.back = () => {window.history.back()};
 
 /**
- * 
+ * Move to another page without recording the previous page.
+ * 이전 페이지 기록 없이 다른 페이지로 이동한다.
  * 
  * @param {string} url
  */
 JAction.teleport = (url) => {window.location.replace(url)};
 
 /**
- * 
+ * Temporarily stop movement.
+ * 동작을 일시적으로 멈춘다.
  * 
  * @param {number} ms
  */
@@ -135,7 +142,8 @@ JAction.sleep = (ms) => {
 };
 
 /**
- * 
+ * Click the button.
+ * 버튼을 클릭한다.
  * 
  * @param {string} btn_id
  */
@@ -147,7 +155,8 @@ JAction.click =(btn_id) => {
 };
 
 /**
- * 
+ * Take focus.
+ * 포커스를 잡는다.
  * 
  * @param {string} id
  */
@@ -159,7 +168,8 @@ JAction.focus = (id) => {
 }
 
 /**
- * 
+ * Release focus.
+ * 포커스를 푼다.
  * 
  * @param {string} id
  */
@@ -171,7 +181,8 @@ JAction.blur = (id) => {
 }
 
 /**
- * 
+ * Start the stopwatch.
+ * 스톱워치 시작을 한다.
  * 
  * @param {function} fn - (start_time) => {} or bool
  * @returns {number}
@@ -188,7 +199,8 @@ JAction.stopwatch_start = (fn) => {
 };
 
 /**
- * 
+ * Stop the stopwatch.
+ * 스톱워치를 정지한다.
  * 
  * @param {number} start_time
  * @param {function} fn - (elapsed_time) => {} or bool
@@ -217,7 +229,8 @@ JAction.stopwatch_stop = (start_time, fn) => {
 };
 
 /**
- * 
+ * Create a new form.
+ * 새로운 폼을 만든다.
  * 
  * @param {string} id
  * @returns {HTMLFormElement}
@@ -232,7 +245,8 @@ JAction.create_form = (id) => {
 }
 
 /**
- * 
+ * Get the form.
+ * 폼을 가져온다.
  * 
  * @param {HTMLFormElement|string} form_info
  * @returns {HTMLFormElement}
@@ -248,7 +262,8 @@ JAction.get_form = (form_info) => {
 }
 
 /**
- * 
+ * Add an input element to the form.
+ * 폼에 입력 엘리먼트를 추가한다.
  * 
  * @param {HTMLFormElement|string} form_info
  * @param {string} name
@@ -268,7 +283,8 @@ JAction.form_append = (form_info, name, value, type = 'hidden') => {
 }
 
 /**
- * 
+ * Set a value to an element of the form.
+ * 폼의 엘리먼트에 값을 설정한다.
  * 
  * @param {HTMLFormElement|string} form_info
  * @param {string} name
@@ -293,7 +309,8 @@ JAction.form_set = (form_info, name, value, type = 'hidden') => {
 }
 
 /**
- * 
+ * Removes an element from the form.
+ * 폼의 엘리먼트를 제거한다.
  * 
  * @param {HTMLFormElement|string} form_info
  * @param {string} name
@@ -314,7 +331,8 @@ JAction.form_remove = (form_info, name) => {
 }
 
 /**
- * 
+ * Convert the form to an object.
+ * 폼을 객체로 변환한다.
  * 
  * @param {HTMLFormElement|string} form_info
  * @returns {Object}
@@ -339,7 +357,8 @@ JAction.form_to_object = (form_info) => {
 }
 
 /**
- * 
+ * Submit the form.
+ * 폼을 제출한다.
  * 
  * @param {string} url
  * @param {HTMLFormElement|string} form_info
@@ -358,7 +377,8 @@ JAction.submit = (url, form_info, method = 'POST', content_type) => {
 }
 
 /**
- * 
+ * Submit the file form.
+ * 파일폼을 제출한다.
  * 
  * @param {string} url
  * @param {HTMLFormElement|string} form
@@ -370,7 +390,8 @@ JAction.submit_by_file_form = (url, form_info) => {
 }
 
 /**
- * 
+ * Handles errors that occur in the fetch API.
+ * fetch API에서 발생한 오류를 처리한다.
  * 
  * @param {object} error
  */
@@ -383,7 +404,8 @@ JAction.fetch_error = (url, error) => {
 }
 
 /**
- * 
+ * Create fetch API options.
+ * fetch API 옵션을 만든다.
  * 
  * @param {string} method
  * @param {string} content_type
@@ -408,7 +430,9 @@ JAction.fetch_option = (method, content_type, body) => {
 }
 
 /**
- * 
+ * Run the fetch API.
+ * fetch API를 실행한다.
+ * Method: GET
  * 
  * @param {string} url
  * @param {object} opt
@@ -455,21 +479,9 @@ JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
 }
 
 /**
- * 
- * 
- * @param {string} url
- * @param {object} obj
- * @param {function} fn
- * @param {boolean} async
- */
-JAction.fetch_by_json = (url, obj, fn, async) => {
-    if (obj == null) obj = {};
-    const opt = JAction.fetch_option('POST', 'application/json', JSON.stringify(obj));
-    JAction.fetch(url, fn, opt, async);
-}
-
-/**
- * 
+ * Execute the fetch API with JSON.
+ * JSON으로 fetch API를 실행한다.
+ * Method: POST
  * 
  * @param {string} url
  * @param {object} obj
@@ -483,7 +495,9 @@ JAction.fetch_by_json = (url, obj, fn, async) => {
 }
 
 /**
- * 
+ * Execute the fetch API using the form.
+ * 폼으로 fetch API를 실행한다.
+ * Method: POST
  * 
  * @param {string} url
  * @param {HTMLFormElement|string} form_info
@@ -500,7 +514,9 @@ JAction.fetch_by_form = (url, form_info, fn, async) => {
 }
 
 /**
- * 
+ * Execute the fetch API using the file form.
+ * 파일폼으로 fetch API를 실행한다.
+ * Method: POST
  * 
  * @param {string} url
  * @param {HTMLFormElement|string} form_info
