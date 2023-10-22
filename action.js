@@ -18,8 +18,8 @@ const JAction = {
     focus: (id) => {},
     blur: (id) => {},
 
-    stopwatch_start: () => {},
-    stopwatch_stop: (start_time) => {},
+    stopwatch_start: (_fn) => {},
+    stopwatch_stop: (start_time, _fn) => {},
 
     create_form: (_id) => {},
     get_form: (form_info) => {},
