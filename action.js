@@ -14,11 +14,12 @@ const JAction = {
     teleport: (url) => {},
 
     sleep: (ms) => {},
-    stopwatch_start: () => {},
-    stopwatch_stop: (start_time) => {},
     click: (btn_id) => {},
     focus: (id) => {},
     blur: (id) => {},
+
+    stopwatch_start: () => {},
+    stopwatch_stop: (start_time) => {},
 
     create_form: (_id) => {},
     get_form: (form_info) => {},
@@ -52,26 +53,6 @@ const JAction = {
 	 * @param {string} msg
 	 */
     confirm_fn: null,
-
-    /** 
-     * Stopwatch start output function
-     * 스톱워치 시작 출력 함수
-     * Example: JAction.stopwatch_fn = (start_time) => { }
-     * 
-	 * @param {number} start_time
-	 */
-    stopwatch_start_fn: null,
-
-    /** 
-     * Stopwatch end output function
-     * 스톱워치 종료 출력 함수
-     * Example: JAction.stopwatch_fn = (start_time, end_time, elapsed_time) => { }
-     * 
-	 * @param {number} start_time
-	 * @param {number} end_time
-	 * @param {number} elapsed_time
-	 */
-    stopwatch_stop_fn: null,
 
     /** 
      * Fetch error handling function
@@ -156,48 +137,6 @@ JAction.sleep = (ms) => {
 /**
  * 
  * 
- * @returns {number}
- */
-JAction.stopwatch_start = () => {
-    let current_date = new Date();
-    let start_time =  current_date.getTime();
-    if (JAction.stopwatch_start_fn != null && JAction.stopwatch_start_fn instanceof Function) {
-        JAction.stopwatch_start_fn(start_time);
-    } else {
-        console.log(`Timer start: ${current_date}`);
-    }
-    return start_time;
-};
-
-/**
- * 
- * 
- * @param {number} start_time
- */
-JAction.stopwatch_stop =(start_time) => {
-    let current_date = new Date();
-    let end_time =  current_date.getTime();
-    let elapsed_time = end_time - start_time;
-    if (JAction.stopwatch_stop_fn != null && JAction.stopwatch_stop_fn instanceof Function) {
-        JAction.stopwatch_stop_fn(start_time, end_time, elapsed_time);
-    } else {
-        console.log(`Timer stop: ${current_date}`);
-        const millisecondsInASecond = 1000;
-        const secondsInAMinute = 60;
-        const minutesInAnHour = 60;
-        const milliseconds = elapsed_time % millisecondsInASecond;
-        const totalSeconds = Math.floor(elapsed_time / millisecondsInASecond);
-        const seconds = totalSeconds % secondsInAMinute;
-        const totalMinutes = Math.floor(totalSeconds / secondsInAMinute);
-        const minutes = totalMinutes % minutesInAnHour;
-        const hours = Math.floor(totalMinutes / minutesInAnHour);
-        console.log(`Hours: ${hours}, Minutes: ${minutes}, Seconds: ${seconds}, Milliseconds: ${milliseconds}`);
-    }
-};
-
-/**
- * 
- * 
  * @param {string} btn_id
  */
 JAction.click =(btn_id) => {
@@ -230,6 +169,52 @@ JAction.blur = (id) => {
     if (element.blur == null) return;
     element.blur();
 }
+
+/**
+ * 
+ * 
+ * @param {function} fn - fn(start_time) => {}
+ * @returns {number}
+ */
+JAction.stopwatch_start = (fn) => {
+    let current_date = new Date();
+    let start_time =  current_date.getTime();
+    if (fn != null && fn instanceof Function) {
+        fn(start_time);
+    } else if (fn != null && fn === true) {
+        console.log(`Stopwatch start: ${current_date}`);
+    }
+    return start_time;
+};
+
+/**
+ * 
+ * 
+ * @param {number} start_time
+ * @param {function} fn - fn(elapsed_time) => {}
+ * @returns {number}
+ */
+JAction.stopwatch_stop = (start_time, fn) => {
+    let current_date = new Date();
+    let end_time =  current_date.getTime();
+    let elapsed_time = end_time - start_time;
+    if (fn != null && fn instanceof Function) {
+        fn(elapsed_time);
+    } else if (fn != null && fn === true) {
+        console.log(`Stopwatch stop: ${current_date}`);
+        const millisecondsInASecond = 1000;
+        const secondsInAMinute = 60;
+        const minutesInAnHour = 60;
+        const milliseconds = elapsed_time % millisecondsInASecond;
+        const totalSeconds = Math.floor(elapsed_time / millisecondsInASecond);
+        const seconds = totalSeconds % secondsInAMinute;
+        const totalMinutes = Math.floor(totalSeconds / secondsInAMinute);
+        const minutes = totalMinutes % minutesInAnHour;
+        const hours = Math.floor(totalMinutes / minutesInAnHour);
+        console.log(`Hours: ${hours}, Minutes: ${minutes}, Seconds: ${seconds}, Milliseconds: ${milliseconds}`);
+    }
+    return elapsed_time;
+};
 
 /**
  * 
