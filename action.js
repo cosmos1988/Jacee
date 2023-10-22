@@ -181,7 +181,7 @@ JAction.stopwatch_start = (fn) => {
     let start_time =  current_date.getTime();
     if (fn != null && fn instanceof Function) {
         fn(start_time);
-    } else if (fn != null && fn === true) {
+    } else if (fn === true) {
         console.log(`Stopwatch start: ${current_date}`);
     }
     return start_time;
@@ -200,7 +200,7 @@ JAction.stopwatch_stop = (start_time, fn) => {
     let elapsed_time = end_time - start_time;
     if (fn != null && fn instanceof Function) {
         fn(elapsed_time);
-    } else if (fn != null && fn === true) {
+    } else if (fn === true) {
         console.log(`Stopwatch stop: ${current_date}`);
         const millisecondsInASecond = 1000;
         const secondsInAMinute = 60;
