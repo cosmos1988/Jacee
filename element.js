@@ -6,6 +6,9 @@
  * @copyright Copyright © 2023 <cosmos1988>
  */
 const JElement = {
+
+    id_separator: '-',
+    idgen: (...parts) => {},
     
     not_null: (id) => {},
     get: (id) => {},
@@ -83,6 +86,20 @@ JElement.dispatch_event = (element) => {
         'cancelable': true
     });
     element.dispatchEvent(changeEvent);
+}
+
+/**
+ * 
+ * 
+ * @param {...string} parts
+ * @returns {string}
+ */
+JElement.idgen = (...parts) => {
+    let separator = JElement.id_separator;
+    if (separator == null) {
+        separator = '-';
+    }
+    return parts.join(separator);
 }
 
 /**
