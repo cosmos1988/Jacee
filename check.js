@@ -93,7 +93,7 @@ const JCheck = {
         max_size: (id, max, _msg) => {},
         max_length: (id, max, _msg) => {},
         id: (id, _msg) => {},
-        password_lv_check: (id, fn) => {}, /* fn(test_lv1, test_lv2) */
+        password_level: (id, fn) => {}, /* fn(test_lv1, test_lv2) */
         email: (id, _msg) => {},
         phone_number: (id, _msg) => {},
         zip_code: (id, _msg) => {},
@@ -1494,7 +1494,7 @@ JCheck.input.id = (id, msg) => {
  * @param {string} id
  * @param {function} fn
  */
-JCheck.input.password_lv_check = (id, fn) => {
+JCheck.input.password_level = (id, fn) => {
     let event_fn = (e) => {
         let id = e.target.id;
         let element = JCheck.element(id);
