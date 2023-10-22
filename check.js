@@ -41,6 +41,7 @@ const JCheck = {
         max_checked_sum: (name) => {},
         checked_count_range: (name, min, max) => {},
         checked_sum_range: (name, min, max) => {},
+        test: (id, pattern) => {},
     },
 
     alert: {
@@ -75,6 +76,7 @@ const JCheck = {
         max_checked_sum: (name, max, msg) => {},
         checked_count_range: (name, min, max, msg) => {},
         checked_sum_range: (name, min, max, msg) => {},
+        test: (id, pattern, msg) => {},
     },
 
     input: {
@@ -95,6 +97,7 @@ const JCheck = {
         email: (id, _msg) => {},
         phone_number: (id, _msg) => {},
         zip_code: (id, _msg) => {},
+        test: (id, pattern, _msg) => {},
     },
 
     focusout: {
@@ -103,6 +106,7 @@ const JCheck = {
         email: (id, del, _msg) => {},
         phone_number: (id, del, _msg) => {},
         zip_code: (id, del, _msg) => {},
+        test: (id, pattern, del, _msg) => {},
     },
 
     change: {
@@ -712,6 +716,25 @@ JCheck.result.zip_code = (id) => {
  * 
  * 
  * @param {string} id
+ * @param {string} pattern
+ * @returns {boolean}
+ */
+JCheck.result.test = (id, pattern) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    if (pattern == null) return false;
+    if (pattern.test(element.value)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
  */
 JCheck.result.selected = (id) => {
     let element = JCheck.element(id);
@@ -1148,6 +1171,18 @@ JCheck.alert.zip_code = (id, msg) => {
  * 
  * 
  * @param {string} id
+ * @param {string} pattern
+ * @param {string} msg
+ * @returns {boolean}
+ */
+JCheck.alert.test = (id, pattern, msg) => {
+    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.test(id, pattern));
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
  * @param {string} msg
  * @returns {boolean}
  */
@@ -1511,6 +1546,17 @@ JCheck.input.zip_code = (id, msg) => {
  * 
  * 
  * @param {string} id
+ * @param {string} pattern
+ * @param {string} msg
+ */
+JCheck.input.test = (id, pattern, msg) => {
+    JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
  * @param {boolean} del
  * @param {string} msg
  * @param {function} fn
@@ -1587,6 +1633,18 @@ JCheck.focusout.phone_number = (id, del, msg) => {
  */
 JCheck.focusout.zip_code = (id, del, msg) => {
     JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.zip_code(id));
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} pattern
+ * @param {boolean} del
+ * @param {string} msg
+ */
+JCheck.focusout.test = (id, pattern, del, msg) => {
+    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.test(id, pattern));
 }
 
 /**
