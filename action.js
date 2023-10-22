@@ -50,8 +50,8 @@ const JAction = {
      * 확인창 출력 함수
      * Example: JAction.confirm_fn = (msg) => { }
      * 
-	 * @param {string} msg
-	 */
+     * @param {string} msg
+     */
     confirm_fn: null,
 
     /** 
@@ -59,8 +59,8 @@ const JAction = {
      * Fetch 에러 처리 함수
      * Example: JAction.fetch_error_fn = (url, error) =>  { }
      * 
-	 * @param {object} error
-	 */
+     * @param {object} error
+     */
     fetch_error_fn: null,
 };
 
