@@ -28,6 +28,7 @@ const JAction = {
 
     create_form: (_id) => {},
     get_form: (form_info) => {},
+    reset_form: (form_info) => {},
     form_append: (form_info, name, value, _type) => {},
     form_set: (form_info, name, value, _type) => {},
     form_remove: (form_info, name) => {},
@@ -327,6 +328,41 @@ JAction.get_form = (form_info) => {
 }
 
 /**
+ * Reset the form.
+ * 폼을 리셋한다.
+ * 
+ * @param {HTMLFormElement|string} form_info
+ * @returns {HTMLFormElement}
+ */
+JAction.reset_form = (form_info) => {
+    let form = JAction.get_form(form_info);
+    if (form == null) return;
+    
+    const types = [
+        'input[type=text]',
+        'input[type=hidden]',
+        'input[type=password]',
+        'input[type=email]',
+        'input[type=number]',
+        'input[type=date]',
+    ];
+    let inputs = form.querySelectorAll(types.join(', '));
+    inputs.forEach(input => {
+        input.value = '';
+    });
+
+    let selects = form.querySelectorAll('select');
+    selects.forEach(select => {
+        select.selectedIndex = 0;
+    });
+
+    let checkboxes = form.querySelectorAll('input[type=checkbox], input[type=radio]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
+/**
  * Add an input element to the form.
  * 폼에 입력 엘리먼트를 추가한다.
  * 
@@ -406,8 +442,14 @@ JAction.form_to_object = (form_info) => {
     let form = JAction.get_form(form_info);
     if (form == null) return JSON.stringify({});
 
+    const disabled_inputs = form.querySelectorAll('[disabled]');
+    disabled_inputs.forEach(input => {
+        input.removeAttribute('disabled');
+    });
+
     const formData = new FormData(form);
     let obj = {};
+
     for (const [key, value] of formData.entries()) {
         if (obj[key] !== undefined) {
             if (!Array.isArray(obj[key])) {
@@ -418,6 +460,10 @@ JAction.form_to_object = (form_info) => {
             obj[key] = value;
         }
     }
+
+    disabled_inputs.forEach(input => {
+        input.setAttribute('disabled', '');
+    });
     return obj;
 }
 
