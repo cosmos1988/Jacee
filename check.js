@@ -10,6 +10,7 @@ const JCheck = {
     result: {
         empty: (id) => {},
         not_empty: (id) => {},
+        equal: (id, value) => {},
         number: (id) => {},
         min_size: (id, min) => {},
         min_length: (id, min) => {},
@@ -22,6 +23,7 @@ const JCheck = {
         uppercase: (id) => {},
         language: (id, lang) => {},
         english_number: (id) => {},
+        number_hyphen: (id) => {},
         not_spchars: (id) => {},
         not_number_spchars: (id) => {},
         not_spchars_space: (id) => {},
@@ -44,8 +46,11 @@ const JCheck = {
         test: (id, pattern) => {},
     },
 
+    alert_and_focus: (id, msg, _result) => {},
+
     alert: {
         not_empty: (id, msg) => {},
+        equal: (id, value, msg) => {},
         number: (id, msg) => {},
         min_size: (id, min, msg) => {},
         min_length: (id, min, msg) => {},
@@ -58,6 +63,7 @@ const JCheck = {
         uppercase: (id, msg) => {},
         language: (id, lang, msg) => {},
         english_number: (id, msg) => {},
+        number_hyphen: (id, msg) => {},
         not_spchars: (id, msg) => {},
         not_number_spchars: (id, msg) => {},
         not_spchars_space: (id, msg) => {},
@@ -86,6 +92,7 @@ const JCheck = {
         uppercase: (id, _msg) => {},
         language: (id, lang, _msg) => {},
         english_number: (id, _msg) => {},
+        number_hyphen: (id, _msg) => {},
         not_spchars: (id, _msg) => {},
         not_number_spchars: (id, _msg) => {},
         not_spchars_space: (id, _msg) => {},
@@ -269,13 +276,36 @@ JCheck.length = (id) => {
  * 
  * 
  * @param {string} id
+ * @param {string} msg
+ * @param {boolean} result
+ * @returns {boolean}
+ */
+JCheck.alert_and_focus = (id, msg, result) => {
+    if (result || result == undefined) {
+        if (JCheck.alert_fn != null && JCheck.alert_fn instanceof Function) {
+            JCheck.alert_fn(msg);
+        } else {
+            alert(msg);
+        }
+        let element = JCheck.element(id);
+        if (element != null 
+            && element.focus != undefined 
+            && document.activeElement !== element) element.focus();
+    };
+    return result;
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
  * @returns {boolean}
  */
 JCheck.result.empty = (id) => {
     let element = JCheck.element(id);
     if (element == null) return true;
     if (element.value == null || element.value.trim() == '') return true;
-    return false
+    return false;
 };
    
 /**
@@ -287,6 +317,19 @@ JCheck.result.empty = (id) => {
 JCheck.result.not_empty = (id) => {
     return !JCheck.result.empty(id)
 }
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {boolean}
+ */
+JCheck.result.equal = (id, value) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value === value) return true;
+    else return false;
+};
 
 /**
  * 
@@ -538,6 +581,24 @@ JCheck.result.english_number = (id) => {
  * @param {string} id
  * @returns {boolean}
  */
+JCheck.result.number_hyphen = (id) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    let pattern = /^[0-9\-]+$/
+    if (pattern.test(element.value)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @returns {boolean}
+ */
 JCheck.result.not_spchars = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
@@ -739,7 +800,10 @@ JCheck.result.test = (id, pattern) => {
 JCheck.result.selected = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
-    return element.options[element.selectedIndex].value;
+    if (element.selectedIndex === -1) return false;
+    let selected_value = element.options[element.selectedIndex].value;
+    if (selected_value == "") return false;
+    else return true;
 }
 
 /**
@@ -889,31 +953,22 @@ JCheck.result.checked_sum_range = (name, min, max) => {
  * 
  * @param {string} id
  * @param {string} msg
- * @param {boolean} result
  * @returns {boolean}
  */
-JCheck.alert.alert_and_focus = (id, msg, result) => {
-    if (result == undefined || result) {
-        if (JCheck.alert_fn != null && JCheck.alert_fn instanceof Function) {
-            JCheck.alert_fn(msg);
-        } else {
-            alert(msg);
-        }
-        let element = JCheck.element(id);
-        if (element != null && element.focus != undefined && document.activeElement !== element) element.focus();
-    };
-    return result;
+JCheck.alert.not_empty = (id, msg) => {
+    return JCheck.alert_and_focus(id, msg, JCheck.result.empty(id));
 }
 
 /**
  * 
  * 
  * @param {string} id
+ * @param {string} value
  * @param {string} msg
  * @returns {boolean}
  */
-JCheck.alert.not_empty = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, JCheck.result.empty(id));
+JCheck.alert.equal = (id, value, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.equal(id, value));
 }
 
 /**
@@ -924,7 +979,7 @@ JCheck.alert.not_empty = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.number = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.number(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.number(id));
 }
 
 /**
@@ -936,7 +991,7 @@ JCheck.alert.number = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.min_size = (id, min, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.min_size(id, min));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.min_size(id, min));
 }
 
 /**
@@ -948,7 +1003,7 @@ JCheck.alert.min_size = (id, min, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.min_length = (id, min, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.min_length(id, min));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.min_length(id, min));
 }
 
 /**
@@ -960,7 +1015,7 @@ JCheck.alert.min_length = (id, min, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.max_size = (id, max, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.max_size(id, max));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.max_size(id, max));
 }
 
 /**
@@ -972,7 +1027,7 @@ JCheck.alert.max_size = (id, max, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.max_length = (id, max, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.max_length(id, max));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.max_length(id, max));
 }
 
 /**
@@ -985,7 +1040,7 @@ JCheck.alert.max_length = (id, max, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.size_range = (id, min, max, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.size_range(id, min, max));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.size_range(id, min, max));
 }
 
 /**
@@ -998,7 +1053,7 @@ JCheck.alert.size_range = (id, min, max, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.length_range = (id, min, max, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.length_range(id, min, max));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.length_range(id, min, max));
 }
 
 /**
@@ -1009,7 +1064,7 @@ JCheck.alert.length_range = (id, min, max, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.english = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.english(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.english(id));
 }
 
 /**
@@ -1020,7 +1075,7 @@ JCheck.alert.english = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.lowercase = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.lowercase(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.lowercase(id));
 }
 
 /**
@@ -1031,7 +1086,7 @@ JCheck.alert.lowercase = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.uppercase = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.uppercase(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.uppercase(id));
 }
 
 /**
@@ -1043,7 +1098,7 @@ JCheck.alert.uppercase = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.language = (id, lang, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.language(id, lang));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.language(id, lang));
 }
 
 /**
@@ -1054,7 +1109,18 @@ JCheck.alert.language = (id, lang, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.english_number = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.english_number(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.english_number(id));
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} msg
+ * @returns {boolean}
+ */
+JCheck.alert.number_hyphen = (id, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.number_hyphen(id));
 }
 
 /**
@@ -1065,7 +1131,7 @@ JCheck.alert.english_number = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.not_spchars = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_spchars(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.not_spchars(id));
 }
 
 /**
@@ -1076,7 +1142,7 @@ JCheck.alert.not_spchars = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.not_number_spchars = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_number_spchars(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.not_number_spchars(id));
 }
 
 /**
@@ -1087,7 +1153,7 @@ JCheck.alert.not_number_spchars = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.not_spchars_space = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_spchars_space(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.not_spchars_space(id));
 }
 
 /**
@@ -1098,7 +1164,7 @@ JCheck.alert.not_spchars_space = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.not_number_spchars_space = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.not_number_spchars_space(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.not_number_spchars_space(id));
 }
 
 /**
@@ -1109,7 +1175,7 @@ JCheck.alert.not_number_spchars_space = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.id = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.id(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.id(id));
 }
 
 /**
@@ -1120,7 +1186,7 @@ JCheck.alert.id = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.password = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.password(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.password(id));
 }
 
 /**
@@ -1131,7 +1197,7 @@ JCheck.alert.password = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.password_lv2 = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.password_lv2(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.password_lv2(id));
 }
 
 /**
@@ -1142,7 +1208,7 @@ JCheck.alert.password_lv2 = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.email = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.email(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.email(id));
 }
 
 /**
@@ -1153,7 +1219,7 @@ JCheck.alert.email = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.phone_number = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.phone_number(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.phone_number(id));
 }
 
 /**
@@ -1164,7 +1230,7 @@ JCheck.alert.phone_number = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.zip_code = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.zip_code(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.zip_code(id));
 }
 
 /**
@@ -1176,7 +1242,7 @@ JCheck.alert.zip_code = (id, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.test = (id, pattern, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.test(id, pattern));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.test(id, pattern));
 }
 
 /**
@@ -1187,7 +1253,7 @@ JCheck.alert.test = (id, pattern, msg) => {
  * @returns {boolean}
  */
 JCheck.alert.selected = (id, msg) => {
-    return JCheck.alert.alert_and_focus(id, msg, !JCheck.result.selected(id));
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.selected(id));
 }
 
 /**
@@ -1200,7 +1266,7 @@ JCheck.alert.selected = (id, msg) => {
 JCheck.alert.checked = (name, msg) => {
     let elements = JCheck.elements(name);
     if(elements == null || elements.length == 0) return;
-    return JCheck.alert.alert_and_focus(elements[0].id, msg, !JCheck.result.checked(name));
+    return JCheck.alert_and_focus(elements[0].id, msg, !JCheck.result.checked(name));
 }
 
 /**
@@ -1214,7 +1280,7 @@ JCheck.alert.checked = (name, msg) => {
 JCheck.alert.min_checked_count = (name, min, msg) => {
     let elements = JCheck.elements(name);
     if(elements == null || elements.length == 0) return;
-    return JCheck.alert.alert_and_focus(elements[0].id, msg, !JCheck.result.min_checked_count(name, min));
+    return JCheck.alert_and_focus(elements[0].id, msg, !JCheck.result.min_checked_count(name, min));
 }
 
 /**
@@ -1228,7 +1294,7 @@ JCheck.alert.min_checked_count = (name, min, msg) => {
 JCheck.alert.min_checked_sum = (name, min, msg) => {
     let elements = JCheck.elements(name);
     if(elements == null || elements.length == 0) return;
-    return JCheck.alert.alert_and_focus(elements[0].id, msg, !JCheck.result.min_checked_sum(name, min));
+    return JCheck.alert_and_focus(elements[0].id, msg, !JCheck.result.min_checked_sum(name, min));
 }
 
 /**
@@ -1242,7 +1308,7 @@ JCheck.alert.min_checked_sum = (name, min, msg) => {
 JCheck.alert.max_checked_count = (name, max, msg) => {
     let elements = JCheck.elements(name);
     if(elements == null || elements.length == 0) return;
-    return JCheck.alert.alert_and_focus(elements[0].id, msg, !JCheck.result.max_checked_count(name, max));
+    return JCheck.alert_and_focus(elements[0].id, msg, !JCheck.result.max_checked_count(name, max));
 }
 
 /**
@@ -1256,7 +1322,7 @@ JCheck.alert.max_checked_count = (name, max, msg) => {
 JCheck.alert.checked_count_range = (name, max, msg) => {
     let elements = JCheck.elements(name);
     if(elements == null || elements.length == 0) return;
-    return JCheck.alert.alert_and_focus(elements[0].id, msg, !JCheck.result.checked_count_range(name, max));
+    return JCheck.alert_and_focus(elements[0].id, msg, !JCheck.result.checked_count_range(name, max));
 }
 
 /**
@@ -1271,7 +1337,7 @@ JCheck.alert.checked_count_range = (name, max, msg) => {
 JCheck.alert.checked_sum_range = (name, min, max, msg) => {
     let elements = JCheck.elements(name);
     if(elements == null || elements.length == 0) return;
-    return JCheck.alert.alert_and_focus(elements[0].id, msg, !JCheck.result.checked_sum_range(name, min, max));
+    return JCheck.alert_and_focus(elements[0].id, msg, !JCheck.result.checked_sum_range(name, min, max));
 }
 
 /**
@@ -1303,7 +1369,7 @@ JCheck.input.add_replace_event = (id, pattern, replacement, msg) => {
             element.value = element.value.replace(pattern, replacement);
         }
         if (msg != null) {
-            JCheck.alert.alert_and_focus(id, msg, test);
+            JCheck.alert_and_focus(id, msg, test);
         }
     };
     JCheck.input.add_event(id, fn);
@@ -1386,7 +1452,18 @@ JCheck.input.language = (id, lang, msg) => {
  * @param {string} msg
  */
 JCheck.input.english_number = (id, msg) => {
-    let pattern = /[^a-zA-Z0-9]/g
+    let pattern = /[^a-zA-Z0-9]/g;
+    JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
+ * @param {string} msg
+ */
+JCheck.input.number_hyphen = (id, msg) => {
+    let pattern = /[^0-9\-]/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
@@ -1453,7 +1530,7 @@ JCheck.input.max_size = (id, max, msg) => {
                 element.value = 0;
             }
             if (msg != null) {
-                JCheck.alert.alert_and_focus(id, msg, !test);
+                JCheck.alert_and_focus(id, msg, !test);
             }
         } else {
             element.value = element.value.replace(/\b0+(\d+)\b/g, '$1');
@@ -1477,7 +1554,7 @@ JCheck.input.max_length = (id, max, msg) => {
             if (element == null) return;
             element.value = element.value.slice(0, max);
             if (msg != null) {
-                JCheck.alert.alert_and_focus(id, msg, !test);
+                JCheck.alert_and_focus(id, msg, !test);
             }
         }
     };
@@ -1571,7 +1648,7 @@ JCheck.focusout.alert_and_focus = (id, del, msg, fn) => {
                 element.focus();
                 setTimeout(function() {
                     if (document.activeElement !== element) {
-                        JCheck.alert.alert_and_focus(id, msg, !test);
+                        JCheck.alert_and_focus(id, msg, !test);
                     }
                     if (del) element.value = null;
                 }, 0);
@@ -1674,7 +1751,7 @@ JCheck.change.min_checked_count = (name, min, msg) => {
         if (!test) {
             e.target.checked = false;
             if (msg != null) {
-                JCheck.alert.alert_and_focus(e.target.id, msg, !test);
+                JCheck.alert_and_focus(e.target.id, msg, !test);
             }
         }
     };
@@ -1693,7 +1770,7 @@ JCheck.change.min_checked_sum = (name, min) => {
         if (!test) {
             e.target.checked = false;
             if (msg != null) {
-                JCheck.alert.alert_and_focus(e.target.id, msg, !test);
+                JCheck.alert_and_focus(e.target.id, msg, !test);
             }
         }
     };
@@ -1712,7 +1789,7 @@ JCheck.change.max_checked_count = (name, min) => {
         if (!test) {
             e.target.checked = false;
             if (msg != null) {
-                JCheck.alert.alert_and_focus(e.target.id, msg, !test);
+                JCheck.alert_and_focus(e.target.id, msg, !test);
             }
         }
     };
@@ -1731,7 +1808,7 @@ JCheck.change.max_checked_sum = (name, min) => {
         if (!test) {
             e.target.checked = false;
             if (msg != null) {
-                JCheck.alert.alert_and_focus(e.target.id, msg, !test);
+                JCheck.alert_and_focus(e.target.id, msg, !test);
             }
         }
     };
@@ -1751,7 +1828,7 @@ JCheck.change.checked_count_range = (name, min, max) => {
         if (!test) {
             e.target.checked = false;
             if (msg != null) {
-                JCheck.alert.alert_and_focus(e.target.id, msg, !test);
+                JCheck.alert_and_focus(e.target.id, msg, !test);
             }
         }
     };
@@ -1771,7 +1848,7 @@ JCheck.change.checked_sum_range = (name, min, max) => {
         if (!test) {
             e.target.checked = false;
             if (msg != null) {
-                JCheck.alert.alert_and_focus(e.target.id, msg, !test);
+                JCheck.alert_and_focus(e.target.id, msg, !test);
             }
         }
     };
