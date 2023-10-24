@@ -337,29 +337,7 @@ JAction.get_form = (form_info) => {
 JAction.reset_form = (form_info) => {
     let form = JAction.get_form(form_info);
     if (form == null) return;
-    
-    const types = [
-        'input[type=text]',
-        'input[type=hidden]',
-        'input[type=password]',
-        'input[type=email]',
-        'input[type=number]',
-        'input[type=date]',
-    ];
-    let inputs = form.querySelectorAll(types.join(', '));
-    inputs.forEach(input => {
-        input.value = '';
-    });
-
-    let selects = form.querySelectorAll('select');
-    selects.forEach(select => {
-        select.selectedIndex = 0;
-    });
-
-    let checkboxes = form.querySelectorAll('input[type=checkbox], input[type=radio]');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
+    form.reset();
 }
 
 /**
