@@ -7,6 +7,9 @@
  */
 const JCheck = {
 
+    alert: (msg) => {},
+    alert_and_focus: (id, msg, _result) => {},
+
     result: {
         empty: (id) => {},
         not_empty: (id) => {},
@@ -45,8 +48,6 @@ const JCheck = {
         checked_sum_range: (name, min, max) => {},
         test: (id, pattern) => {},
     },
-
-    alert_and_focus: (id, msg, _result) => {},
 
     alert: {
         not_empty: (id, msg) => {},
@@ -275,13 +276,26 @@ JCheck.length = (id) => {
 /**
  * 
  * 
+ * @param {string} msg
+ */
+JCheck.alert = (msg) => {
+    if (JCheck.alert_fn != null && JCheck.alert_fn instanceof Function) {
+        JCheck.alert_fn(msg);
+    } else {
+        alert(msg);
+    }
+}
+
+/**
+ * 
+ * 
  * @param {string} id
  * @param {string} msg
  * @param {boolean} result
  * @returns {boolean}
  */
-JCheck.alert_and_focus = (id, msg, result) => {
-    if (result || result == undefined) {
+JCheck.alert_and_focus = (id, msg, result = true) => {
+    if (result) {
         if (JCheck.alert_fn != null && JCheck.alert_fn instanceof Function) {
             JCheck.alert_fn(msg);
         } else {
