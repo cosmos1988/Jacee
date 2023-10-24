@@ -21,6 +21,11 @@ const JAction = {
     stopwatch_start: (_fn) => {},
     stopwatch_stop: (start_time, _fn) => {},
 
+    scroll_into_view: (id) => {},
+    scroll_into_view_smooth: (id) => {},
+    scroll_to_top:(speed) => {},
+    scroll_to_bottom:(speed) => {},
+
     create_form: (_id) => {},
     get_form: (form_info) => {},
     form_append: (form_info, name, value, _type) => {},
@@ -227,6 +232,66 @@ JAction.stopwatch_stop = (start_time, fn) => {
     }
     return elapsed_time;
 };
+
+/**
+ * Move the scroll to the corresponding element position.
+ * 스크롤을 해당 엘리먼트 위치로 움직인다
+ * 
+ * @param {string} id
+ */
+JAction.scroll_into_view = (id) => {
+    let element = JAction.element(id);
+    if (element == null) return;
+    element.scrollIntoView(); 
+},
+
+/**
+ * Smoothly moves the scroll to the corresponding element position.
+ * 스크롤을 해당 엘리먼트 위치로 부드럽게 움직인다.
+ * 
+ * @param {string} id
+ */
+JAction.scroll_into_view_smooth = (id) => {
+    let element = JAction.element(id);
+    if (element == null) return;
+    element.scrollIntoView({ behavior: 'smooth' }); 
+},
+
+/**
+ * Scroll up to the top.
+ * 스크롤을 가장 위로 올린다.
+ * 
+ * @param {number} speed
+ */
+JAction.scroll_to_top = (speed = 1) => {
+    if (speed === 0) speed = 1;
+    const c = document.documentElement.scrollTop || document.body.scrollTop;
+    if (c > 0) {
+        window.requestAnimationFrame(() => JAction.scroll_to_top(speed));
+        window.scrollTo(window.scrollX, c - c / speed);
+    }
+},
+
+/**
+ * Scroll down to the bottom.
+ * 스크롤을 가장 아래로 내린다.
+ * 
+ * @param {number} speed
+ */
+JAction.scroll_to_bottom = (speed = 1) => {
+    if (speed === 0) speed = 1;
+    const c = document.documentElement.scrollTop || document.body.scrollTop;
+    const document_height = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+    );
+    const target = document_height - window.innerHeight;
+    if (c < target) {
+        window.requestAnimationFrame(JAction.scroll_to_bottom = (speed));
+        window.scrollTo(window.scrollX, c + (target - c) / speed);
+    }
+},
 
 /**
  * Create a new form.
