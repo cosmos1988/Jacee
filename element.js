@@ -7,7 +7,7 @@
  */
 const JElement = {
 
-    id_separator: '-',
+    idgen_separator: '-',
     idgen: (...parts) => {},
     
     not_null: (id) => {},
@@ -19,7 +19,7 @@ const JElement = {
 
     value: (id) => {},
     value_length: (id) => {},
-    set_value: (id, value) => {},
+    set_value: (id, _value) => {},
 
     text: (id) => {},
     text_length: (id) => {},
@@ -52,19 +52,21 @@ const JElement = {
     remove_class_by_name: (name, class_name) => {},
 
     selected_value: (id) => {}, // select
-    select_by_value: (id, value) => {}, // select
-    select_by_text: (id, value) => {}, // select
-    select_by_index: (id, index) => {}, // select
-    add_option: (select_id, text, value) => {}, // select
+    selected_text: (id) => {}, // select
+    select_by_value: (id, _value) => {}, // select
+    select_by_text: (id, _value) => {}, // select
+    select_by_index: (id, _index) => {}, // select
+    add_option: (select_id, text, _value) => {}, // select
     remove_all_options: (select_id) => {}, // select
-    remove_option_by_index: (select_id, index) => {}, // select
+    remove_option_by_index: (select_id, _index) => {}, // select
     remove_option_by_text: (select_id, text) => {}, // select
-    remove_option_by_value: (select_id, value) => {}, // select
+    remove_option_by_value: (select_id, _value) => {}, // select
     checked: (id) => {}, // checkbox
+    checked_values: (name) => {}, // checkbox
     checked_count: (name) => {}, // checkbox
     checked_sum: (name) => {}, // checkbox
     check: (id, _bool) => {}, // checkbox, radio
-    check_by_value: (name, value, _bool) => {}, // checkbox, radio
+    check_by_value: (name, _value, _bool) => {}, // checkbox, radio
     check_all: (name, _bool) => {}, // checkbox
 };
 
@@ -95,7 +97,7 @@ JElement.dispatch_event = (element) => {
  * @returns {string}
  */
 JElement.idgen = (...parts) => {
-    let separator = JElement.id_separator;
+    let separator = JElement.idgen_separator;
     if (separator == null) {
         separator = '-';
     }
@@ -185,7 +187,7 @@ JElement.value_length = (id) => {
  * @param {string} id
  * @param {string} value
  */
-JElement.set_value = (id, value) => {
+JElement.set_value = (id, value = null) => {
     let element = JElement.element(id);
     if (element != null) {
         if (element.value != value) {
@@ -583,9 +585,21 @@ JElement.selected_value = (id) => {
  * 
  * 
  * @param {string} id
+ * @returns {string}
+ */
+JElement.selected_text = (id) => {
+    let element = JElement.element(id);
+    if (element == null) return false;
+    return element.options[element.selectedIndex].text;
+}
+
+/**
+ * 
+ * 
+ * @param {string} id
  * @param {string} value
  */
-JElement.select_by_value = (id, value) => {
+JElement.select_by_value = (id, value = null) => {
     let element = JElement.element(id);
     if (element == null) return;
     let options = element.options;
@@ -631,7 +645,7 @@ JElement.select_by_text = (id, text) => {
  * @param {string} id
  * @param {number} index
  */
-JElement.select_by_index = (id, index) => {
+JElement.select_by_index = (id, index = 0) => {
     let element = JElement.element(id);
     if (element == null) return;
     let options = element.options;
@@ -653,7 +667,7 @@ JElement.select_by_index = (id, index) => {
  * @param {string} select_id
  * @param {number} index
  */
-JElement.add_option = (select_id, text, value) => {
+JElement.add_option = (select_id, text, value = null) => {
     let element = JElement.element(select_id);
     if (element == null) return;
     var option = new Option(text, value);
@@ -680,7 +694,7 @@ JElement.remove_all_options = (select_id) => {
  * @param {string} select_id
  * @param {number} index
  */
-JElement.remove_option_by_index = (select_id, index) => {
+JElement.remove_option_by_index = (select_id, index = 0) => {
     let element = JElement.element(select_id);
     if (element == null) return;
     element.remove(index);
@@ -709,7 +723,7 @@ JElement.remove_option_by_text = (select_id, text) => {
  * @param {string} select_id
  * @param {string} value
  */
-JElement.remove_option_by_value = (select_id, value) => {
+JElement.remove_option_by_value = (select_id, value = null) => {
     let element = JElement.element(select_id);
     if (element == null) return;
     let options = element.options;
@@ -731,6 +745,27 @@ JElement.checked = (id) => {
     if (element == null) return 0;
     if (element.checked == null) return 0;
     return element.checked;
+}
+
+/**
+ * 
+ * 
+ * @param {string} name
+ * @returns {number}
+ */
+JElement.checked_values = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return 0;
+    let values = [];
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element == null) return 0;
+        if (element.checked == null) return 0;
+        if (element.checked) {
+            values.push(element.value);
+        }
+    }
+    return values;
 }
 
 /**
@@ -799,7 +834,7 @@ JElement.check = (id, bool = true) => {
  * @param {string} value
  * @param {boolean} bool
  */
-JElement.check_by_value = (name, value, bool = true) => {
+JElement.check_by_value = (name, value = null, bool = true) => {
     let elements = JElement.elements(name);
     if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
