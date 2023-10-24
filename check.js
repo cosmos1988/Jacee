@@ -130,8 +130,8 @@ const JCheck = {
      * 경고창 출력 함수 
      * Example: JAction.alert_fn = (msg) => { }
      * 
-	 * @param {string} msg
-	 */
+     * @param {string} msg
+     */
     alert_fn: null,
 
     /**
