@@ -14,12 +14,13 @@ const JCheck = {
         empty: (id) => {},
         not_empty: (id) => {},
         equal: (id, value) => {},
+        not_equal: (id, value) => {},
         number: (id) => {},
-        min_size: (id, min) => {},
+        min_value: (id, min) => {},
         min_length: (id, min) => {},
-        max_size: (id, max) => {},
+        max_value: (id, max) => {},
         max_length: (id, max) => {},
-        size_range: (id, min, max) => {},
+        value_range: (id, min, max) => {},
         length_range: (id, min, max) => {},
         english: (id) => {},
         lowercase: (id) => {},
@@ -35,8 +36,9 @@ const JCheck = {
         password: (id) => {},
         password_lv2: (id) => {},
         email: (id) => {},
+        uri: (id) => {},
         phone_number: (id) => {},
-        zip_code: (id) => {},
+        postal_code: (id) => {},
         selected: (id) => {},
         checked: (name) => {},
         checked_sum: (name) => {},
@@ -52,12 +54,13 @@ const JCheck = {
     alert: {
         not_empty: (id, msg) => {},
         equal: (id, value, msg) => {},
+        not_equal: (id, value, msg) => {},
         number: (id, msg) => {},
-        min_size: (id, min, msg) => {},
+        min_value: (id, min, msg) => {},
         min_length: (id, min, msg) => {},
-        max_size: (id, max, msg) => {},
+        max_value: (id, max, msg) => {},
         max_length: (id, max, msg) => {},
-        size_range: (id, min, max, msg) => {},
+        value_range: (id, min, max, msg) => {},
         length_range: (id, min, max, msg) => {},
         english: (id, msg) => {},
         lowercase: (id, msg) => {},
@@ -73,8 +76,9 @@ const JCheck = {
         password: (id, msg) => {},
         password_lv2: (id, msg) => {},
         email: (id, msg) => {},
+        uri: (id, msg) => {},
         phone_number: (id, msg) => {},
-        zip_code: (id, msg) => {},
+        postal_code: (id, msg) => {},
         selected: (id, msg) => {},
         checked: (name, msg) => {},
         min_checked_count: (name, min, msg) => {},
@@ -98,13 +102,14 @@ const JCheck = {
         not_number_spchars: (id, _msg) => {},
         not_spchars_space: (id, _msg) => {},
         not_number_spchars_space: (id, _msg) => {},
-        max_size: (id, max, _msg) => {},
+        max_value: (id, max, _msg) => {},
         max_length: (id, max, _msg) => {},
         id: (id, _msg) => {},
         password_level: (id, fn) => {}, /* fn(test_lv1, test_lv2) */
         email: (id, _msg) => {},
+        uri: (id, _msg) => {},
         phone_number: (id, _msg) => {},
-        zip_code: (id, _msg) => {},
+        postal_code: (id, _msg) => {},
         test: (id, pattern, _msg) => {},
     },
 
@@ -112,9 +117,9 @@ const JCheck = {
         id: (id, del, _msg) => {},
         password: (id, del, _msg) => {},
         email: (id, del, _msg) => {},
+        uri: (id, del, _msg) => {},
         phone_number: (id, del, _msg) => {},
-        zip_code: (id, del, _msg) => {},
-        test: (id, pattern, del, _msg) => {},
+        postal_code: (id, del, _msg) => {},
     },
 
     change: {
@@ -205,6 +210,18 @@ const JCheck = {
     email_input_pattern: /[^a-zA-Z0-9-.@+]/g,
 
     /**
+     * URI pattern
+     * URI 패턴
+     */
+    uri_pattern: /^([a-z][a-z0-9+\-.]*):\/\/([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+
+    /**
+     * URI input pattern
+     * URI 입력 패턴
+     */
+    uri_input_pattern: /[^a-zA-Z0-9-._~]/g,
+
+    /**
      * Phone number pattern
      * 전화번호 패턴
      */
@@ -220,17 +237,17 @@ const JCheck = {
      * Zip code pattern
      * 우편번호 패턴
      */
-    zip_code_pattern: /^[a-zA-Z0-9\s-]+$/,
+    postal_code_pattern: /^[a-zA-Z0-9\s-]+$/,
     
     /**
      * Zip code input pattern
      * 우편번호 입력 패턴
      */
-    zip_code_input_pattern:  /[^a-zA-Z0-9\s\-]/g,
+    postal_code_input_pattern:  /[^a-zA-Z0-9\s\-]/g,
 };
 
 /**
- * 
+ * 엘리먼트를 가져온다.
  * 
  * @param {string} id 
  * @returns {Element}
@@ -244,7 +261,8 @@ JCheck.element = (id) => {
 }
 
 /**
- * 
+ * Get the elements.
+ * 엘리먼트들을 가져온다.
  * 
  * @param {string} name 
  * @returns {Element}
@@ -259,7 +277,8 @@ JCheck.elements = (name) => {
 }
 
 /**
- * 
+ * Get the length.
+ * 길이를 얻는다.
  * 
  * @param {string} id 
  * @returns {number}
@@ -274,7 +293,8 @@ JCheck.length = (id) => {
 }
 
 /**
- * 
+ * Pop up a check alert
+ * 체크 경고창을 띄운다.
  * 
  * @param {string} msg
  */
@@ -287,7 +307,8 @@ JCheck.alert = (msg) => {
 }
 
 /**
- * 
+ * Pop up a check alert and focus on it
+ * 체크 경고창을 띄우고 포커스한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -310,7 +331,8 @@ JCheck.alert_and_focus = (id, msg, result = true) => {
 }
 
 /**
- * 
+ * Check if it is empty.
+ * 빈값인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -323,7 +345,8 @@ JCheck.result.empty = (id) => {
 };
    
 /**
- * 
+ * Check if it is not empty.
+ * 빈값이 아닌지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -333,7 +356,8 @@ JCheck.result.not_empty = (id) => {
 }
 
 /**
- * 
+ * Check if the values are the same.
+ * 같은 값인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -344,9 +368,21 @@ JCheck.result.equal = (id, value) => {
     if (element.value === value) return true;
     else return false;
 };
+   
+/**
+ * Check if the values are not equal.
+ * 같은 값이 아닌지 확인한다.
+ * 
+ * @param {string} id
+ * @returns {boolean}
+ */
+JCheck.result.not_equal = (id, value) => {
+    return !JCheck.result.equal(id, value)
+}
 
 /**
- * 
+ * Check if the value is numeric.
+ * 값이 숫자인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -363,13 +399,14 @@ JCheck.result.number = (id) => {
 }
 
 /**
- * 
+ * Check the minimum value of the value.
+ * 값의 최소값을 확인한다.
  * 
  * @param {string} id
  * @param {number} min
  * @returns {boolean}
  */
-JCheck.result.min_size = (id, min) => {
+JCheck.result.min_value = (id, min) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
@@ -385,7 +422,8 @@ JCheck.result.min_size = (id, min) => {
 }
 
 /**
- * 
+ * Check the minimum length of the value.
+ * 값의 최소길이를 확인한다.
  * 
  * @param {string} id
  * @param {number} min
@@ -403,13 +441,14 @@ JCheck.result.min_length = (id, min) => {
 }
 
 /**
- * 
+ * Check the maximum value of the value.
+ * 값의 최대값을 확인한다.
  * 
  * @param {string} id
  * @param {number} max
  * @returns {boolean}
  */
-JCheck.result.max_size = (id, max) => {
+JCheck.result.max_value = (id, max) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
@@ -425,7 +464,8 @@ JCheck.result.max_size = (id, max) => {
 }
 
 /**
- * 
+ * Check the maximum length of the value.
+ * 값의 최대길이를 확인한다.
  * 
  * @param {string} id
  * @param {number} max
@@ -443,14 +483,15 @@ JCheck.result.max_length = (id, max) => {
 }
 
 /**
- * 
+ * Check the range of the value.
+ * 값의 범위를 확인한다.
  * 
  * @param {string} id
  * @param {number} min
  * @param {number} max
  * @returns {boolean}
  */
-JCheck.result.size_range = (id, min, max) => {
+JCheck.result.value_range = (id, min, max) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
@@ -466,7 +507,8 @@ JCheck.result.size_range = (id, min, max) => {
 }
 
 /**
- * 
+ * Check the length range of the value.
+ * 값의 길이 범위를 확인한다.
  * 
  * @param {string} id
  * @param {number} min
@@ -485,7 +527,8 @@ JCheck.result.length_range = (id, min, max) => {
 }
 
 /**
- * 
+ * Check if the value is in English.
+ * 값이 영어인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -503,7 +546,8 @@ JCheck.result.english = (id) => {
 }
 
 /**
- * 
+ * Check if the value is in lowercase.
+ * 값이 소문자인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -521,7 +565,8 @@ JCheck.result.lowercase = (id) => {
 }
 
 /**
- * 
+ * Check if the value is in uppercase.
+ * 값이 대문자인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -539,7 +584,8 @@ JCheck.result.uppercase = (id) => {
 }
 
 /**
- * 
+ * Check if the value is in the specified language.
+ * 값이 해당 언어인지 확인한다.
  * 
  * @param {string} id
  * @param {string} lang
@@ -572,7 +618,8 @@ JCheck.result.language = (id, pattern) => {
 }
 
 /**
- * 
+ * Check if the value is alphanumeric.
+ * 값이 영어, 숫자인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -590,7 +637,8 @@ JCheck.result.english_number = (id) => {
 }
 
 /**
- * 
+ * Check if the value is English or '-'.
+ * 값이 영어, '-'인지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -599,7 +647,7 @@ JCheck.result.number_hyphen = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = /^[0-9\-]+$/
+    let pattern = /^[0-9\-]+$/;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -608,7 +656,8 @@ JCheck.result.number_hyphen = (id) => {
 }
 
 /**
- * 
+ * Check if the value contains no special characters.
+ * 값에 특수문자가 없는지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -626,7 +675,8 @@ JCheck.result.not_spchars = (id) => {
 }
 
 /**
- * 
+ * Check if the value contains no numbers or special characters.
+ * 값에 숫자, 특수문자가 없는지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -644,7 +694,8 @@ JCheck.result.not_number_spchars = (id) => {
 }
 
 /**
- * 
+ * Check if the value contains no special characters or spaces.
+ * 값에 특수문자, 띄워쓰기가 없는지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -662,7 +713,8 @@ JCheck.result.not_spchars_space = (id) => {
 }
 
 /**
- * 
+ * Check if the value contains no numbers, special characters, or spaces.
+ * 값에 숫자, 특수문자, 띄워쓰기가 없는지 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -680,7 +732,8 @@ JCheck.result.not_number_spchars_space = (id) => {
 }
 
 /**
- * 
+ * Check the format of the ID.
+ * 아이디 형식 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -698,7 +751,8 @@ JCheck.result.id = (id) => {
 }
 
 /**
- * 
+ * Check the format of the password.
+ * 비밀번호 형식 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -716,7 +770,8 @@ JCheck.result.password = (id) => {
 }
 
 /**
- * 
+ * Check for a strong password format.
+ * 강력한 비밀번호 형식 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -734,7 +789,8 @@ JCheck.result.password_lv2 = (id) => {
 }
 
 /**
- * 
+ * Check the email format.
+ * 이메일 형식 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -752,7 +808,27 @@ JCheck.result.email = (id) => {
 }
 
 /**
+ * Check the URI format.
+ * URI형식 확인한다.
  * 
+ * @param {string} id
+ * @returns {boolean}
+ */
+JCheck.result.uri = (id) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    let pattern = JCheck.uri_pattern;
+    if (pattern.test(element.value)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Check the phone number format.
+ * 전화번호 형식 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
@@ -770,16 +846,17 @@ JCheck.result.phone_number = (id) => {
 }
 
 /**
- * 
+ * Check the postal code format.
+ * 우편번호 형식 확인한다.
  * 
  * @param {string} id
  * @returns {boolean}
  */
-JCheck.result.zip_code = (id) => {
+JCheck.result.postal_code = (id) => {
     let element = JCheck.element(id);
     if (element == null) return false;
     if (element.value == null) return false;
-    let pattern = JCheck.zip_code_pattern;
+    let pattern = JCheck.postal_code_pattern;
     if (pattern.test(element.value)){
         return true;
     } else {
@@ -788,7 +865,8 @@ JCheck.result.zip_code = (id) => {
 }
 
 /**
- * 
+ * Check the pattern of the value.
+ * 값의 패턴 확인한다.
  * 
  * @param {string} id
  * @param {string} pattern
@@ -807,7 +885,8 @@ JCheck.result.test = (id, pattern) => {
 }
 
 /**
- * 
+ * Check if the value is selected.
+ * 값이 선택되어 있는지 확인한다.
  * 
  * @param {string} id
  */
@@ -821,7 +900,8 @@ JCheck.result.selected = (id) => {
 }
 
 /**
- * 
+ * Check if the value is checked.
+ * 값이 체크되어 있는지 확인한다.
  * 
  * @param {string} id
  * @returns {number}
@@ -842,7 +922,8 @@ JCheck.result.checked = (name) => {
 }
 
 /**
- * 
+ * Check the sum of the checked values."
+ * 체크된 값의 합계를 확인한다.
  * 
  * @param {string} name
  * @returns {number}
@@ -865,7 +946,8 @@ JCheck.result.checked_sum = (name) => {
 }
 
 /**
- * 
+ * Check the minimum number of checks.
+ * 최소 체크 갯수를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -881,7 +963,8 @@ JCheck.result.min_checked_count = (name, min) => {
 }
 
 /**
- * 
+ * Check the minimum sum of the checked values.
+ * 최소 체크 값 합계를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -897,7 +980,8 @@ JCheck.result.min_checked_sum = (name, min) => {
 }
 
 /**
- * 
+ * Check the maximum number of checks.
+ * 최대 체크 갯수를 확인한다.
  * 
  * @param {string} name
  * @param {number} max
@@ -913,7 +997,8 @@ JCheck.result.max_checked_count = (name, max) => {
 }
 
 /**
- * 
+ * Check the minimum sum of checked values.
+ * 최소 체크 값 합계를 확인한다.
  * 
  * @param {string} name
  * @param {number} max
@@ -929,7 +1014,8 @@ JCheck.result.max_checked_sum = (name, max) => {
 }
 
 /**
- * 
+ * Check the range of check counts.
+ * 체크 건수 범위를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -946,7 +1032,8 @@ JCheck.result.checked_count_range = (name, min, max) => {
 }
 
 /**
- * 
+ * Check the range of the sum of checked values.
+ * 체크 값의 합계 범위를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -963,7 +1050,8 @@ JCheck.result.checked_sum_range = (name, min, max) => {
 }
 
 /**
- * 
+ * If not empty, display an alert and return true.
+ * 빈값이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -974,7 +1062,8 @@ JCheck.alert.not_empty = (id, msg) => {
 }
 
 /**
- * 
+ * If the values are not the same, display an alert and return true.
+ * 같은 값이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} value
@@ -986,7 +1075,21 @@ JCheck.alert.equal = (id, value, msg) => {
 }
 
 /**
+ * If the values are the same, display an alert and return true.
+ * 같은 값이면 경고창을 띄우고 true를 반환한다.
  * 
+ * @param {string} id
+ * @param {string} value
+ * @param {string} msg
+ * @returns {boolean}
+ */
+JCheck.alert.not_equal = (id, value, msg) => {
+    return JCheck.alert_and_focus(id, msg, JCheck.result.equal(id, value));
+}
+
+/**
+ * If the value is not a number, display an alert and return true.
+ * 값이 숫자가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -997,19 +1100,21 @@ JCheck.alert.number = (id, msg) => {
 }
 
 /**
- * 
+ * If the value is not the minimum, display an alert and return true.
+ * 값이 최소값이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {number} min
  * @param {string} msg
  * @returns {boolean}
  */
-JCheck.alert.min_size = (id, min, msg) => {
-    return JCheck.alert_and_focus(id, msg, !JCheck.result.min_size(id, min));
+JCheck.alert.min_value = (id, min, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.min_value(id, min));
 }
 
 /**
- * 
+ * If the value does not meet the minimum length, display an alert and return true.
+ * 값이 최소길이가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {number} min
@@ -1021,19 +1126,21 @@ JCheck.alert.min_length = (id, min, msg) => {
 }
 
 /**
- * 
+ * If the value exceeds the maximum, display an alert and return true.
+ * 값이 최대값이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {number} max
  * @param {string} msg
  * @returns {boolean}
  */
-JCheck.alert.max_size = (id, max, msg) => {
-    return JCheck.alert_and_focus(id, msg, !JCheck.result.max_size(id, max));
+JCheck.alert.max_value = (id, max, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.max_value(id, max));
 }
 
 /**
- * 
+ * If the value exceeds the maximum length, display an alert and return true.
+ * 값이 최대길이가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {number} max
@@ -1045,7 +1152,8 @@ JCheck.alert.max_length = (id, max, msg) => {
 }
 
 /**
- * 
+ * If the value exceeds the range, display an alert and return true.
+ * 값의 범위를 넘으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {number} min
@@ -1053,12 +1161,13 @@ JCheck.alert.max_length = (id, max, msg) => {
  * @param {string} msg
  * @returns {boolean}
  */
-JCheck.alert.size_range = (id, min, max, msg) => {
-    return JCheck.alert_and_focus(id, msg, !JCheck.result.size_range(id, min, max));
+JCheck.alert.value_range = (id, min, max, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.value_range(id, min, max));
 }
 
 /**
- * 
+ * If the length of the value exceeds the specified range, display an alert and return true.
+ * 값의 길이 범위를 넘으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {number} min
@@ -1071,7 +1180,8 @@ JCheck.alert.length_range = (id, min, max, msg) => {
 }
 
 /**
- * 
+ * If the value is not in English, display an alert and return true.
+ * 값이 영어가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1082,7 +1192,8 @@ JCheck.alert.english = (id, msg) => {
 }
 
 /**
- * 
+ * If the value is not lowercase, display an alert and return true.
+ * 값이 소문자가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1093,7 +1204,8 @@ JCheck.alert.lowercase = (id, msg) => {
 }
 
 /**
- * 
+ * If the value is not uppercase, display an alert and return true.
+ * 값이 대문자가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1104,7 +1216,8 @@ JCheck.alert.uppercase = (id, msg) => {
 }
 
 /**
- * 
+ * If the value is not in the specified language, display an alert and return true.
+ * 값이 해당 언어가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} lang
@@ -1116,7 +1229,8 @@ JCheck.alert.language = (id, lang, msg) => {
 }
 
 /**
- * 
+ * If the value is not alphanumeric, display an alert and return true.
+ * 값이 영어, 숫자가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1127,7 +1241,8 @@ JCheck.alert.english_number = (id, msg) => {
 }
 
 /**
- * 
+ * If the value is not English letters or '-', display an alert and return true.
+ * 값이 영어, '-'가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1138,7 +1253,8 @@ JCheck.alert.number_hyphen = (id, msg) => {
 }
 
 /**
- * 
+ * If the value contains special characters, display an alert and return true.
+ * 값에 특수문자가 있으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1149,7 +1265,8 @@ JCheck.alert.not_spchars = (id, msg) => {
 }
 
 /**
- * 
+ * If the value contains numbers or special characters, display an alert and return true.
+ * 값에 숫자, 특수문자가 있으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1160,7 +1277,8 @@ JCheck.alert.not_number_spchars = (id, msg) => {
 }
 
 /**
- * 
+ * If the value contains special characters or spaces, display an alert and return true.
+ * 값에 특수문자, 띄워쓰기가 있으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1171,7 +1289,8 @@ JCheck.alert.not_spchars_space = (id, msg) => {
 }
 
 /**
- * 
+ * If the value contains numbers, special characters, or spaces, display an alert and return true.
+ * 값에 숫자, 특수문자, 띄워쓰기가 있으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1182,7 +1301,8 @@ JCheck.alert.not_number_spchars_space = (id, msg) => {
 }
 
 /**
- * 
+ * If it is not a valid ID format, display an alert and return true.
+ * 아이디 형식이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1193,7 +1313,8 @@ JCheck.alert.id = (id, msg) => {
 }
 
 /**
- * 
+ * If the format is not a valid password, display an alert and return true.
+ * 비밀번호 형식이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1204,7 +1325,8 @@ JCheck.alert.password = (id, msg) => {
 }
 
 /**
- * 
+ * If it is not a strong password format, display an alert and return true.
+ * 강력한 비밀번호 형식이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1215,7 +1337,8 @@ JCheck.alert.password_lv2 = (id, msg) => {
 }
 
 /**
- * 
+ * If it is not in email format, display an alert and return true.
+ * 이메일 형식이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1226,7 +1349,20 @@ JCheck.alert.email = (id, msg) => {
 }
 
 /**
+ * If it is not in URI format, display an alert and return true.
+ * URI형식이 아니면 경고창을 띄우고 true를 반환한다.
  * 
+ * @param {string} id
+ * @param {string} msg
+ * @returns {boolean}
+ */
+JCheck.alert.uri = (id, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.uri(id));
+}
+
+/**
+ * If the format is not a valid phone number, display an alert and return true.
+ * 전화번호 형식이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1237,18 +1373,20 @@ JCheck.alert.phone_number = (id, msg) => {
 }
 
 /**
- * 
+ * If the format is not a valid postal code, display an alert and return true.
+ * 우편번호 형식이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
  * @returns {boolean}
  */
-JCheck.alert.zip_code = (id, msg) => {
-    return JCheck.alert_and_focus(id, msg, !JCheck.result.zip_code(id));
+JCheck.alert.postal_code = (id, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.postal_code(id));
 }
 
 /**
- * 
+ * If the value does not match the pattern, display an alert and return true.
+ * 값의 패턴이 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} pattern
@@ -1260,7 +1398,8 @@ JCheck.alert.test = (id, pattern, msg) => {
 }
 
 /**
- * 
+ * If the value is not selected, display an alert and return true.
+ * 값이 선택되어 있지 않으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1271,7 +1410,8 @@ JCheck.alert.selected = (id, msg) => {
 }
 
 /**
- * 
+ * If the value is not checked, display an alert and return true.
+ * 값이 체크되어 있지 않으면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} name
  * @param {string} msg
@@ -1284,7 +1424,8 @@ JCheck.alert.checked = (name, msg) => {
 }
 
 /**
- * 
+ * If the number of checks does not meet the minimum requirement, display an alert and return true.
+ * 최소 체크 갯수가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1298,7 +1439,8 @@ JCheck.alert.min_checked_count = (name, min, msg) => {
 }
 
 /**
- * 
+ * If the sum of the checked values does not meet the minimum requirement, display an alert and return true.
+ * 최소 체크 값 합계가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1312,7 +1454,8 @@ JCheck.alert.min_checked_sum = (name, min, msg) => {
 }
 
 /**
- * 
+ * If the number of checks exceeds the maximum allowed, display an alert and return true.
+ * 최대 체크 갯수가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} name
  * @param {number} max
@@ -1326,7 +1469,8 @@ JCheck.alert.max_checked_count = (name, max, msg) => {
 }
 
 /**
- * 
+ * If the number of checks is out of range, display an alert and return true.
+ * 체크 건수 범위가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} name
  * @param {number} max
@@ -1340,7 +1484,8 @@ JCheck.alert.checked_count_range = (name, max, msg) => {
 }
 
 /**
- * 
+ * If the sum of the checked values is out of range, display an alert and return true.
+ * 체크 값의 합계 범위가 아니면 경고창을 띄우고 true를 반환한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1355,7 +1500,8 @@ JCheck.alert.checked_sum_range = (name, min, max, msg) => {
 }
 
 /**
- * 
+ * Add an input event.
+ * 인풋 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -1367,7 +1513,8 @@ JCheck.input.add_event = (id, fn) => {
 }
 
 /**
- * 
+ * Add an event to replace the value.
+ * 값을 치환하는 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {RegExp} pattern
@@ -1390,7 +1537,8 @@ JCheck.input.add_replace_event = (id, pattern, replacement, msg) => {
 }
 
 /**
- * 
+ * Allow only numeric input.
+ * 숫자인 값만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1401,7 +1549,8 @@ JCheck.input.number = (id, msg) => {
 }
 
 /**
- * 
+ * Allow only English alphabet input.
+ * 영어인 값만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1412,7 +1561,8 @@ JCheck.input.english = (id, msg) => {
 }
 
 /**
- * 
+ * Allow only lowercase input.
+ * 소문자인 값만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1423,7 +1573,8 @@ JCheck.input.lowercase = (id, msg) => {
 }
 
 /**
- * 
+ * Allow only uppercase input.
+ * 대문자인 값만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1434,7 +1585,8 @@ JCheck.input.uppercase = (id, msg) => {
 }
 
 /**
- * 
+ * Allow only input in the specified language.
+ * 해당 언어인 값만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} lang
@@ -1460,7 +1612,8 @@ JCheck.input.language = (id, lang, msg) => {
 }
 
 /**
- * 
+ * Allow input of only English letters and numbers.
+ * 영어, 숫자인 값만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1471,7 +1624,8 @@ JCheck.input.english_number = (id, msg) => {
 }
 
 /**
- * 
+ * Allow input of only numbers and '-'.
+ * 숫자, '-'인 값만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1482,7 +1636,8 @@ JCheck.input.number_hyphen = (id, msg) => {
 }
 
 /**
- * 
+ * Disallow the input of special characters.
+ * 특수문자의 입력을 허용하지 않는다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1493,7 +1648,8 @@ JCheck.input.not_spchars = (id, msg) => {
 }
 
 /**
- * 
+ * Disallow the input of numbers and special characters.
+ * 숫자, 특수문자의 입력을 허용하지 않는다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1504,7 +1660,8 @@ JCheck.input.not_number_spchars = (id, msg) => {
 }
 
 /**
- * 
+ * Disallow the input of special characters and spaces.
+ * 특수문자, 띄워쓰기의 입력을 허용하지 않는다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1515,7 +1672,8 @@ JCheck.input.not_spchars_space = (id, msg) => {
 }
 
 /**
- * 
+ * Disallow the input of numbers, special characters, and spaces.
+ * 숫자, 특수문자, 띄워쓰기의 입력을 허용하지 않는다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1526,17 +1684,18 @@ JCheck.input.not_number_spchars_space = (id, msg) => {
 }
 
 /**
- * 
+ * Limit the maximum value.
+ * 최대 값을 제한한다.
  * 
  * @param {string} id
  * @param {number} max
  * @param {string} msg
  */
-JCheck.input.max_size = (id, max, msg) => {
+JCheck.input.max_value = (id, max, msg) => {
     let fn = (e) => {
         let element = JCheck.element(id);
         if (element == null) return;
-        let test = JCheck.result.max_size(id, max);
+        let test = JCheck.result.max_value(id, max);
         if (!test) {
             if (JCheck.result.number(id)) {
                 element.value = max;
@@ -1554,7 +1713,8 @@ JCheck.input.max_size = (id, max, msg) => {
 }
 
 /**
- * 
+ * Limit the maximum length.
+ * 최대 길이를 제한한다.
  * 
  * @param {string} id
  * @param {number} max
@@ -1580,7 +1740,8 @@ JCheck.input.id = (id, msg) => {
 }
 
 /**
- * 
+ * Perform real-time password level checks during input.
+ * 입력시 비밀번호 레벨 체크를 실시간으로 체크한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -1601,7 +1762,8 @@ JCheck.input.password_level = (id, fn) => {
 }
 
 /**
- * 
+ * Allow input in email format only.
+ * 이메일 형식만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1612,7 +1774,20 @@ JCheck.input.email = (id, msg) => {
 }
 
 /**
+ * Allow input in URI format only.
+ * URI 형식만 입력을 허용한다.
  * 
+ * @param {string} id
+ * @param {string} msg
+ */
+JCheck.input.uri = (id, msg) => {
+    let pattern = JCheck.uri_input_pattern;
+    JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * Allow input in phone number format only.
+ * 전화번호 형식만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
@@ -1623,18 +1798,20 @@ JCheck.input.phone_number = (id, msg) => {
 }
 
 /**
- * 
+ * Allow input in postal code format only.
+ * 우편번호 형식만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} msg
  */
-JCheck.input.zip_code = (id, msg) => {
-    let pattern = JCheck.zip_code_input_pattern;
+JCheck.input.postal_code = (id, msg) => {
+    let pattern = JCheck.postal_code_input_pattern;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
 /**
- * 
+ * Allow input with the specified pattern only.
+ * 해당 패턴만 입력을 허용한다.
  * 
  * @param {string} id
  * @param {string} pattern
@@ -1645,14 +1822,15 @@ JCheck.input.test = (id, pattern, msg) => {
 }
 
 /**
- * 
+ * Add an event that displays an alert when the focus-out event occurs.
+ * 포커스아웃 이벤트가 발생할 때 경고창을 띄우는 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
  * @param {function} fn
  */
-JCheck.focusout.alert_and_focus = (id, del, msg, fn) => {
+JCheck.focusout.add_event_alert_and_focus = (id, del, msg, fn) => {
     let element = JCheck.element(id);
     if (element == null) return;
     element.addEventListener('focusout', () => {
@@ -1672,74 +1850,80 @@ JCheck.focusout.alert_and_focus = (id, del, msg, fn) => {
 }
 
 /**
- * 
+ * Check the ID format when the focus-out event occurs.
+ * 포커스아웃 될 때 아이디 형식 확인한다.
  * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
  */
 JCheck.focusout.id = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.id(id));
+    JCheck.focusout.add_event_alert_and_focus(id, del, msg, JCheck.result.id);
 }
 
 /**
- * 
+ * Check the password format when the focus-out event occurs.
+ * 포커스아웃 될 때 비밀번호 형식 확인한다.
  * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
  */
 JCheck.focusout.password = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.password(id));
+    JCheck.focusout.add_event_alert_and_focus(id, del, msg, JCheck.result.password);
 }
 
 /**
- * 
+ * Check the email format when the focus-out event occurs.
+ * 포커스아웃 될 때 이메일 형식 확인한다.
  * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
  */
 JCheck.focusout.email = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.email(id));
+    JCheck.focusout.add_event_alert_and_focus(id, del, msg, JCheck.result.email);
 }
 
 /**
+ * Check the URI format when the focus-out event occurs.
+ * 포커스아웃 될 때 URI형식 확인한다.
  * 
+ * @param {string} id
+ * @param {boolean} del
+ * @param {string} msg
+ */
+JCheck.focusout.uri = (id, del, msg) => {
+    JCheck.focusout.add_event_alert_and_focus(id, del, msg, JCheck.result.uri);
+}
+
+/**
+ * Check the phone number format when the focus-out event occurs.
+ * 포커스아웃 될 때 전화번호 형식 확인한다.
  * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
  */
 JCheck.focusout.phone_number = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.phone_number(id));
+    JCheck.focusout.add_event_alert_and_focus(id, del, msg, JCheck.result.phone_number);
 }
 
 /**
- * 
+ * Check the postal code format when the focus-out event occurs.
+ * 포커스아웃 될 때 우편번호 형식 확인한다.
  * 
  * @param {string} id
  * @param {boolean} del
  * @param {string} msg
  */
-JCheck.focusout.zip_code = (id, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.zip_code(id));
+JCheck.focusout.postal_code = (id, del, msg) => {
+    JCheck.focusout.add_event_alert_and_focus(id, del, msg, JCheck.result.postal_code);
 }
 
 /**
- * 
- * 
- * @param {string} id
- * @param {string} pattern
- * @param {boolean} del
- * @param {string} msg
- */
-JCheck.focusout.test = (id, pattern, del, msg) => {
-    JCheck.focusout.alert_and_focus(id, del, msg, JCheck.result.test(id, pattern));
-}
-
-/**
- * 
+ * Add events that occur when the value is changed.
+ * 값이 변경 될 때 발생하는 이벤트들을 추가한다.
  * 
  * @param {string} name
  * @param {string} msg
@@ -1753,7 +1937,8 @@ JCheck.change.add_events = (name, fn) => {
 }
 
 /**
- * 
+ * Check the minimum number of checks when the value changes.
+ * 값이 변경 될 때 최소 체크 갯수를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1773,7 +1958,8 @@ JCheck.change.min_checked_count = (name, min, msg) => {
 }
 
 /**
- * 
+ * Check the minimum sum of checked values when the value changes.
+ * 값이 변경 될 때 최소 체크 값 합계를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1792,7 +1978,8 @@ JCheck.change.min_checked_sum = (name, min) => {
 }
 
 /**
- * 
+ * Check the maximum number of checks when the value changes.
+ * 값이 변경 될 때 최대 체크 갯수를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1811,7 +1998,8 @@ JCheck.change.max_checked_count = (name, min) => {
 }
 
 /**
- * 
+ * Check the minimum sum of checked values when the value changes.
+ * 값이 변경 될 때 최소 체크 값 합계를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1830,7 +2018,8 @@ JCheck.change.max_checked_sum = (name, min) => {
 }
 
 /**
- * 
+ * Check the range of check counts when the value changes.
+ * 값이 변경 될 때 체크 건수 범위를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
@@ -1850,7 +2039,8 @@ JCheck.change.checked_count_range = (name, min, max) => {
 }
 
 /**
- * 
+ * Check the range of the sum of checked values when the value changes.
+ * 값이 변경 될 때 체크 값의 합계 범위를 확인한다.
  * 
  * @param {string} name
  * @param {number} min
