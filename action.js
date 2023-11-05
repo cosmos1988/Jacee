@@ -651,7 +651,7 @@ JAction.upload = (url, form_info, fn, async) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.download = (url, fn, opt = {method: "GET"}) => {
+JAction.download = (url, opt = {method: "GET"}) => {
     fetch(url, opt)
     .then(response => {
         if (!response.ok) {
@@ -699,11 +699,11 @@ JAction.download = (url, fn, opt = {method: "GET"}) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.download_by_json = (url, obj, fn) => {
+JAction.download_by_json = (url, obj) => {
     let urlParams = new URLSearchParams(obj).toString();
     const opt = JAction.fetch_option('GET');
     if (urlParams.trim().length > 0) {
         urlParams = "?" + urlParams;
     }
-    JAction.download(url + urlParams, fn, opt);
+    JAction.download(url + urlParams, opt);
 }
