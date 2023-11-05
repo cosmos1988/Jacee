@@ -44,8 +44,8 @@ const JAction = {
     fetch_by_form: (url, form_info, fn, _async) => {},
 
     upload: (url, form_info, fn, _async) => {},
-    download: (url, fn, _opt, _async) => {},
-    download_by_json: (url, fn, _opt, _async) => {},
+    download: (url, fn, _opt) => {},
+    download_by_json: (url, fn, _opt) => {},
 
     /** 
      * Alert output function
@@ -651,45 +651,42 @@ JAction.upload = (url, form_info, fn, async) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.download = (url, fn, opt = {method: "GET"}, async = true) => {
-    if (async) {
-        fetch(url, opt)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response);
+JAction.download = (url, fn, opt = {method: "GET"}) => {
+    fetch(url, opt)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(response);
+        }
+        let filename = '';
+        const disposition = response.headers.get('Content-Disposition');
+        if (disposition && disposition.indexOf('attachment') !== -1) {
+            const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = filenameRegex.exec(disposition);
+            if (matches != null && matches[1]) {
+                filename = matches[1].replace(/['"]/g, '');
             }
-            let filename = '';
-            const disposition = response.headers.get('Content-Disposition');
-            if (disposition && disposition.indexOf('attachment') !== -1) {
-                const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                const matches = filenameRegex.exec(disposition);
-                if (matches != null && matches[1]) {
-                    filename = matches[1].replace(/['"]/g, '');
-                }
-                const filenameUTF8Regex = /filename\*=UTF-8''(.+)$/;
-                const matchesUTF8 = filenameUTF8Regex.exec(disposition);
-                if (matchesUTF8 != null && matchesUTF8[1]) {
-                    filename = decodeURIComponent(matchesUTF8[1]);
-                }
+            const filenameUTF8Regex = /filename\*=UTF-8''(.+)$/;
+            const matchesUTF8 = filenameUTF8Regex.exec(disposition);
+            if (matchesUTF8 != null && matchesUTF8[1]) {
+                filename = decodeURIComponent(matchesUTF8[1]);
             }
-            return response.blob().then(blob => ({ blob, filename }));
-        })
-        .then(({ blob, filename }) => {
-            const blobUrl = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.style.display = 'none';
-            link.href = blobUrl;
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(blobUrl);
-        })
-        .catch(error => {
-            JAction.fetch_error(url, error);
-        });
-    } else {
-    }
+        }
+        return response.blob().then(blob => ({ blob, filename }));
+    })
+    .then(({ blob, filename }) => {
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = blobUrl;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+    })
+    .catch(error => {
+        JAction.fetch_error(url, error);
+    });
 }
 
 /**
@@ -702,11 +699,11 @@ JAction.download = (url, fn, opt = {method: "GET"}, async = true) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.download_by_json = (url, obj, fn, async) => {
+JAction.download_by_json = (url, obj, fn) => {
     let urlParams = new URLSearchParams(obj).toString();
     const opt = JAction.fetch_option('GET');
     if (urlParams.trim().length > 0) {
         urlParams = "?" + urlParams;
     }
-    JAction.download(url + urlParams, fn, opt, async);
+    JAction.download(url + urlParams, fn, opt);
 }
