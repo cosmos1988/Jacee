@@ -27,7 +27,7 @@ The JEvent object is a collection of functions designed to simplify the addition
 It abstracts the arguments of the addEventListener function into function names, making it more clear to add events.
 
 
-[한국어 번역]
+[한국어]
 JQuery를 대체하여 사용할 수 있는 빠르고 낮은 수준의 추상 자바스크립트 라이브러리 입니다.
 J, action, check, element, event의 앞글자를 따와서 이름을 정했습니다.
 
