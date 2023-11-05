@@ -7,6 +7,8 @@
  */
 const JAction = {
 
+    reload: (force_get) => {},
+
     alert: (msg) => {},
     confirm: (msg) => {},
     go: (url) => {},
@@ -42,6 +44,9 @@ const JAction = {
     fetch_by_form: (url, form_info, fn, _async) => {},
     fetch_by_file_form: (url, form_info, fn, _async) => {},
 
+    download: (url, fn, _opt, _async) => {},
+    download_by_json: (url, fn, _opt, _async) => {},
+
     /** 
      * Alert output function
      * 경고창 출력 함수
@@ -69,6 +74,21 @@ const JAction = {
      */
     fetch_error_fn: null,
 };
+
+/**
+ * Reload the page.
+ * 페이지를 다시 불러온다.
+ * 
+ * @param {string} id
+ * @returns {HTMLElement}
+ */
+JAction.reload = (force_get) => {
+    if (force_get == null) {
+        window.location.reload();
+    } else {
+        window.location.reload(force_get);
+    }
+}
 
 /**
  * Gets an element.
@@ -521,7 +541,6 @@ JAction.fetch_option = (method, content_type, body) => {
 /**
  * Run the fetch API.
  * fetch API를 실행한다.
- * Method: GET
  * 
  * @param {string} url
  * @param {object} opt
@@ -620,4 +639,74 @@ JAction.fetch_by_file_form = (url, form_info, fn, async) => {
     // 크롬에서는 boundary가 포함된 Content-Type를 자동 생성해준다.
     const opt = JAction.fetch_option('POST', null, form_data);
     JAction.fetch(url, fn, opt, async);
+}
+
+/**
+ * Execute the download.
+ * 다운로드를 실행한다.
+ * Method: GET
+ * 
+ * @param {string} url
+ * @param {object} obj
+ * @param {function} fn
+ * @param {boolean} async
+ */
+JAction.download = (url, fn, opt = {method: "GET"}, async = true) => {
+    if (async) {
+        fetch(url, opt)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            let filename = '';
+            const disposition = response.headers.get('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                const matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) {
+                    filename = matches[1].replace(/['"]/g, '');
+                }
+                const filenameUTF8Regex = /filename\*=UTF-8''(.+)$/;
+                const matchesUTF8 = filenameUTF8Regex.exec(disposition);
+                if (matchesUTF8 != null && matchesUTF8[1]) {
+                    filename = decodeURIComponent(matchesUTF8[1]);
+                }
+            }
+            return response.blob().then(blob => ({ blob, filename }));
+        })
+        .then(({ blob, filename }) => {
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = blobUrl;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+        })
+        .catch(error => {
+            JAction.fetch_error(url, error);
+        });
+    } else {
+    }
+}
+
+/**
+ * Execute a download in JSON format.
+ * JSON으로 다운로드를 실행한다.
+ * Method: GET
+ * 
+ * @param {string} url
+ * @param {object} obj
+ * @param {function} fn
+ * @param {boolean} async
+ */
+JAction.download_by_json = (url, obj, fn, async) => {
+    let urlParams = new URLSearchParams(obj).toString();
+    const opt = JAction.fetch_option('GET');
+    if (urlParams.trim().length > 0) {
+        urlParams = "?" + urlParams;
+    }
+    JAction.download(url + urlParams, fn, opt, async);
 }
