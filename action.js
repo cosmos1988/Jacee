@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version 2023.beta
+ * @version v2023.20231106
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -38,6 +38,7 @@ const JAction = {
 
     submit: (url, form_info, _method, _content_type) => {},
     submit_by_file_form: (url, form_info) => {},
+
     fetch_option: (method, body, _content_type) => {},
     fetch: (url, fn, _opt, _async) => {},
     fetch_by_json: (url, obj, fn, _async) => {},
