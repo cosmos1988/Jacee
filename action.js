@@ -44,8 +44,8 @@ const JAction = {
     fetch_by_form: (url, form_info, fn, _async) => {},
 
     upload: (url, form_info, fn, _async) => {},
-    download: (url, fn, _opt) => {},
-    download_by_json: (url, fn, _opt) => {},
+    download: (url, fn) => {},
+    download_by_json: (url, fn) => {},
 
     /** 
      * Alert output function
