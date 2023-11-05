@@ -82,6 +82,7 @@ const JEvent = {
 };
 
 /**
+ * Prevent the default behavior of the event.
  * 이벤트의 기본동작을 취소한다.
  * 
  * @param {Event} e
@@ -95,6 +96,7 @@ JEvent.preventDefault = (e) => {
 }
 
 /**
+ * Get the element.
  * 엘리먼트를 가져온다.
  * 
  * @param {string} id
@@ -109,6 +111,7 @@ JEvent.element = (id) => {
 }
 
 /**
+ * Get the elements.
  * 엘리먼트들을 가져온다.
  * 
  * @param {string} name
@@ -124,6 +127,7 @@ JEvent.elements = (name) => {
 }
 
 /**
+ * Add the event.
  * 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -137,7 +141,8 @@ JEvent.add_event = (id, type, fn) => {
 }
 
 /**
- * 이벤트들을 추가한다.
+ * Add an event to the specified name.
+ * 해당 이름에 이벤트를 추가한다.
  * 
  * @param {string} name
  * @param {string} msg
@@ -151,6 +156,7 @@ JEvent.add_event_for_name = (name, type, fn) => {
 }
 
 /**
+ * Add an event to the specified class.
  * 해당 클래스에 이벤트를 추가한다.
  * 
  * @param {string} class_name
@@ -165,6 +171,7 @@ JEvent.add_event_for_class = (class_name, type, fn) => {
 }
 
 /**
+ * Add a load event
  * 로드 이벤트를 추가한다.
  * 
  * @param {function} fn
@@ -178,6 +185,7 @@ JEvent.load = (fn) => {
 }
 
 /**
+ * Add an event to return to the previous page.
  * 이전 페이지로 돌아가기 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -187,6 +195,7 @@ JEvent.click_to_back = (id) => {
 }
 
 /**
+ * Add an event to move to another page.
  * 다른 페이지로 이동하기 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -197,6 +206,7 @@ JEvent.click_to_go = (id, url) => {
 }
 
 /**
+ * Add an event to move to another page without recording the previous page.
  * 이전 페이지 기록 없이 다른 페이지로 이동하기 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -207,6 +217,7 @@ JEvent.click_to_teleport = (id, url) => {
 }
 
 /**
+ * Add keyup event.
  * 키업 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -217,6 +228,7 @@ JEvent.keyup = (id, fn) => {
 }
 
 /**
+ * Add a keypress event.
  * 키프레스 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -227,6 +239,7 @@ JEvent.keypress = (id, fn) => {
 }
 
 /**
+ * Add a keydown event.
  * 키다운 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -237,6 +250,7 @@ JEvent.keydown = (id, fn) => {
 }
 
 /**
+ * Add a click event.
  * 클릭 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -247,6 +261,7 @@ JEvent.click = (id, fn) => {
 }
 
 /**
+ * Add a double click event.
  * 더블클릭 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -257,6 +272,7 @@ JEvent.dblclick = (id, fn) => {
 }
 
 /**
+ * Add a drag event.
  * 드레그 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -267,6 +283,7 @@ JEvent.drag = (id, fn) => {
 }
 
 /**
+ * Add a drag start event.
  * 드레그 시작 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -277,6 +294,7 @@ JEvent.dragstart = (id, fn) => {
 }
 
 /**
+ * Add a drag end event.
  * 드레그 종료 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -287,6 +305,8 @@ JEvent.dragend = (id, fn) => {
 }
 
 /**
+ * Add drag enter event.
+ * Occurs when the drag drop area is within range.
  * 드레그 엔터 이벤트를 추가한다.
  * 드레그 드롭 영역 범위에 들어오는 경우 발생한다.
  * 
@@ -298,6 +318,8 @@ JEvent.dragenter = (id, fn) => {
 }
 
 /**
+ * Add drag leave event.
+ * Occurs when the drag drop area is exceeded.
  * 드레그 리브 이벤트를 추가한다.
  * 드레그 드롭 영역 범위에 나가는 경우 발생한다.
  * 
@@ -309,6 +331,8 @@ JEvent.dragleave = (id, fn) => {
 }
 
 /**
+ * Add drag over event.
+ * Occurs when dragging occurs within the drag drop area.
  * 드레그 오버 이벤트를 추가한다.
  * 드레그 드롭 영역 범위에서 드레그가 발생하고 있을 때 발생한다.
  * 
@@ -320,6 +344,8 @@ JEvent.dragover = (id, fn) => {
 }
 
 /**
+ * Add drop event.
+ * Occurs when the drag ends within the drag drop area.
  * 드롭 이벤트를 추가한다.
  * 드레그 드롭 영역 범위에서 드레그가 끝날 때 발생한다.
  * 
@@ -331,6 +357,7 @@ JEvent.drop = (id, fn) => {
 }
 
 /**
+ * Add a touch start event.
  * 터치 시작 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -341,6 +368,7 @@ JEvent.touchstart = (id, fn) => {
 }
 
 /**
+ * Add a touch movement event.
  * 터치 이동 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -351,6 +379,7 @@ JEvent.touchmove = (id, fn) => {
 }
 
 /**
+ * Add a touch end event.
  * 터치 종료 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -361,6 +390,8 @@ JEvent.touchend = (id, fn) => {
 }
 
 /**
+ * Add touch cancel event.
+ * Occurs when the system cancels an event.
  * 터치 취소 이벤트를 추가한다.
  * 시스템에서 이벤트를 취소시킬 때 발생한다.
  * 
@@ -372,6 +403,7 @@ JEvent.touchcancel = (id, fn) => {
 }
 
 /**
+ * Add a change event.
  * 변경 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -382,6 +414,7 @@ JEvent.change = (id, fn) => {
 }
 
 /**
+ * Add an input event.
  * 입력 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -392,6 +425,7 @@ JEvent.input = (id, fn) => {
 }
 
 /**
+ * Add a focus event.
  * 포커스 이벤트를 추가한다.
  * 
  * @param {string} id
@@ -402,7 +436,8 @@ JEvent.focus = (id, fn) => {
 }
 
 /**
- * 포커스를 잃을 때의 이벤트를 추가한다.
+ * Add a blur event.
+ * 블러 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -412,6 +447,8 @@ JEvent.blur = (id, fn) => {
 }
 
 /**
+ * Add focus in event.
+ * Events are also delivered to parent elements. (bubbling)
  * 포커스 인 이벤트를 추가한다.
  * 부모 엘리먼트에도 이벤트가 전달된다. (버블링)
  * 
@@ -423,6 +460,8 @@ JEvent.focusin = (id, fn) => {
 }
 
 /**
+ * Add focus out event.
+ * Events are also delivered to parent elements. (bubbling)
  * 포커스 아웃 이벤트를 추가한다.
  * 부모 엘리먼트에도 이벤트가 전달된다. (버블링)
  * 
@@ -434,7 +473,8 @@ JEvent.focusout = (id, fn) => {
 }
 
 /**
- * 
+ * Add a keyup event by name.
+ * 이름으로 키업 이벤트를 추가한다.
  * 
  * @param {string} name
  * @param {function} fn
@@ -444,7 +484,8 @@ JEvent.keyup_by_name = (name, fn) => {
 }
 
 /**
- * 
+ * Add a keypress event by name.
+ * 이름으로 키프레스 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -454,7 +495,8 @@ JEvent.keypress_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a keydown event by name.
+ * 이름으로 키다운 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -464,7 +506,8 @@ JEvent.keydown_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a click event by name.
+ * 이름으로 클릭 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -474,7 +517,8 @@ JEvent.click_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a double click event by name.
+ * 이름으로 더블클릭 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -484,7 +528,8 @@ JEvent.dblclick_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a drag event by name.
+ * 이름으로 드레그 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -494,7 +539,8 @@ JEvent.drag_by_name = (name , fn) => {
 }
 
 /**
- * 
+ *  Add a drag start event by name.
+ * 이름으로 드레그 시작 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -504,7 +550,8 @@ JEvent.dragstart_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a drag end event by name.
+ * 이름으로 드레그 종료 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -514,7 +561,8 @@ JEvent.dragend_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add drag enter event by name.
+ * 이름으로 드레그 엔터 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -524,7 +572,8 @@ JEvent.dragenter_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add drag leave event by name.
+ * 이름으로 드레그 리브 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -534,7 +583,8 @@ JEvent.dragleave_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add drag over event by name.
+ * 이름으로 드레그 오버 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -544,7 +594,8 @@ JEvent.dragover_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add drop event by name.
+ * 이름으로 드롭 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -554,7 +605,8 @@ JEvent.drop_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a touch start event by name.
+ * 이름으로 터치 시작 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -564,7 +616,8 @@ JEvent.touchstart_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a touch movement event by name.
+ * 이름으로 터치 이동 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -574,7 +627,8 @@ JEvent.touchmove_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a touch end event by name.
+ * 이름으로 터치 종료 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -584,7 +638,8 @@ JEvent.touchend_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add touch cancel event by name.
+ * 이름으로 터치 취소 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -594,7 +649,8 @@ JEvent.touchcancel_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a change event by name.
+ * 이름으로 변경 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -604,7 +660,8 @@ JEvent.change_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add an input event by name.
+ * 이름으로 입력 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -614,7 +671,8 @@ JEvent.input_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a focus event by name.
+ * 이름으로 포커스 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -624,7 +682,8 @@ JEvent.focus_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a blur event by name.
+ * 이름으로 블러 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -634,7 +693,8 @@ JEvent.blur_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add focus in event by name.
+ * 이름으로 포커스 인 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -644,7 +704,8 @@ JEvent.focusin_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add focus out event by name.
+ * 이름으로 포커스 아웃 이벤트를 추가한다.
  * 
  * @param {string} name 
  * @param {function} fn
@@ -654,221 +715,243 @@ JEvent.focusout_by_name = (name , fn) => {
 }
 
 /**
- * 
+ * Add a keyup event by class name.
+ * 클래스 이름으로 키업 이벤트를 추가한다.
  * 
  * @param {string} class_name
  * @param {function} fn
  */
-JEvent.keyup_by_class  = (class_name, fn) => {
+JEvent.keyup_by_class = (class_name, fn) => {
     JEvent.add_event_for_class(class_name , 'keyup', fn);
 }
 
 /**
- * 
+ * Add a keypress event by class name.
+ * 클래스 이름으로 키프레스 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.keypress_by_class  = (class_name , fn) => {
+JEvent.keypress_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'keypress', fn);
 }
 
 /**
- * 
+ * Add a keydown event by class name.
+ * 클래스 이름으로 키다운 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.keydown_by_class  = (class_name , fn) => {
+JEvent.keydown_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'keydown', fn);
 }
 
 /**
- * 
+ * Add a click event by class name.
+ * 클래스 이름으로 클릭 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.click_by_class  = (class_name , fn) => {
+JEvent.click_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'click', fn);
 }
 
 /**
- * 
+ * Add a double click event by class name.
+ * 클래스 이름으로 더블클릭 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.dblclick_by_class  = (class_name , fn) => {
+JEvent.dblclick_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'dblclick', fn);
 }
 
 /**
- * 
+ * Add a drag event by class name.
+ * 클래스 이름으로 드레그 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.drag_by_class  = (class_name , fn) => {
+JEvent.drag_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'drag', fn);
 }
 
 /**
- * 
+ *  Add a drag start event by class name.
+ * 클래스 이름으로 드레그 시작 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.dragstart_by_class  = (class_name , fn) => {
+JEvent.dragstart_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'dragstart', fn);
 }
 
 /**
- * 
+ * Add a drag end event by class name.
+ * 클래스 이름으로 드레그 종료 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.dragend_by_class  = (class_name , fn) => {
+JEvent.dragend_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'dragend', fn);
 }
 
 /**
- * 
+ * Add drag enter event by class name.
+ * 클래스 이름으로 드레그 엔터 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.dragenter_by_class  = (class_name , fn) => {
+JEvent.dragenter_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'dragenter', fn);
 }
 
 /**
- * 
+ * Add drag leave event by class name.
+ * 클래스 이름으로 드레그 리브 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.dragleave_by_class  = (class_name , fn) => {
+JEvent.dragleave_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'dragleave', fn);
 }
 
 /**
- * 
+ * Add drag over event by class name.
+ * 클래스 이름으로 드레그 오버 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.dragover_by_class  = (class_name , fn) => {
+JEvent.dragover_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'dragover', fn);
 }
 
 /**
- * 
+ * Add drop event by class name.
+ * 클래스 이름으로 드롭 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.drop_by_class  = (class_name , fn) => {
+JEvent.drop_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'drop', fn);
 }
 
 /**
- * 
+ * Add a touch start event by class name.
+ * 클래스 이름으로 터치 시작 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.touchstart_by_class  = (class_name , fn) => {
+JEvent.touchstart_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'touchstart', fn);
 }
 
 /**
- * 
+ * Add a touch movement event by class name.
+ * 클래스 이름으로 터치 이동 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.touchmove_by_class  = (class_name , fn) => {
+JEvent.touchmove_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'touchmove', fn);
 }
 
 /**
- * 
+ * Add a touch end event by class name.
+ * 클래스 이름으로 터치 종료 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.touchend_by_class  = (class_name , fn) => {
+JEvent.touchend_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'touchend', fn);
 }
 
 /**
- * 
+ * Add touch cancel event by class name.
+ * 클래스 이름으로 터치 취소 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.touchcancel_by_class  = (class_name , fn) => {
+JEvent.touchcancel_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'touchcancel', fn);
 }
 
 /**
- * 
+ * Add a change event by class name.
+ * 클래스 이름으로 변경 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.change_by_class  = (class_name , fn) => {
+JEvent.change_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'change', fn);
 }
 
 /**
- * 
+ * Add an input event by class name.
+ * 클래스 이름으로 입력 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.input_by_class  = (class_name , fn) => {
+JEvent.input_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'input', fn);
 }
 
 /**
- * 
+ * Add a focus event by class name.
+ * 클래스 이름으로 포커스 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.focus_by_class  = (class_name , fn) => {
+JEvent.focus_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'focus', fn);
 }
 
 /**
- * 
+ * Add a blur event by class name.
+ * 클래스 이름으로 블러 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.blur_by_class  = (class_name , fn) => {
+JEvent.blur_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'dblclick', fn);
 }
 
 /**
- * 
+ * Add focus in event by class name.
+ * 클래스 이름으로 포커스 인 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.focusin_by_class  = (class_name , fn) => {
+JEvent.focusin_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'focusin', fn);
 }
 
 /**
- * 
+ * Add focus out event by class name.
+ * 클래스 이름으로 포커스 아웃 이벤트를 추가한다.
  * 
  * @param {string} class_name 
  * @param {function} fn
  */
-JEvent.focusout_by_class  = (class_name , fn) => {
+JEvent.focusout_by_class = (class_name , fn) => {
     JEvent.add_event_for_class(class_name , 'focusout', fn);
 }
