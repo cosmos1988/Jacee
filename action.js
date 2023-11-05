@@ -38,12 +38,12 @@ const JAction = {
 
     submit: (url, form_info, _method, _content_type) => {},
     submit_by_file_form: (url, form_info) => {},
-    fetch_option: (method, content_type, body) => {},
+    fetch_option: (method, body, _content_type) => {},
     fetch: (url, fn, _opt, _async) => {},
     fetch_by_json: (url, obj, fn, _async) => {},
     fetch_by_form: (url, form_info, fn, _async) => {},
-    fetch_by_file_form: (url, form_info, fn, _async) => {},
 
+    upload: (url, form_info, fn, _async) => {},
     download: (url, fn, _opt, _async) => {},
     download_by_json: (url, fn, _opt, _async) => {},
 
@@ -521,7 +521,7 @@ JAction.fetch_error = (url, error) => {
  * @param {object} body
  * @returns {Object}
  */
-JAction.fetch_option = (method, content_type, body) => {
+JAction.fetch_option = (method, body, content_type) => {
     if (content_type == null) {
         return {
             method,
@@ -598,7 +598,7 @@ JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
  */
 JAction.fetch_by_json = (url, obj, fn, async) => {
     if (obj == null) obj = {};
-    const opt = JAction.fetch_option('POST', 'application/json', JSON.stringify(obj));
+    const opt = JAction.fetch_option('POST', JSON.stringify(obj), 'application/json');
     JAction.fetch(url, fn, opt, async);
 }
 
@@ -617,13 +617,13 @@ JAction.fetch_by_form = (url, form_info, fn, async) => {
     if (form == null) return;
     const form_data = new FormData(form);
     const url_encoded_data = new URLSearchParams(form_data);
-    const opt = JAction.fetch_option('POST', 'application/x-www-form-urlencoded', url_encoded_data);
+    const opt = JAction.fetch_option('POST', url_encoded_data, 'application/x-www-form-urlencoded');
     JAction.fetch(url, fn, opt, async);
 }
 
 /**
- * Execute the fetch API using the file form.
- * 파일폼으로 fetch API를 실행한다.
+ * Execute the upload using the file form.
+ * 파일폼으로 업로드를 실행한다.
  * Method: POST
  * 
  * @param {string} url
@@ -631,13 +631,13 @@ JAction.fetch_by_form = (url, form_info, fn, async) => {
  * @param {function} fn
  * @param {boolean} async
  */
-JAction.fetch_by_file_form = (url, form_info, fn, async) => {
+JAction.upload = (url, form_info, fn, async) => {
     let form = JAction.get_form(form_info);
     if (form == null) return;
     form.enctype = 'multipart/form-data';
     const form_data = new FormData(form);
     // 크롬에서는 boundary가 포함된 Content-Type를 자동 생성해준다.
-    const opt = JAction.fetch_option('POST', null, form_data);
+    const opt = JAction.fetch_option('POST', form_data);
     JAction.fetch(url, fn, opt, async);
 }
 
