@@ -6,6 +6,8 @@
  * @copyright Copyright © 2023 <cosmos1988>
  */
 const JEvent = {
+
+    preventDefault: (e) => {},
     
     load: (fn) => {},
     click_to_back: (id) => {},
@@ -19,6 +21,7 @@ const JEvent = {
     dblclick: (id, fn) => {},
     drag: (id, fn) => {},
     dragstart: (id, fn) => {},
+    dragend: (id, fn) => {},
     dragenter: (id, fn) => {},
     dragleave: (id, fn) => {},
     dragover: (id, fn) => {},
@@ -40,6 +43,7 @@ const JEvent = {
     dblclick_by_name: (name, fn) => {},
     drag_by_name: (name, fn) => {},
     dragstart_by_name: (name, fn) => {},
+    dragend_by_name: (name, fn) => {},
     dragenter_by_name: (name, fn) => {},
     dragleave_by_name: (name, fn) => {},
     dragover_by_name: (name, fn) => {},
@@ -61,6 +65,7 @@ const JEvent = {
     dblclick_by_class: (class_name, fn) => {},
     drag_by_class: (class_name, fn) => {},
     dragstart_by_class: (class_name, fn) => {},
+    dragend_by_class: (class_name, fn) => {},
     dragenter_by_class: (class_name, fn) => {},
     dragleave_by_class: (class_name, fn) => {},
     dragover_by_class: (class_name, fn) => {},
@@ -77,7 +82,20 @@ const JEvent = {
 };
 
 /**
+ * 이벤트의 기본동작을 취소한다.
  * 
+ * @param {Event} e
+ */
+JEvent.preventDefault = (e) => {
+    if (e == null) {
+        console.error(`Event is null`);
+        return;
+    }
+    e.preventDefault();
+}
+
+/**
+ * 엘리먼트를 가져온다.
  * 
  * @param {string} id
  * @returns {Element}
@@ -91,7 +109,7 @@ JEvent.element = (id) => {
 }
 
 /**
- * 
+ * 엘리먼트들을 가져온다.
  * 
  * @param {string} name
  * @returns {NodeList}
@@ -106,7 +124,7 @@ JEvent.elements = (name) => {
 }
 
 /**
- * 
+ * 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {string} type
@@ -119,12 +137,12 @@ JEvent.add_event = (id, type, fn) => {
 }
 
 /**
- * 
+ * 이벤트들을 추가한다.
  * 
  * @param {string} name
  * @param {string} msg
  */
-JEvent.add_events = (name, type, fn) => {
+JEvent.add_event_for_name = (name, type, fn) => {
     let elements = JEvent.elements(name);
     if (elements.length == null) return;
     for (let i = 0; i < elements.length; i++) {
@@ -133,12 +151,12 @@ JEvent.add_events = (name, type, fn) => {
 }
 
 /**
- * 
+ * 해당 클래스에 이벤트를 추가한다.
  * 
  * @param {string} class_name
  * @param {string} msg
  */
-JEvent.add_events_for_class = (class_name, type, fn) => {
+JEvent.add_event_for_class = (class_name, type, fn) => {
     let elements = document.querySelectorAll('.' + class_name);
     if (elements.length == null) return;
     for (let i = 0; i < elements.length; i++) {
@@ -147,7 +165,7 @@ JEvent.add_events_for_class = (class_name, type, fn) => {
 }
 
 /**
- * 
+ * 로드 이벤트를 추가한다.
  * 
  * @param {function} fn
  */
@@ -160,7 +178,7 @@ JEvent.load = (fn) => {
 }
 
 /**
- * 
+ * 이전 페이지로 돌아가기 이벤트를 추가한다.
  * 
  * @param {string} id
  */
@@ -169,7 +187,7 @@ JEvent.click_to_back = (id) => {
 }
 
 /**
- * 
+ * 다른 페이지로 이동하기 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {string} url
@@ -179,7 +197,7 @@ JEvent.click_to_go = (id, url) => {
 }
 
 /**
- * 
+ * 이전 페이지 기록 없이 다른 페이지로 이동하기 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {string} url
@@ -189,7 +207,7 @@ JEvent.click_to_teleport = (id, url) => {
 }
 
 /**
- * 
+ * 키업 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -199,7 +217,7 @@ JEvent.keyup = (id, fn) => {
 }
 
 /**
- * 
+ * 키프레스 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -209,7 +227,7 @@ JEvent.keypress = (id, fn) => {
 }
 
 /**
- * 
+ * 키다운 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -219,7 +237,7 @@ JEvent.keydown = (id, fn) => {
 }
 
 /**
- * 
+ * 클릭 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -229,7 +247,7 @@ JEvent.click = (id, fn) => {
 }
 
 /**
- * 
+ * 더블클릭 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -239,7 +257,7 @@ JEvent.dblclick = (id, fn) => {
 }
 
 /**
- * 
+ * 드레그 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -249,7 +267,7 @@ JEvent.drag = (id, fn) => {
 }
 
 /**
- * 
+ * 드레그 시작 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -259,7 +277,18 @@ JEvent.dragstart = (id, fn) => {
 }
 
 /**
+ * 드레그 종료 이벤트를 추가한다.
  * 
+ * @param {string} id
+ * @param {function} fn
+ */
+JEvent.dragend = (id, fn) => {
+    JEvent.add_event(id, 'dragend', fn);
+}
+
+/**
+ * 드레그 엔터 이벤트를 추가한다.
+ * 드레그 드롭 영역 범위에 들어오는 경우 발생한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -269,7 +298,8 @@ JEvent.dragenter = (id, fn) => {
 }
 
 /**
- * 
+ * 드레그 리브 이벤트를 추가한다.
+ * 드레그 드롭 영역 범위에 나가는 경우 발생한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -279,7 +309,8 @@ JEvent.dragleave = (id, fn) => {
 }
 
 /**
- * 
+ * 드레그 오버 이벤트를 추가한다.
+ * 드레그 드롭 영역 범위에서 드레그가 발생하고 있을 때 발생한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -289,7 +320,8 @@ JEvent.dragover = (id, fn) => {
 }
 
 /**
- * 
+ * 드롭 이벤트를 추가한다.
+ * 드레그 드롭 영역 범위에서 드레그가 끝날 때 발생한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -299,7 +331,7 @@ JEvent.drop = (id, fn) => {
 }
 
 /**
- * 
+ * 터치 시작 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -309,7 +341,7 @@ JEvent.touchstart = (id, fn) => {
 }
 
 /**
- * 
+ * 터치 이동 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -319,7 +351,7 @@ JEvent.touchmove = (id, fn) => {
 }
 
 /**
- * 
+ * 터치 종료 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -329,7 +361,8 @@ JEvent.touchend = (id, fn) => {
 }
 
 /**
- * 
+ * 터치 취소 이벤트를 추가한다.
+ * 시스템에서 이벤트를 취소시킬 때 발생한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -339,7 +372,7 @@ JEvent.touchcancel = (id, fn) => {
 }
 
 /**
- * 
+ * 변경 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -349,7 +382,7 @@ JEvent.change = (id, fn) => {
 }
 
 /**
- * 
+ * 입력 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -359,7 +392,7 @@ JEvent.input = (id, fn) => {
 }
 
 /**
- * 
+ * 포커스 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -369,7 +402,7 @@ JEvent.focus = (id, fn) => {
 }
 
 /**
- * 
+ * 포커스를 잃을 때의 이벤트를 추가한다.
  * 
  * @param {string} id
  * @param {function} fn
@@ -379,7 +412,8 @@ JEvent.blur = (id, fn) => {
 }
 
 /**
- * 
+ * 포커스 인 이벤트를 추가한다.
+ * 부모 엘리먼트에도 이벤트가 전달된다. (버블링)
  * 
  * @param {string} id
  * @param {function} fn
@@ -389,7 +423,8 @@ JEvent.focusin = (id, fn) => {
 }
 
 /**
- * 
+ * 포커스 아웃 이벤트를 추가한다.
+ * 부모 엘리먼트에도 이벤트가 전달된다. (버블링)
  * 
  * @param {string} id
  * @param {function} fn
@@ -405,7 +440,7 @@ JEvent.focusout = (id, fn) => {
  * @param {function} fn
  */
 JEvent.keyup_by_name = (name, fn) => {
-    JEvent.add_events(name , 'keyup', fn);
+    JEvent.add_event_for_name(name , 'keyup', fn);
 }
 
 /**
@@ -415,7 +450,7 @@ JEvent.keyup_by_name = (name, fn) => {
  * @param {function} fn
  */
 JEvent.keypress_by_name = (name , fn) => {
-    JEvent.add_events(name , 'keypress', fn);
+    JEvent.add_event_for_name(name , 'keypress', fn);
 }
 
 /**
@@ -425,7 +460,7 @@ JEvent.keypress_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.keydown_by_name = (name , fn) => {
-    JEvent.add_events(name , 'keydown', fn);
+    JEvent.add_event_for_name(name , 'keydown', fn);
 }
 
 /**
@@ -435,7 +470,7 @@ JEvent.keydown_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.click_by_name = (name , fn) => {
-    JEvent.add_events(name , 'click', fn);
+    JEvent.add_event_for_name(name , 'click', fn);
 }
 
 /**
@@ -445,7 +480,7 @@ JEvent.click_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.dblclick_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dblclick', fn);
+    JEvent.add_event_for_name(name , 'dblclick', fn);
 }
 
 /**
@@ -455,7 +490,7 @@ JEvent.dblclick_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.drag_by_name = (name , fn) => {
-    JEvent.add_events(name , 'drag', fn);
+    JEvent.add_event_for_name(name , 'drag', fn);
 }
 
 /**
@@ -465,7 +500,17 @@ JEvent.drag_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.dragstart_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragstart', fn);
+    JEvent.add_event_for_name(name , 'dragstart', fn);
+}
+
+/**
+ * 
+ * 
+ * @param {string} name 
+ * @param {function} fn
+ */
+JEvent.dragend_by_name = (name , fn) => {
+    JEvent.add_event_for_name(name , 'dragend', fn);
 }
 
 /**
@@ -475,7 +520,7 @@ JEvent.dragstart_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.dragenter_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragenter', fn);
+    JEvent.add_event_for_name(name , 'dragenter', fn);
 }
 
 /**
@@ -485,7 +530,7 @@ JEvent.dragenter_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.dragleave_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragleave', fn);
+    JEvent.add_event_for_name(name , 'dragleave', fn);
 }
 
 /**
@@ -495,7 +540,7 @@ JEvent.dragleave_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.dragover_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dragover', fn);
+    JEvent.add_event_for_name(name , 'dragover', fn);
 }
 
 /**
@@ -505,7 +550,7 @@ JEvent.dragover_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.drop_by_name = (name , fn) => {
-    JEvent.add_events(name , 'drop', fn);
+    JEvent.add_event_for_name(name , 'drop', fn);
 }
 
 /**
@@ -515,7 +560,7 @@ JEvent.drop_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.touchstart_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchstart', fn);
+    JEvent.add_event_for_name(name , 'touchstart', fn);
 }
 
 /**
@@ -525,7 +570,7 @@ JEvent.touchstart_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.touchmove_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchmove', fn);
+    JEvent.add_event_for_name(name , 'touchmove', fn);
 }
 
 /**
@@ -535,7 +580,7 @@ JEvent.touchmove_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.touchend_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchend', fn);
+    JEvent.add_event_for_name(name , 'touchend', fn);
 }
 
 /**
@@ -545,7 +590,7 @@ JEvent.touchend_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.touchcancel_by_name = (name , fn) => {
-    JEvent.add_events(name , 'touchcancel', fn);
+    JEvent.add_event_for_name(name , 'touchcancel', fn);
 }
 
 /**
@@ -555,7 +600,7 @@ JEvent.touchcancel_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.change_by_name = (name , fn) => {
-    JEvent.add_events(name , 'change', fn);
+    JEvent.add_event_for_name(name , 'change', fn);
 }
 
 /**
@@ -565,7 +610,7 @@ JEvent.change_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.input_by_name = (name , fn) => {
-    JEvent.add_events(name , 'input', fn);
+    JEvent.add_event_for_name(name , 'input', fn);
 }
 
 /**
@@ -575,7 +620,7 @@ JEvent.input_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.focus_by_name = (name , fn) => {
-    JEvent.add_events(name , 'focus', fn);
+    JEvent.add_event_for_name(name , 'focus', fn);
 }
 
 /**
@@ -585,7 +630,7 @@ JEvent.focus_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.blur_by_name = (name , fn) => {
-    JEvent.add_events(name , 'dblclick', fn);
+    JEvent.add_event_for_name(name , 'dblclick', fn);
 }
 
 /**
@@ -595,7 +640,7 @@ JEvent.blur_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.focusin_by_name = (name , fn) => {
-    JEvent.add_events(name , 'focusin', fn);
+    JEvent.add_event_for_name(name , 'focusin', fn);
 }
 
 /**
@@ -605,7 +650,7 @@ JEvent.focusin_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.focusout_by_name = (name , fn) => {
-    JEvent.add_events(name , 'focusout', fn);
+    JEvent.add_event_for_name(name , 'focusout', fn);
 }
 
 /**
@@ -615,7 +660,7 @@ JEvent.focusout_by_name = (name , fn) => {
  * @param {function} fn
  */
 JEvent.keyup_by_class  = (class_name, fn) => {
-    JEvent.add_events_for_class(class_name , 'keyup', fn);
+    JEvent.add_event_for_class(class_name , 'keyup', fn);
 }
 
 /**
@@ -625,7 +670,7 @@ JEvent.keyup_by_class  = (class_name, fn) => {
  * @param {function} fn
  */
 JEvent.keypress_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'keypress', fn);
+    JEvent.add_event_for_class(class_name , 'keypress', fn);
 }
 
 /**
@@ -635,7 +680,7 @@ JEvent.keypress_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.keydown_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'keydown', fn);
+    JEvent.add_event_for_class(class_name , 'keydown', fn);
 }
 
 /**
@@ -645,7 +690,7 @@ JEvent.keydown_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.click_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'click', fn);
+    JEvent.add_event_for_class(class_name , 'click', fn);
 }
 
 /**
@@ -655,7 +700,7 @@ JEvent.click_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.dblclick_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dblclick', fn);
+    JEvent.add_event_for_class(class_name , 'dblclick', fn);
 }
 
 /**
@@ -665,7 +710,7 @@ JEvent.dblclick_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.drag_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'drag', fn);
+    JEvent.add_event_for_class(class_name , 'drag', fn);
 }
 
 /**
@@ -675,7 +720,17 @@ JEvent.drag_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.dragstart_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragstart', fn);
+    JEvent.add_event_for_class(class_name , 'dragstart', fn);
+}
+
+/**
+ * 
+ * 
+ * @param {string} class_name 
+ * @param {function} fn
+ */
+JEvent.dragend_by_class  = (class_name , fn) => {
+    JEvent.add_event_for_class(class_name , 'dragend', fn);
 }
 
 /**
@@ -685,7 +740,7 @@ JEvent.dragstart_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.dragenter_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragenter', fn);
+    JEvent.add_event_for_class(class_name , 'dragenter', fn);
 }
 
 /**
@@ -695,7 +750,7 @@ JEvent.dragenter_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.dragleave_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragleave', fn);
+    JEvent.add_event_for_class(class_name , 'dragleave', fn);
 }
 
 /**
@@ -705,7 +760,7 @@ JEvent.dragleave_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.dragover_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dragover', fn);
+    JEvent.add_event_for_class(class_name , 'dragover', fn);
 }
 
 /**
@@ -715,7 +770,7 @@ JEvent.dragover_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.drop_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'drop', fn);
+    JEvent.add_event_for_class(class_name , 'drop', fn);
 }
 
 /**
@@ -725,7 +780,7 @@ JEvent.drop_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.touchstart_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchstart', fn);
+    JEvent.add_event_for_class(class_name , 'touchstart', fn);
 }
 
 /**
@@ -735,7 +790,7 @@ JEvent.touchstart_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.touchmove_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchmove', fn);
+    JEvent.add_event_for_class(class_name , 'touchmove', fn);
 }
 
 /**
@@ -745,7 +800,7 @@ JEvent.touchmove_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.touchend_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchend', fn);
+    JEvent.add_event_for_class(class_name , 'touchend', fn);
 }
 
 /**
@@ -755,7 +810,7 @@ JEvent.touchend_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.touchcancel_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'touchcancel', fn);
+    JEvent.add_event_for_class(class_name , 'touchcancel', fn);
 }
 
 /**
@@ -765,7 +820,7 @@ JEvent.touchcancel_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.change_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'change', fn);
+    JEvent.add_event_for_class(class_name , 'change', fn);
 }
 
 /**
@@ -775,7 +830,7 @@ JEvent.change_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.input_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'input', fn);
+    JEvent.add_event_for_class(class_name , 'input', fn);
 }
 
 /**
@@ -785,7 +840,7 @@ JEvent.input_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.focus_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'focus', fn);
+    JEvent.add_event_for_class(class_name , 'focus', fn);
 }
 
 /**
@@ -795,7 +850,7 @@ JEvent.focus_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.blur_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'dblclick', fn);
+    JEvent.add_event_for_class(class_name , 'dblclick', fn);
 }
 
 /**
@@ -805,7 +860,7 @@ JEvent.blur_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.focusin_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'focusin', fn);
+    JEvent.add_event_for_class(class_name , 'focusin', fn);
 }
 
 /**
@@ -815,5 +870,5 @@ JEvent.focusin_by_class  = (class_name , fn) => {
  * @param {function} fn
  */
 JEvent.focusout_by_class  = (class_name , fn) => {
-    JEvent.add_events_for_class(class_name , 'focusout', fn);
+    JEvent.add_event_for_class(class_name , 'focusout', fn);
 }
