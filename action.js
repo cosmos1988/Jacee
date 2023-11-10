@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231106
+ * @version v2023.20231107
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -19,6 +19,7 @@ const JAction = {
     click: (btn_id) => {},
     focus: (id) => {},
     blur: (id) => {},
+    //clipboard: (text) => {},
 
     stopwatch_start: (_fn) => {},
     stopwatch_stop: (start_time, _fn) => {},
@@ -37,9 +38,9 @@ const JAction = {
     form_to_object: (form_info) => {},
 
     submit: (url, form_info, _method, _content_type) => {},
-    submit_by_file_form: (url, form_info) => {},
+    submit_by_file: (url, form_info) => {},
 
-    fetch_option: (method, body, _content_type) => {},
+    fetch_option: (body, _method, _content_type) => {},
     fetch: (url, fn, _opt, _async) => {},
     fetch_by_json: (url, obj, fn, _async) => {},
     fetch_by_form: (url, form_info, fn, _async) => {},
@@ -47,6 +48,12 @@ const JAction = {
     upload: (url, form_info, fn, _async) => {},
     download: (url, fn) => {},
     download_by_json: (url, fn) => {},
+
+    /**
+     * Whether to display console errors
+     * 콘솔 에러를 표시할지 여부
+     */
+    console_error_enabled: true,
 
     /** 
      * Alert output function
@@ -80,7 +87,7 @@ const JAction = {
  * Reload the page.
  * 페이지를 다시 불러온다.
  * 
- * @param {string} id
+ * @param {boolean} force_get
  * @returns {HTMLElement}
  */
 JAction.reload = (force_get) => {
@@ -101,7 +108,9 @@ JAction.reload = (force_get) => {
 JAction.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.error(`Element (id: ${id}) is null`);
+        if (JAction.console_error_enabled) {
+            console.error(`Element (id: ${id}) is null`);
+        }
     }
     return element;
 }
@@ -344,7 +353,9 @@ JAction.get_form = (form_info) => {
     } else if (typeof form_info === 'string') {
         return JAction.element(form_info);
     } else {
-        console.error(`Argument(${form_info}) is not a form info`);
+        if (JAction.console_error_enabled) {
+            console.error(`Argument(${form_info}) is not a form info`);
+        }
     }
 }
 
@@ -493,7 +504,7 @@ JAction.submit = (url, form_info, method = 'POST', content_type) => {
  * @param {string} url
  * @param {HTMLFormElement|string} form
  */
-JAction.submit_by_file_form = (url, form_info) => {
+JAction.submit_by_file = (url, form_info) => {
     let form = JAction.get_form(form_info);
     if (form == null) return;
     JAction.submit(url, form, 'POST', 'multipart/form-data');
@@ -509,7 +520,9 @@ JAction.fetch_error = (url, error) => {
     if (JAction.fetch_error_fn != null && JAction.fetch_error_fn instanceof Function) {
         JAction.fetch_error_fn(url, error);
     } else {
-        console.error(`Fetch error (url: ${url})`);
+        if (JAction.console_error_enabled) {
+            console.error(`Fetch error (url: ${url})`);
+        }
     }
 }
 
@@ -517,12 +530,12 @@ JAction.fetch_error = (url, error) => {
  * Create fetch API options.
  * fetch API 옵션을 만든다.
  * 
+ * @param {object} body
  * @param {string} method
  * @param {string} content_type
- * @param {object} body
  * @returns {Object}
  */
-JAction.fetch_option = (method, body, content_type) => {
+JAction.fetch_option = (body, method = 'GET', content_type) => {
     if (content_type == null) {
         return {
             method,
@@ -544,8 +557,8 @@ JAction.fetch_option = (method, body, content_type) => {
  * fetch API를 실행한다.
  * 
  * @param {string} url
- * @param {object} opt
  * @param {function} fn
+ * @param {object} opt
  * @param {boolean} async
  */
 JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
@@ -599,7 +612,7 @@ JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
  */
 JAction.fetch_by_json = (url, obj, fn, async) => {
     if (obj == null) obj = {};
-    const opt = JAction.fetch_option('POST', JSON.stringify(obj), 'application/json');
+    const opt = JAction.fetch_option(JSON.stringify(obj), 'POST', 'application/json');
     JAction.fetch(url, fn, opt, async);
 }
 
@@ -618,7 +631,7 @@ JAction.fetch_by_form = (url, form_info, fn, async) => {
     if (form == null) return;
     const form_data = new FormData(form);
     const url_encoded_data = new URLSearchParams(form_data);
-    const opt = JAction.fetch_option('POST', url_encoded_data, 'application/x-www-form-urlencoded');
+    const opt = JAction.fetch_option(url_encoded_data, 'POST', 'application/x-www-form-urlencoded');
     JAction.fetch(url, fn, opt, async);
 }
 
@@ -638,7 +651,7 @@ JAction.upload = (url, form_info, fn, async) => {
     form.enctype = 'multipart/form-data';
     const form_data = new FormData(form);
     // 크롬에서는 boundary가 포함된 Content-Type를 자동 생성해준다.
-    const opt = JAction.fetch_option('POST', form_data);
+    const opt = JAction.fetch_option(form_data, 'POST');
     JAction.fetch(url, fn, opt, async);
 }
 
@@ -702,9 +715,8 @@ JAction.download = (url, opt = {method: "GET"}) => {
  */
 JAction.download_by_json = (url, obj) => {
     let urlParams = new URLSearchParams(obj).toString();
-    const opt = JAction.fetch_option('GET');
     if (urlParams.trim().length > 0) {
         urlParams = "?" + urlParams;
     }
-    JAction.download(url + urlParams, opt);
+    JAction.download(url + urlParams);
 }
