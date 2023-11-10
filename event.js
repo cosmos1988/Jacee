@@ -1,13 +1,13 @@
 /**
  * @name Jacee
- * @version v2023.20231106
+ * @version v2023.20231107
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
  */
 const JEvent = {
 
-    preventDefault: (e) => {},
+    prevent_default: (e) => {},
     
     load: (fn) => {},
     click_to_back: (id) => {},
@@ -79,6 +79,12 @@ const JEvent = {
     blur_by_class: (class_name, fn) => {},
     focusin_by_class: (class_name, fn) => {},
     focusout_by_class: (class_name, fn) => {},
+
+    /**
+     * Whether to display console errors
+     * 콘솔 에러를 표시할지 여부
+     */
+    console_error_enabled: true,
 };
 
 /**
@@ -87,9 +93,11 @@ const JEvent = {
  * 
  * @param {Event} e
  */
-JEvent.preventDefault = (e) => {
+JEvent.prevent_default = (e) => {
     if (e == null) {
-        console.error(`Event is null`);
+        if (JEvent.console_error_enabled) {
+            console.error(`Event is null`);
+        }
         return;
     }
     e.preventDefault();
@@ -105,7 +113,9 @@ JEvent.preventDefault = (e) => {
 JEvent.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.error(`Element (id: ${id}) is null`);
+        if (JEvent.console_error_enabled) {
+            console.error(`Element (id: ${id}) is null`);
+        }
     }
     return element;
 }
@@ -120,7 +130,9 @@ JEvent.element = (id) => {
 JEvent.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements.length === 0) {
-        console.error(`Elements (name: ${name}) is a length of 0`);
+        if (JEvent.console_error_enabled) {
+            console.error(`Elements (name: ${name}) is a length of 0`);
+        }
         return;
     }
     return elements;
@@ -180,7 +192,9 @@ JEvent.load = (fn) => {
     try {
         window.addEventListener('load', fn);
     } catch (e) {
-        console.error(e)
+        if (JEvent.console_error_enabled) {
+            console.error(`Add Event Error (error: ${e})`);
+        }
    }
 }
 
