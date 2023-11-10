@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231106
+ * @version v2023.20231107
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -62,12 +62,19 @@ const JElement = {
     remove_option_by_text: (select_id, text) => {}, // select
     remove_option_by_value: (select_id, _value) => {}, // select
     checked: (id) => {}, // checkbox, radio
+    checked_value: (name) => {}, // radio
     checked_values: (name) => {}, // checkbox
     checked_count: (name) => {}, // checkbox
     checked_sum: (name) => {}, // checkbox
     check: (id, _bool) => {}, // checkbox, radio
     check_by_value: (name, _value, _bool) => {}, // checkbox, radio
     check_all: (name, _bool) => {}, // checkbox
+
+    /**
+     * Whether to display console errors
+     * 콘솔 에러를 표시할지 여부
+     */
+    console_error_enabled: true,
 };
 
 /**
@@ -142,7 +149,9 @@ JElement.get = (id) => {
 JElement.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.error(`Element (id: ${id}) is null`);
+        if (JElement.console_error_enabled) {
+            console.error(`Element (id: ${id}) is null`);
+        }
     }
     return element;
 }
@@ -157,7 +166,9 @@ JElement.element = (id) => {
 JElement.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements.length === 0) {
-        console.error(`Elements (name: ${name}) is a length of 0`);
+        if (JElement.console_error_enabled) {
+            console.error(`Elements (name: ${name}) is a length of 0`);
+        }
         return;
     }
     return elements;
@@ -814,6 +825,30 @@ JElement.checked = (id) => {
     if (element == null) return 0;
     if (element.checked == null) return 0;
     return element.checked;
+}
+
+/**
+ * Get the checked value.
+ * 체크된 값을 가져온다.
+ * ※ radio
+ * 
+ * @param {string} name
+ * @returns {number}
+ */
+JElement.checked_value = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return 0;
+    let value = "";
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element == null) return "";
+        if (element.checked == null) return "";
+        if (element.checked) {
+            value = element.value;
+            break;
+        }
+    }
+    return value;
 }
 
 /**
