@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231106
+ * @version v2023.20231107
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -39,6 +39,9 @@ const JCheck = {
         uri: (id) => {},
         phone_number: (id) => {},
         postal_code: (id) => {},
+        test: (id, pattern) => {},
+        file_extension: (id, allowed_extension_arr) => {},
+        file_size: (id, max_size) => {},
         selected: (id) => {},
         checked: (name) => {},
         checked_sum: (name) => {},
@@ -48,7 +51,6 @@ const JCheck = {
         max_checked_sum: (name) => {},
         checked_count_range: (name, min, max) => {},
         checked_sum_range: (name, min, max) => {},
-        test: (id, pattern) => {},
     },
 
     alert: {
@@ -79,6 +81,9 @@ const JCheck = {
         uri: (id, msg) => {},
         phone_number: (id, msg) => {},
         postal_code: (id, msg) => {},
+        test: (id, pattern) => {},
+        file_extension: (id, allowed_extension_arr) => {},
+        file_size: (id, max_size) => {},
         selected: (id, msg) => {},
         checked: (name, msg) => {},
         min_checked_count: (name, min, msg) => {},
@@ -87,7 +92,6 @@ const JCheck = {
         max_checked_sum: (name, max, msg) => {},
         checked_count_range: (name, min, max, msg) => {},
         checked_sum_range: (name, min, max, msg) => {},
-        test: (id, pattern, msg) => {},
     },
 
     input: {
@@ -111,6 +115,8 @@ const JCheck = {
         phone_number: (id, _msg) => {},
         postal_code: (id, _msg) => {},
         test: (id, pattern, _msg) => {},
+        file_extension: (id, allowed_extension_arr, _msg) => {},
+        file_size: (id, max_size, _msg) => {},
     },
 
     focusout: {
@@ -130,6 +136,12 @@ const JCheck = {
         checked_count_range: (name, min, max) => {},
         checked_sum_range: (name, min, max) => {},
     },
+
+    /**
+     * Whether to display console errors
+     * 콘솔 에러를 표시할지 여부
+     */
+    console_error_enabled: true,
 
     /** 
      * Alert output function
@@ -255,7 +267,9 @@ const JCheck = {
 JCheck.element = (id) => {
     let element = document.getElementById(id);
     if (element == null) {
-        console.error(`Element (id: ${id}) is null`);
+        if (JCheck.console_error_enabled) {
+            console.error(`Element (id: ${id}) is null`);
+        }
     }
     return element;
 }
@@ -270,7 +284,9 @@ JCheck.element = (id) => {
 JCheck.elements = (name) => {
     let elements = document.getElementsByName(name);
     if (elements.length === 0) {
-        console.error(`Elements (name: ${name}) is a length of 0`);
+        if (JCheck.console_error_enabled) {
+            console.error(`Elements (name: ${name}) is a length of 0`);
+        }
         return;
     }
     return elements;
@@ -885,6 +901,48 @@ JCheck.result.test = (id, pattern) => {
 }
 
 /**
+ * Check the file extension.
+ * 파일의 확장자를 확인한다.
+ * 
+ * @param {string} id
+ * @param {Array} allowed_extension_arr
+ * @returns {boolean}
+ */
+JCheck.result.file_extension = (id, allowed_extension_arr) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    let file_path = element.value;
+    let extension = file_path.substring(file_path.lastIndexOf('.') + 1).toLowerCase();
+    if (!allowed_extension_arr.includes(extension)) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Check the maximum size of the file.
+ * 파일의 최대 크기를 확인한다.
+ * 
+ * @param {string} id
+ * @param {number} max_size
+ * @returns {boolean}
+ */
+JCheck.result.file_size = (id, max_size) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    let files = element.files;
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        if (file.size > max_size) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * Check if the value is selected.
  * 값이 선택되어 있는지 확인한다.
  * 
@@ -1398,6 +1456,32 @@ JCheck.alert.test = (id, pattern, msg) => {
 }
 
 /**
+ * If the file does not have the corresponding extension, a warning window appears and returns true.
+ * 파일의 해당 확장자가 아니면 경고창을 띄우고 true를 반환한다.
+ * 
+ * @param {string} id
+ * @param {string} pattern
+ * @param {string} msg
+ * @returns {boolean}
+ */
+JCheck.alert.file_extension = (id, allowed_extension_arr, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.file_extension(id, allowed_extension_arr));
+}
+
+/**
+ * If the file size exceeds the maximum size, a warning window is displayed and true is returned.
+ * 값의 패턴이 아니면 경고창을 띄우고 true를 반환한다.
+ * 
+ * @param {string} id
+ * @param {string} pattern
+ * @param {string} msg
+ * @returns {boolean}
+ */
+JCheck.alert.file_size = (id, max_size, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.file_size(id, max_size));
+}
+
+/**
  * If the value is not selected, display an alert and return true.
  * 값이 선택되어 있지 않으면 경고창을 띄우고 true를 반환한다.
  * 
@@ -1734,6 +1818,7 @@ JCheck.input.max_length = (id, max, msg) => {
     };
     JCheck.input.add_event(id, fn);
 }
+
 JCheck.input.id = (id, msg) => {
     let pattern = JCheck.id_input_pattern;
     JCheck.input.add_replace_event(id, pattern, '', msg);
@@ -1819,6 +1904,52 @@ JCheck.input.postal_code = (id, msg) => {
  */
 JCheck.input.test = (id, pattern, msg) => {
     JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * Limit the file extension.
+ * 파일의 확장자를 제한한다.
+ * 
+ * @param {string} id
+ * @param {number} max
+ * @param {string} msg
+ */
+JCheck.input.file_extension = (id, allowed_extension_arr, msg) => {
+    let fn = (e) => {
+        let test = JCheck.result.file_extension(id, allowed_extension_arr);
+        if (!test) {
+            let element = JCheck.element(id);
+            if (element == null) return;
+            element.value = '';
+            if (msg != null) {
+                JCheck.alert_and_focus(id, msg, !test);
+            }
+        }
+    };
+    JCheck.input.add_event(id, fn);
+}
+
+/**
+ * Limit the maximum size of the file.
+ * 파일의 최대크기를 제한한다.
+ * 
+ * @param {string} id
+ * @param {number} max
+ * @param {string} msg
+ */
+JCheck.input.file_size = (id, max_size, msg) => {
+    let fn = (e) => {
+        let test = JCheck.result.file_size(id, max_size);
+        if (!test) {
+            let element = JCheck.element(id);
+            if (element == null) return;
+            element.value = '';
+            if (msg != null) {
+                JCheck.alert_and_focus(id, msg, !test);
+            }
+        }
+    };
+    JCheck.input.add_event(id, fn);
 }
 
 /**
