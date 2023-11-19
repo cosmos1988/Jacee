@@ -76,7 +76,7 @@ const JAction = {
     /** 
      * Fetch error handling function
      * Fetch 에러 처리 함수
-     * Example: JAction.fetch_error_fn = (url, error) =>  { }
+     * Example: JAction.fetch_error_fn = (url, error) => { }
      * 
      * @param {object} error
      */
