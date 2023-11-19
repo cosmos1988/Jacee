@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231107
+ * @version v2023.20231113
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -14,6 +14,7 @@ const JElement = {
     get: (id) => {},
     element: (id) => {},
     elements: (name) => {},
+    elements_by_class: (class_name) => {},
     remove: (id) => {},
     remove_by_name: (name) => {},
 
@@ -39,17 +40,29 @@ const JElement = {
     disabled: (id) => {},
     set_disabled: (id, _bool) => {},
     set_disabled_by_name: (name, _bool) => {},
-    set_disabled_for_form: (form_id, _bool) => {},
+    set_disabled_by_class: (class_name, _bool) => {},
+    set_disabled_in_form: (form_id, _bool) => {},
     readonly: (id) => {},
     set_readonly: (id, _bool) => {},
     set_readonly_by_name: (name, _bool) => {},
-    set_readonly_for_form: (form_id, _bool) => {},
+    set_readonly_by_class: (class_name, _bool) => {},
+    set_readonly_in_form: (form_id, _bool) => {},
     add_display_none: (id) => {},
+    add_display_none_by_name: (name) => {},
+    add_display_none_by_class: (class_name) => {},
+    add_display_none_in_form: (form_id) => {},
     remove_display_none: (id) => {},
+    remove_display_none_by_name: (name) => {},
+    remove_display_none_by_class: (class_name) => {},
+    remove_display_none_in_form: (form_id) => {},
     add_class: (id, class_name) => {},
     add_class_by_name: (name, class_name) => {},
+    add_class_by_class: (target_class_name, class_name) => {},
+    add_class_in_form: (form_id, class_name) => {},
     remove_class: (id, class_name) => {},
     remove_class_by_name: (name, class_name) => {},
+    remove_class_by_class: (target_class_name, class_name) => {},
+    remove_class_in_form: (form_id, class_name) => {},
 
     selected_value: (id) => {}, // select
     selected_text: (id) => {}, // select
@@ -160,11 +173,29 @@ JElement.element = (id) => {
  * Get the elements.
  * 엘리먼트들을 가져온다.
  * 
- * @param {string} name
+ * @param {string} class_name
  * @returns {NodeList}
  */
-JElement.elements = (name) => {
-    let elements = document.getElementsByName(name);
+JElement.elements = (class_name) => {
+    let elements = document.getElementsByName(class_name);
+    if (elements.length === 0) {
+        if (JElement.console_error_enabled) {
+            console.error(`Elements (class name: ${class_name}) is a length of 0`);
+        }
+        return;
+    }
+    return elements;
+}
+
+/**
+ * Get the elements by class name.
+ * 클래스이름으로 엘리먼트들을 가져온다.
+ * 
+ * @param {string} class_name
+ * @returns {NodeList}
+ */
+JElement.elements_by_class = (class_name) => {
+    let elements = document.querySelectorAll('.' + class_name);
     if (elements.length === 0) {
         if (JElement.console_error_enabled) {
             console.error(`Elements (name: ${name}) is a length of 0`);
@@ -473,13 +504,28 @@ JElement.set_disabled_by_name = (name, bool = true) => {
 }
 
 /**
+ * Set the disabled state by class name.
+ * 비활성 상태를 클래스 이름으로 설정한다.
+ * 
+ * @param {string} class_name
+ * @param {boolean} bool
+ */
+JElement.set_disabled_by_class = (class_name, bool = true) => {
+    let elements = JElement.elements_by_class(class_name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].disabled = bool;
+    }
+}
+
+/**
  * Set the disabled state of the form
  * 폼의 비활성 상태를 설정한다.
  * 
  * @param {string} form_id
  * @param {boolean} bool
  */
-JElement.set_disabled_for_form = (form_id, bool = true) => {
+JElement.set_disabled_in_form = (form_id, bool = true) => {
     let form = JElement.element(form_id);
     if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
@@ -529,13 +575,28 @@ JElement.set_readonly_by_name = (name, bool = true) => {
 }
 
 /**
+ * Set the read-only state by class name.
+ * 읽기전용 상태를 클래스 이름으로 설정한다.
+ * 
+ * @param {string} class_name
+ * @param {boolean} bool
+ */
+JElement.set_readonly_by_class = (class_name, bool = true) => {
+    let elements = JElement.elements_by_class(class_name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].readOnly = bool;
+    }
+}
+
+/**
  * Set the read-only state of the form.
  * 폼의 읽기전용 상태를 설정한다.
  * 
  * @param {string} form_id
  * @param {boolean} bool
  */
-JElement.set_readonly_for_form = (form_id, bool = true) => {
+JElement.set_readonly_in_form = (form_id, bool = true) => {
     let form = JElement.element(form_id);
     if (form == null) return;
     let elements = form.querySelectorAll('input, select, textarea, button');
@@ -559,6 +620,51 @@ JElement.add_display_none = (id) => {
 }
 
 /**
+ * Add hidden by name.
+ * 비표시 스타일을 이름으로 추가한다.
+ * 
+ * @param {string} name
+ * @param {string} class_name
+ */
+JElement.add_display_none_by_name = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = 'none';
+    }
+}
+
+/**
+ * Add hidden by class name.
+ * 비표시 스타일을 클래스 이름으로 추가한다.
+ * 
+ * @param {string} class_name
+ */
+JElement.add_display_none_by_class = (class_name) => {
+    let elements = JElement.elements_by_class(class_name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = 'none';
+    }
+}
+
+/**
+ * Add hidden of the form.
+ * 폼의 비표시 스타일을 추가한다.
+ * 
+ * @param {string} form_id
+ */
+JElement.add_display_none_in_form = (form_id) => {
+    let form = JElement.element(form_id);
+    if (form == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = 'none';
+    }
+}
+
+/**
  * Remove hidden styles.
  * 비표시 스타일을 지운다.
  * 
@@ -572,8 +678,52 @@ JElement.remove_display_none = (id) => {
 }
 
 /**
- * Add styles.
- * 스타일을 추가한다.
+ * Remove hidden styles by name.
+ * 이름으로 비표시 스타일을 지운다.
+ * 
+ * @param {string} name
+ */
+JElement.remove_display_none_by_name = (name) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = '';
+    }
+}
+
+/**
+ * Remove hidden styles by name.
+ * 이름으로 비표시 스타일을 지운다.
+ * 
+ * @param {string} class_name
+ */
+JElement.remove_display_none_by_class = (class_name) => {
+    let elements = JElement.elements_by_class(class_name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = '';
+    }
+}
+
+/**
+ * Remove hidden styles of the form.
+ * 폼의 비표시 스타일을 지운다.
+ * 
+ * @param {string} form_id
+ */
+JElement.remove_display_none_in_form = (form_id) => {
+    let form = JElement.element(form_id);
+    if (form == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = '';
+    }
+}
+
+/**
+ * Add class.
+ * 클래스를 추가한다.
  * 
  * @param {string} id
  * @param {string} class_name
@@ -585,14 +735,46 @@ JElement.add_class = (id, class_name) => {
 }
 
 /**
- * Add styles by name.
- * 스타일을 이름으로 추가한다.
+ * Add class by name.
+ * 클래스를 이름으로 추가한다.
  * 
  * @param {string} name
  * @param {string} class_name
  */
 JElement.add_class_by_name = (name, class_name) => {
     let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.add(class_name);
+    }
+}
+
+/**
+ * Add class by class name.
+ * 클래스를 클래스 이름으로 추가한다.
+ * 
+ * @param {string} target_class_name
+ * @param {string} class_name
+ */
+JElement.add_class_by_class = (target_class_name, class_name) => {
+    let elements = JElement.elements_by_class(target_class_name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.add(class_name);
+    }
+}
+
+/**
+ * Add class of the form.
+ * 폼의 클래스를 추가한다.
+ * 
+ * @param {string} form_id
+ * @param {string} class_name
+ */
+JElement.add_class_in_form = (form_id, class_name) => {
+    let form = JElement.element(form_id);
+    if (form == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
     if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
         elements[i].classList.add(class_name);
@@ -621,6 +803,38 @@ JElement.remove_class = (id, class_name) => {
  */
 JElement.remove_class_by_name = (name, class_name) => {
     let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.remove(class_name);
+    }
+}
+
+/**
+ * Remove class by class name.
+ * 클래스를 클래스 이름으로 지운다.
+ * 
+ * @param {string} target_class_name
+ * @param {string} class_name
+ */
+JElement.remove_class_by_class = (target_class_name, class_name) => {
+    let elements = JElement.elements_by_class(target_class_name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].classList.remove(class_name);
+    }
+}
+
+/**
+ * Remove class of the form.
+ * 폼의 클래스를 지운다.
+ * 
+ * @param {string} form_id
+ * @param {string} class_name
+ */
+JElement.add_class_in_form = (form_id, class_name) => {
+    let form = JElement.element(form_id);
+    if (form == null) return;
+    let elements = form.querySelectorAll('input, select, textarea, button');
     if (elements == null) return;
     for (let i = 0; i < elements.length; i++) {
         elements[i].classList.remove(class_name);
