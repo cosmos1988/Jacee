@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231107
+ * @version v2023.20231113
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -30,6 +30,7 @@ const JCheck = {
         number_hyphen: (id) => {},
         not_spchars: (id) => {},
         not_number_spchars: (id) => {},
+        not_space: (id) => {},
         not_spchars_space: (id) => {},
         not_number_spchars_space: (id) => {},
         id: (id) => {},
@@ -72,6 +73,7 @@ const JCheck = {
         number_hyphen: (id, msg) => {},
         not_spchars: (id, msg) => {},
         not_number_spchars: (id, msg) => {},
+        not_space: (id, msg) => {},
         not_spchars_space: (id, msg) => {},
         not_number_spchars_space: (id, msg) => {},
         id: (id, msg) => {},
@@ -104,6 +106,7 @@ const JCheck = {
         number_hyphen: (id, _msg) => {},
         not_spchars: (id, _msg) => {},
         not_number_spchars: (id, _msg) => {},
+        not_space: (id, _msg) => {},
         not_spchars_space: (id, _msg) => {},
         not_number_spchars_space: (id, _msg) => {},
         max_value: (id, max, _msg) => {},
@@ -615,14 +618,26 @@ JCheck.result.language = (id, pattern) => {
     switch (pattern.toLowerCase()) {
         case 'english':
         return JCheck.result.english(id);
+        case 'english space':
+        pattern = /[a-zA-Z\s]$/;
+        break;
         case 'korean':
         pattern = /^[ㄱ-ㅎㅏ-ㅣ가-힣]+$/;
+        break;
+        case 'korean space':
+        pattern = /^[ㄱ-ㅎㅏ-ㅣ가-힣\s]+$/;
         break;
         case 'japanese':
         pattern = /^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+$/;
         break;
+        case 'japanese space':
+        pattern = /^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\s]+$/;
+        break;
         case 'chinese':
         pattern = /^[\u4E00-\u9FFF]+$/;
+        break;
+        case 'chinese space':
+        pattern = /^[\u4E00-\u9FFF\s]+$/;
         break;
     }
 
@@ -702,6 +717,25 @@ JCheck.result.not_number_spchars = (id) => {
     if (element == null) return false;
     if (element.value == null) return false;
     let pattern = /(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?]+).*/;
+    if (pattern.test(element.value)){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/**
+ * Check if the value contains spaces.
+ * 띄워쓰기가 없는지 확인한다.
+ * 
+ * @param {string} id
+ * @returns {boolean}
+ */
+JCheck.result.not_space = (id) => {
+    let element = JCheck.element(id);
+    if (element == null) return false;
+    if (element.value == null) return false;
+    let pattern = /(?=.*[\s]+).*/;
     if (pattern.test(element.value)){
         return false;
     } else {
@@ -1335,6 +1369,18 @@ JCheck.alert.not_number_spchars = (id, msg) => {
 }
 
 /**
+ * If the value contains spaces, display an alert and return true.
+ * 값에 띄워쓰기가 있으면 경고창을 띄우고 true를 반환한다.
+ * 
+ * @param {string} id
+ * @param {string} msg
+ * @returns {boolean}
+ */
+JCheck.alert.not_space = (id, msg) => {
+    return JCheck.alert_and_focus(id, msg, !JCheck.result.not_space(id));
+}
+
+/**
  * If the value contains special characters or spaces, display an alert and return true.
  * 값에 특수문자, 띄워쓰기가 있으면 경고창을 띄우고 true를 반환한다.
  * 
@@ -1682,14 +1728,26 @@ JCheck.input.language = (id, lang, msg) => {
     switch (lang.toLowerCase()) {
         case 'english':
         return JCheck.input.english(id, msg);
+        case 'english space':
+        pattern = /[^a-zA-Z\s]/g;
+        break;
         case 'korean':
         pattern = /[^ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+        break;
+        case 'korean space':
+        pattern = /[^ㄱ-ㅎㅏ-ㅣ가-힣\s]/g;
         break;
         case 'japanese':
         pattern = /[^\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g;
         break;
+        case 'japanese space':
+        pattern = /[^\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\s]/g;
+        break;
         case 'chinese':
         pattern = /[^\u4E00-\u9FFF]/g;
+        break;
+        case 'chinese space':
+        pattern = /[^\u4E00-\u9FFF\s]/g;
         break;
     }
     JCheck.input.add_replace_event(id, pattern, '', msg);
@@ -1740,6 +1798,18 @@ JCheck.input.not_spchars = (id, msg) => {
  */
 JCheck.input.not_number_spchars = (id, msg) => {
     let pattern = /[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?0-9]+/g;
+    JCheck.input.add_replace_event(id, pattern, '', msg);
+}
+
+/**
+ * Disallow the input of spaces.
+ * 띄워쓰기의 입력을 허용하지 않는다.
+ * 
+ * @param {string} id
+ * @param {string} msg
+ */
+JCheck.input.not_space = (id, msg) => {
+    let pattern = /[\s]+/g;
     JCheck.input.add_replace_event(id, pattern, '', msg);
 }
 
