@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231107
+ * @version v2023.20231120
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -33,8 +33,8 @@ const JAction = {
     get_form: (form_info) => {},
     reset_form: (form_info) => {},
     form_append: (form_info, name, value, _type) => {},
-    form_set: (form_info, name, value, _type) => {},
-    form_remove: (form_info, name) => {},
+    form_set: (form_info, name, value, _index, _type) => {},
+    form_remove: (form_info, name, _index) => {},
     form_to_object: (form_info) => {},
 
     submit: (url, form_info, _method, _content_type) => {},
@@ -400,16 +400,19 @@ JAction.form_append = (form_info, name, value, type = 'hidden') => {
  * @param {HTMLFormElement|string} form_info
  * @param {string} name
  * @param {string} value
+ * @param {number} index
  * @param {string} type
  */
-JAction.form_set = (form_info, name, value, type = 'hidden') => {
+JAction.form_set = (form_info, name, value, index = 0, type = 'hidden') => {
     let form = JAction.get_form(form_info);
     if (form == null) return;
     let element = form.elements[name];
     if (element != null) {
         if (element.length != null) {
             for (let i = 0; i < element.length; i++) {
-                element[i].value = value;
+                if (i == index) {
+                    element[i].value = value;
+                }
             }
         } else {
             element.value = value;
@@ -425,15 +428,18 @@ JAction.form_set = (form_info, name, value, type = 'hidden') => {
  * 
  * @param {HTMLFormElement|string} form_info
  * @param {string} name
+ * @param {number} index
  */
-JAction.form_remove = (form_info, name) => {
+JAction.form_remove = (form_info, name, index = 0) => {
     let form = JAction.get_form(form_info);
     if (form == null) return;
     let element = form.elements[name];
     if (element != null) {
         if (element.length != null) {
             for (let i = 0; i < element.length; i++) {
-                element[i].remove();
+                if (i == index) {
+                    element[i].remove();
+                }
             }
         } else {
             element.remove();
