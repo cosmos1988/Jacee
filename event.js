@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231107
+ * @version v2023.20231125
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -12,7 +12,7 @@ const JEvent = {
     load: (fn) => {},
     click_to_back: (id) => {},
     click_to_go: (id, url) => {},
-    click_to_teleport: (id, url) => {},
+    click_to_jump: (id, url) => {},
     
     keyup: (id, fn) => {},
     keypress: (id, fn) => {},
@@ -226,7 +226,7 @@ JEvent.click_to_go = (id, url) => {
  * @param {string} id
  * @param {string} url
  */
-JEvent.click_to_teleport = (id, url) => {
+JEvent.click_to_jump = (id, url) => {
     JEvent.click(id, () => {window.location.replace(url)});
 }
 
