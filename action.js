@@ -13,7 +13,7 @@ const JAction = {
     confirm: (msg) => {},
     go: (url) => {},
     back: () => {},
-    teleport: (url) => {},
+    jump: (url) => {},
 
     sleep: (ms) => {},
     click: (btn_id) => {},
@@ -164,7 +164,7 @@ JAction.back = () => {window.history.back()};
  * 
  * @param {string} url
  */
-JAction.teleport = (url) => {window.location.replace(url)};
+JAction.jump = (url) => {window.location.replace(url)};
 
 /**
  * Temporarily stop movement.
@@ -406,16 +406,13 @@ JAction.form_append = (form_info, name, value, type = 'hidden') => {
 JAction.form_set = (form_info, name, value, index = 0, type = 'hidden') => {
     let form = JAction.get_form(form_info);
     if (form == null) return;
-    let element = form.elements[name];
-    if (element != null) {
-        if (element.length != null) {
-            for (let i = 0; i < element.length; i++) {
-                if (i == index) {
-                    element[i].value = value;
-                }
+    //let element = form.elements[name];
+    let element = Array.from(form.elements).filter(element => element.name === name)
+    if (element.length > 0) {
+        for (let i = 0; i < element.length; i++) {
+            if (i == index) {
+                element[i].value = value;
             }
-        } else {
-            element.value = value;
         }
     } else {
         JAction.form_append(form, name, value, type);
