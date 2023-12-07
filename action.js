@@ -76,7 +76,7 @@ const JAction = {
     /** 
      * Fetch error handling function
      * Fetch 에러 처리 함수
-     * Example: JAction.fetch_error_fn = (url, error) => { }
+     * Example: JAction.fetch_error_fn = (url, error, body) => { }
      * 
      * @param {object} error
      */
@@ -519,9 +519,9 @@ JAction.submit_by_file = (url, form_info) => {
  * 
  * @param {object} error
  */
-JAction.fetch_error = (url, error) => {
+JAction.fetch_error = (url, error, body) => {
     if (JAction.fetch_error_fn != null && JAction.fetch_error_fn instanceof Function) {
-        JAction.fetch_error_fn(url, error);
+        JAction.fetch_error_fn(url, error, body);
     } else {
         if (JAction.console_error_enabled) {
             console.error(`Fetch error (url: ${url})`);
@@ -565,18 +565,20 @@ JAction.fetch_option = (body, method = 'GET', content_type) => {
  * @param {boolean} async
  */
 JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
+    let response_text;
     if (async) {
         fetch(url, opt)
         .then(response => {
             if (!response.ok) {
                 throw new Error(response);
             }
-            return response.text();
+            response_text = response.text();
+            return response_text;
        })
         .then(text => JSON.parse(text))
         .then(json => fn(json))
         .catch(error => {
-            JAction.fetch_error(url, error);
+            JAction.fetch_error(url, error, response_text);
         });
     } else {
         var xhr = new XMLHttpRequest();
@@ -589,13 +591,14 @@ JAction.fetch = (url, fn, opt = {method: "GET"}, async = true) => {
                 try{
                     if (xhr.status === 200) {
                         let text = xhr.responseText;
+                        response_text = text;
                         let json = JSON.parse(text);
                         fn(json);
                     } else {
                         throw new Error(xhr);
                     }
                 } catch (error) {
-                    JAction.fetch_error(url, error);
+                    JAction.fetch_error(url, error, response_text);
                 }
             }
         };
