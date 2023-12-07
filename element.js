@@ -1,6 +1,6 @@
 /**
  * @name Jacee
- * @version v2023.20231113
+ * @version v2023.20231125
  * @author cosmos1988 <https://github.com/cosmos1988/Jacee>
  * @license MIT
  * @copyright Copyright © 2023 <cosmos1988>
@@ -21,10 +21,11 @@ const JElement = {
     value: (id) => {},
     value_length: (id) => {},
     set_value: (id, _value) => {},
-
     text: (id) => {},
     text_length: (id) => {},
     set_text: (id, text) => {},
+    set_text_by_name: (name, text) => {},
+    set_text_by_class: (class_name, text) => {},
 
     inner_html: (id) => {}, // <p>inner</p>
     outer_html: (id) => {}, // <div id='target'><p>inner</p></div>
@@ -198,7 +199,7 @@ JElement.elements_by_class = (class_name) => {
     let elements = document.querySelectorAll('.' + class_name);
     if (elements.length === 0) {
         if (JElement.console_error_enabled) {
-            console.error(`Elements (name: ${name}) is a length of 0`);
+            console.error(`Elements (name: ${class_name}) is a length of 0`);
         }
         return;
     }
@@ -284,6 +285,38 @@ JElement.text_length = (id) => {
 JElement.set_text = (id, text) => {
     let element = JElement.element(id);
     if (element != null) {
+        element.textContent = text;
+    }
+}
+
+/**
+ * Set the text by name.
+ * 이름으로 텍스트를 설정한다.
+ * 
+ * @param {string} id
+ * @param {string} text
+ */
+JElement.set_text_by_name = (name, text) => {
+    let elements = JElement.elements(name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        element.textContent = text;
+    }
+}
+
+/**
+ * Set the text by class name.
+ * 클래스 이름으로 텍스트를 설정한다.
+ * 
+ * @param {string} class
+ * @param {string} text
+ */
+JElement.set_text_by_class = (class_name, text) => {
+    let elements = JElement.elements_by_class(class_name);
+    if (elements == null) return;
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
         element.textContent = text;
     }
 }
@@ -1036,8 +1069,8 @@ JElement.remove_option_by_value = (select_id, value = null) => {
  */
 JElement.checked = (id) => {
     let element = JElement.element(id);
-    if (element == null) return 0;
-    if (element.checked == null) return 0;
+    if (element == null) return false;
+    if (element.checked == null) return false;
     return element.checked;
 }
 
@@ -1051,7 +1084,7 @@ JElement.checked = (id) => {
  */
 JElement.checked_value = (name) => {
     let elements = JElement.elements(name);
-    if (elements == null) return 0;
+    if (elements == null) return "";
     let value = "";
     for (let i = 0; i < elements.length; i++) {
         let element = elements[i];
